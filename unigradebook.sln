@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unigradebook", "unigradebook\unigradebook.csproj", "{FDE3A4F1-FD44-460D-9E80-213FD506654D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gradebook", "gradebook\gradebook.csproj", "{85FD037A-9B9E-4A54-AFF3-BB987347C73C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FDE3A4F1-FD44-460D-9E80-213FD506654D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDE3A4F1-FD44-460D-9E80-213FD506654D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDE3A4F1-FD44-460D-9E80-213FD506654D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85FD037A-9B9E-4A54-AFF3-BB987347C73C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85FD037A-9B9E-4A54-AFF3-BB987347C73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85FD037A-9B9E-4A54-AFF3-BB987347C73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85FD037A-9B9E-4A54-AFF3-BB987347C73C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,6 +51,7 @@ namespace unigradebook
             this.addCourseBtn.TabIndex = 1;
             this.addCourseBtn.Text = "New Course";
             this.addCourseBtn.UseVisualStyleBackColor = true;
+            this.addCourseBtn.Click += new System.EventHandler(this.addCourseBtn_Click);
             // 
             // Home
             // 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using gradebook;
 
 namespace unigradebook
 {
@@ -15,6 +16,12 @@ namespace unigradebook
         public Home()
         {
             InitializeComponent();
+        }
+
+
+        private void addCourseBtn_Click(object sender, EventArgs e)
+        {
+            //Program.gradebook.courses.Add(new Course(100, "CS101"));
         }
     }
 }

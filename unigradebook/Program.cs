@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using gradebook;
 
 namespace unigradebook
 {
     static class Program
     {
+        public static Gradebook gradebook { get; set; }
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
+
         [STAThread]
         static void Main()
         {
+            gradebook = new Gradebook();
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
