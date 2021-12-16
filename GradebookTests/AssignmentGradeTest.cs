@@ -70,5 +70,21 @@ namespace GradebookTests
                 Assert.IsTrue(ag != assignmentGrades[i]);
             }
         }
+
+        // tests the getGrade() method
+        [Test]
+        public void Test4()
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(assignmentGrades[i].points / 1000.0 * 100.0, assignmentGrades[i].getGrade());
+            }
+
+            AssignmentGrade ag = assignmentGrades[0];
+            ag.points = 100.0;
+            ag.maxPoints = 100.0;
+
+            Assert.AreEqual(100.0, ag.getGrade());
+        }
     }
 }

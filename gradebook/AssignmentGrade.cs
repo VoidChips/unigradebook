@@ -29,7 +29,7 @@ namespace gradebook
         // get the grade in percentage
         public double getGrade()
         {
-            return points / maxPoints * 100;
+            return points / maxPoints * 100.0;
         }
 
         public override bool Equals(object obj)
