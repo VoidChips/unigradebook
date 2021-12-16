@@ -21,7 +21,7 @@ namespace unigradebook
 
         private void addCourseBtn_Click(object sender, EventArgs e)
         {
-            //Program.gradebook.courses.Add(new Course(100, "CS101"));
+            //Program.courses.Add(new Course(100, "CS101"));
         }
     }
 }
