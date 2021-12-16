@@ -28,5 +28,26 @@ namespace gradebook
             this.maxPoints = maxPoints;
         }
 
+        public Assignment(Assignment a)
+        {
+            name = a.name;
+            type = a.type;
+            maxPoints = a.maxPoints;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Assignment a = (Assignment)obj;
+            return this.name == a.name && this.type == a.type && this.maxPoints == a.maxPoints;
+        }
+
+        public static bool operator ==(Assignment a1, Assignment a2) => a1.Equals(a2);
+
+        public static bool operator !=(Assignment a1, Assignment a2) => !a1.Equals(a2);
     }
 }

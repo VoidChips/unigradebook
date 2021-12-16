@@ -6,16 +6,17 @@ using System.IO;
 
 namespace GradebookTests
 {
-    public class Tests
+    public class StudentTest
     {
+        private static Random rand;
         private List<string> names;
         private List<Student> students;
+        private List<Student> randomStudents;
         private int students_num;
 
         // returns a random name
         private string generateName()
         {
-            var rand = new Random();
             return names[rand.Next(students_num)];
         }
 
@@ -24,6 +25,8 @@ namespace GradebookTests
         {
             names = new List<string>();
             students = new List<Student>();
+            randomStudents = new List<Student>();
+            rand = new Random();
 
             // get names from the csv file
             string[] lines = File.ReadAllLines("random_names_fossbytes.csv");
@@ -34,34 +37,48 @@ namespace GradebookTests
             students_num = lines.Length;
 
             // create a list of students
+            // create a list of random students
             for (int i = 0; i < students_num; i++)
             {
+                students.Add(new Student(i, names[i]));
+
                 // since the names are random, students can have same names
-                students.Add(new Student(i + 100000, generateName()));
+                randomStudents.Add(new Student(i + 100000, generateName()));
             }
         }
 
-        // test if the Student object are initialized correctly
+        // tests if the Student object are initialized correctly
         [Test]
-        public void StudentTest1()
+        public void Test1()
         {
             for (int i = 0; i < students_num; i++)
             {
-                Student student = new Student(i, names[i]);
-                Assert.AreEqual(i, student.id);
-                Assert.AreEqual(names[i], student.name);
+                Assert.AreEqual(i, students[i].id);
+                Assert.AreEqual(names[i], students[i].name);
+            }
+        }
+
+        // tests copy constructor
+        [Test]
+        public void Test2()
+        {
+            for (int i = 0; i < students_num; i++)
+            {
+                Student s = new Student(students[i]);
+                Assert.AreEqual(i, s.id);
+                Assert.AreEqual(names[i], s.name);
             }
         }
 
         // test for equality with Student
         [Test]
-        public void StudentTest2()
+        public void Test3()
         {
             for (int i = 0; i < students_num; i++)
             {
                 Student student = new Student(i, names[i]);
-                Assert.IsTrue(student.Equals(new Student(i, names[i])));
-                Assert.IsTrue(student == new Student(i, names[i]));
+                Assert.IsTrue(student.Equals(students[i]));
+                Assert.IsTrue(student == students[i]);
                 Assert.IsFalse(student == new Student(500, "Lorem Ipsum"));
             }
         }

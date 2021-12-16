@@ -16,9 +16,20 @@ namespace gradebook
             this.name = name;
         }
 
+        public Student(Student s)
+        {
+            id = s.id;
+            name = s.name;
+        }
+
         // Student objects with the same student ids are equal
         public override bool Equals(object obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
+
             Student student = (Student)obj;
             return this.id == student.id;
         }
