@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 using gradebook;
 
 namespace unigradebook
@@ -22,6 +23,7 @@ namespace unigradebook
         private void addCourseBtn_Click(object sender, EventArgs e)
         {
             //Program.courses.Add(new Course(100, "CS101"));
+            //Debug.WriteLine(Program.courses[0].name);
         }
     }
 }
