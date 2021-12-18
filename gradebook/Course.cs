@@ -108,6 +108,11 @@ namespace gradebook
             return true;
         }
 
+        public override int GetHashCode()
+        {
+            return id ^ name.GetHashCode() ^ section.GetHashCode() ^ students.GetHashCode() ^ assignments.GetHashCode();
+        }
+
         public static bool operator ==(Course c1, Course c2) => c1.Equals(c2);
 
         public static bool operator !=(Course c1, Course c2) => !c1.Equals(c2);

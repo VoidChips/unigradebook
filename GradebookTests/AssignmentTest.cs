@@ -173,5 +173,46 @@ namespace GradebookTests
                 Assert.IsTrue(a != assignments[i]);
             }
         }
+
+        // tests GetHashCode()
+        [Test]
+        public void Test4()
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Assignment.Type type = Assignment.Type.Attendance;
+                double maxPoints = 10.0;
+                if (i <= 10)
+                {
+                    type = Assignment.Type.Attendance;
+                }
+                else if (i <= 25)
+                {
+                    type = Assignment.Type.Homework;
+                    maxPoints = 100.0;
+                }
+                else if (i <= 50)
+                {
+                    type = Assignment.Type.Project;
+                    maxPoints = 200.0;
+                }
+                else if (i <= 75)
+                {
+                    type = Assignment.Type.Quiz;
+                    maxPoints = 500.0;
+                }
+                else
+                {
+                    type = Assignment.Type.Test;
+                    maxPoints = 1000.0;
+                }
+
+                Assignment a = new Assignment("Assignment " + i.ToString(), type, maxPoints);
+                Assert.AreEqual(a.GetHashCode(), assignments[i].GetHashCode());
+
+                a.name = "New Name";
+                Assert.AreNotEqual(a.GetHashCode(), assignments[i].GetHashCode());
+            }
+        }
     }
 }

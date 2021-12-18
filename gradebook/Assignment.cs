@@ -48,7 +48,7 @@ namespace gradebook
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return name.GetHashCode() ^ type.GetHashCode() ^ maxPoints.GetHashCode();
         }
 
         public static bool operator ==(Assignment a1, Assignment a2) => a1.Equals(a2);

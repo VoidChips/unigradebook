@@ -71,9 +71,27 @@ namespace GradebookTests
             }
         }
 
-        // tests the getGrade() method
+        // tests GetHashCode()
         [Test]
         public void Test4()
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Grade ag = new Grade(grades[i]);
+                ag.points = grades[i].points;
+                ag.maxPoints = grades[i].maxPoints;
+                ag.graded = grades[i].graded;
+
+                Assert.AreEqual(ag.GetHashCode(), grades[i].GetHashCode());
+
+                ag.points += 10.0;
+                Assert.AreNotEqual(ag.GetHashCode(), grades[i].GetHashCode());
+            }
+        }
+
+        // tests the getGrade() method
+        [Test]
+        public void Test5()
         {
             for (int i = 0; i < count; i++)
             {

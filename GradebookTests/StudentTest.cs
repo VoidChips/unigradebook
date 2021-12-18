@@ -70,7 +70,7 @@ namespace GradebookTests
             }
         }
 
-        // test for equality with Student
+        // tests for equality with Student
         [Test]
         public void Test3()
         {
@@ -82,6 +82,18 @@ namespace GradebookTests
                 Assert.IsFalse(student != students[i]);
                 Assert.IsFalse(student == new Student(500, "Lorem Ipsum"));
                 Assert.IsTrue(student != new Student(500, "Lorem Ipsum"));
+            }
+        }
+
+        // tests GetHashCode()
+        [Test]
+        public void Test4()
+        {
+            for (int i = 0; i < students_num; i++)
+            {
+                Student student = new Student(i, names[i]);
+                Assert.AreEqual(student.GetHashCode(), students[i].GetHashCode());
+                Assert.AreNotEqual(student.GetHashCode(), new Student(500, "Lorem Ipsum").GetHashCode());
             }
         }
     }

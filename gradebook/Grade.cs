@@ -40,7 +40,7 @@ namespace gradebook
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return points.GetHashCode() ^ maxPoints.GetHashCode() ^ graded.GetHashCode();
         }
 
         public static bool operator ==(Grade ag1, Grade ag2) => ag1.Equals(ag2);

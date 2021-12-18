@@ -36,7 +36,7 @@ namespace gradebook
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return id ^ name.GetHashCode();
         }
 
         public static bool operator ==(Student s1, Student s2) => s1.Equals(s2);
