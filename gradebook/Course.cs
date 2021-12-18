@@ -6,20 +6,21 @@ namespace gradebook
 {
     public class Course
     {
-        public int id { get; set; }
+        public string name { get; set; }  // e.g. CS101
 
-        public string name { get; set; }
+        public string title { get; set; }  // e.g. Intro to Programming
 
-        public string section { get; set; }
+        public string section { get; set; }  // e.g. 001
 
-        public Dictionary<Student, Dictionary<Assignment, Grade>> students { get; set; }
+        public Dictionary<Student, Dictionary<Assignment, Grade>> students { get; }
 
-        public List<Assignment> assignments { get; set; }
+        public List<Assignment> assignments { get; }
 
-        public Course(int id, string name)
+        public Course(string name, string title, string section)
         {
-            this.id = id;
             this.name = name;
+            this.title = title;
+            this.section = section;
             this.students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
             this.assignments = new List<Assignment>();
         }
@@ -28,8 +29,8 @@ namespace gradebook
         // deep copy
         public Course(Course c)
         {
-            id = c.id;
             name = c.name;
+            title = c.title;
             section = c.section;
 
             students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
@@ -66,8 +67,8 @@ namespace gradebook
             Course c = (Course)obj;
             if (students.Count != c.students.Count || 
                 assignments.Count != c.assignments.Count ||
-                id != c.id ||
                 name != c.name ||
+                title != c.title ||
                 section != c.section)
             {
                 return false;
@@ -110,7 +111,24 @@ namespace gradebook
 
         public override int GetHashCode()
         {
-            return id ^ name.GetHashCode() ^ section.GetHashCode() ^ students.GetHashCode() ^ assignments.GetHashCode();
+            int studentsHashCode = 0;
+            int assignmentsHashCode = 0;
+
+            foreach((Student student, Dictionary<Assignment, Grade> ag_dict) in students)
+            {
+                studentsHashCode ^= student.GetHashCode();
+                foreach((Assignment assignment, Grade grade) in ag_dict)
+                {
+                    studentsHashCode ^= assignment.GetHashCode() ^ grade.GetHashCode();
+                }
+            }
+
+            foreach(Assignment assignment in assignments)
+            {
+                assignmentsHashCode ^= assignment.GetHashCode();
+            }
+
+            return name.GetHashCode() ^ title.GetHashCode() ^ section.GetHashCode() ^ studentsHashCode ^ assignmentsHashCode;
         }
 
         public static bool operator ==(Course c1, Course c2) => c1.Equals(c2);
@@ -129,16 +147,24 @@ namespace gradebook
 
         public void addAssignment(Assignment a)
         {
-            assignments.Add(a);
+            // check for unique assignment
+            if (!assignments.Contains(a))
+            {
+                assignments.Add(a);
+            }
 
             // add the assignment for all students
-            foreach(Student student in students.Keys)
+            foreach((Student student, Dictionary<Assignment, Grade> ag_dict) in students)
             {
-                students[student].Add(a, new Grade(a.maxPoints));
+                // check for unique assignment
+                if (!ag_dict.ContainsKey(a))
+                {
+                    students[student].Add(a, new Grade(a.maxPoints));
+                }
             }
         }
 
-        public void removeAssigment(Assignment a)
+        public void removeAssignment(Assignment a)
         {
             assignments.Remove(a);
 
@@ -155,8 +181,8 @@ namespace gradebook
             return students[s][a];
         }
 
-        // set the grade for an assignment for a specific student
-        public void setAssignmentGrade(Student s, Assignment a, double points)
+        // set the points for an assignment for a specific student
+        public void gradeAssignment(Student s, Assignment a, double points)
         {
             students[s][a].points = points;
             students[s][a].graded = true;

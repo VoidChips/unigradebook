@@ -6,7 +6,7 @@ namespace gradebook
 {
     public class Student
     {
-        public int id { get; }
+        public int id { get; }  // student id
 
         public string name { get; }
 
