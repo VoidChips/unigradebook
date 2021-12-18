@@ -4,7 +4,7 @@ using System.Text;
 
 namespace gradebook
 {
-    public class AssignmentGrade
+    public class Grade
     {
         public double points { get; set; }
 
@@ -12,14 +12,14 @@ namespace gradebook
 
         public bool graded { get; set; }
 
-        public AssignmentGrade(Assignment assignment)
+        public Grade(double maxPoints)
         {
             points = 0.0;
-            maxPoints = assignment.maxPoints;
+            this.maxPoints = maxPoints;
             graded = false;
         }
 
-        public AssignmentGrade(AssignmentGrade assignment)
+        public Grade(Grade assignment)
         {
             points = assignment.points;
             maxPoints = assignment.maxPoints;
@@ -39,13 +39,18 @@ namespace gradebook
                 return false;
             }
 
-            AssignmentGrade ag = (AssignmentGrade)obj;
+            Grade ag = (Grade)obj;
 
             return this.points == ag.points && this.maxPoints == ag.maxPoints && this.graded == ag.graded;
         }
 
-        public static bool operator ==(AssignmentGrade ag1, AssignmentGrade ag2) => ag1.Equals(ag2);
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
-        public static bool operator !=(AssignmentGrade ag1, AssignmentGrade ag2) => !ag1.Equals(ag2);
+        public static bool operator ==(Grade ag1, Grade ag2) => ag1.Equals(ag2);
+
+        public static bool operator !=(Grade ag1, Grade ag2) => !ag1.Equals(ag2);
     }
 }

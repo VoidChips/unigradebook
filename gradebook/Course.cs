@@ -12,7 +12,7 @@ namespace gradebook
 
         public string section { get; set; }
 
-        public Dictionary<Student, Dictionary<Assignment, AssignmentGrade>> students { get; set; }
+        public Dictionary<Student, Dictionary<Assignment, Grade>> students { get; set; }
 
         public List<Assignment> assignments { get; set; }
 
@@ -20,14 +20,14 @@ namespace gradebook
         {
             this.id = id;
             this.name = name;
-            this.students = new Dictionary<Student, Dictionary<Assignment, AssignmentGrade>>();
+            this.students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
             this.assignments = new List<Assignment>();
         }
 
 
         public void addStudent(Student s)
         {
-            students.Add(s, new Dictionary<Assignment, AssignmentGrade>());
+            students.Add(s, new Dictionary<Assignment, Grade>());
         }
 
         public void removeStudent(Student s)
@@ -42,7 +42,7 @@ namespace gradebook
             // add the assignment for all students
             foreach(Student student in students.Keys)
             {
-                students[student].Add(a, new AssignmentGrade(a));
+                students[student].Add(a, new Grade(a.maxPoints));
             }
         }
 
@@ -58,7 +58,7 @@ namespace gradebook
         }
 
         // get the grade for an assignment for a specific student
-        public AssignmentGrade getAssignmentGrade(Student s, Assignment a)
+        public Grade getAssignmentGrade(Student s, Assignment a)
         {
             return students[s][a];
         }

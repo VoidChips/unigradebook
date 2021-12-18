@@ -34,6 +34,11 @@ namespace gradebook
             return this.id == student.id;
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public static bool operator ==(Student s1, Student s2) => s1.Equals(s2);
 
         public static bool operator !=(Student s1, Student s2) => !s1.Equals(s2);
