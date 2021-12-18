@@ -26,12 +26,6 @@ namespace gradebook
             graded = assignment.graded;
         }
 
-        // get the grade in percentage
-        public double getGrade()
-        {
-            return points / maxPoints * 100.0;
-        }
-
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -52,5 +46,11 @@ namespace gradebook
         public static bool operator ==(Grade ag1, Grade ag2) => ag1.Equals(ag2);
 
         public static bool operator !=(Grade ag1, Grade ag2) => !ag1.Equals(ag2);
+
+        // get the grade in percentage
+        public double getGrade()
+        {
+            return points / maxPoints * 100.0;
+        }
     }
 }

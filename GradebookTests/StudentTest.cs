@@ -79,7 +79,9 @@ namespace GradebookTests
                 Student student = new Student(i, names[i]);
                 Assert.IsTrue(student.Equals(students[i]));
                 Assert.IsTrue(student == students[i]);
+                Assert.IsFalse(student != students[i]);
                 Assert.IsFalse(student == new Student(500, "Lorem Ipsum"));
+                Assert.IsTrue(student != new Student(500, "Lorem Ipsum"));
             }
         }
     }
