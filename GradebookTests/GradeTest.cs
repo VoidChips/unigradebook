@@ -42,10 +42,10 @@ namespace GradebookTests
         {
             for (int i = 0; i < count; i++)
             {
-                Grade ag = new Grade(grades[i]);
-                Assert.AreEqual(i, ag.points);
-                Assert.AreEqual(true, ag.graded);
-                Assert.AreEqual(1000.0, ag.maxPoints);
+                Grade g = new Grade(grades[i]);
+                Assert.AreEqual(i, g.points);
+                Assert.AreEqual(true, g.graded);
+                Assert.AreEqual(1000.0, g.maxPoints);
             }
         }
 
@@ -55,19 +55,19 @@ namespace GradebookTests
         {
             for (int i = 0; i < count; i++)
             {
-                Grade ag = new Grade(grades[i]);
-                ag.points = grades[i].points;
-                ag.maxPoints = grades[i].maxPoints;
-                ag.graded = grades[i].graded;
+                Grade g = new Grade(grades[i]);
+                g.points = grades[i].points;
+                g.maxPoints = grades[i].maxPoints;
+                g.graded = grades[i].graded;
 
-                Assert.IsTrue(ag.Equals(grades[i]));
-                Assert.IsTrue(ag == grades[i]);
-                Assert.IsFalse(ag != grades[i]);
+                Assert.IsTrue(g.Equals(grades[i]));
+                Assert.IsTrue(g == grades[i]);
+                Assert.IsFalse(g != grades[i]);
 
-                ag.points += 10.0;
-                Assert.IsFalse(ag.Equals(grades[i]));
-                Assert.IsFalse(ag == grades[i]);
-                Assert.IsTrue(ag != grades[i]);
+                g.points += 10.0;
+                Assert.IsFalse(g.Equals(grades[i]));
+                Assert.IsFalse(g == grades[i]);
+                Assert.IsTrue(g != grades[i]);
             }
         }
 
@@ -77,15 +77,15 @@ namespace GradebookTests
         {
             for (int i = 0; i < count; i++)
             {
-                Grade ag = new Grade(grades[i]);
-                ag.points = grades[i].points;
-                ag.maxPoints = grades[i].maxPoints;
-                ag.graded = grades[i].graded;
+                Grade g = new Grade(grades[i]);
+                g.points = grades[i].points;
+                g.maxPoints = grades[i].maxPoints;
+                g.graded = grades[i].graded;
 
-                Assert.AreEqual(ag.GetHashCode(), grades[i].GetHashCode());
+                Assert.AreEqual(g.GetHashCode(), grades[i].GetHashCode());
 
-                ag.points += 10.0;
-                Assert.AreNotEqual(ag.GetHashCode(), grades[i].GetHashCode());
+                g.points += 10.0;
+                Assert.AreNotEqual(g.GetHashCode(), grades[i].GetHashCode());
             }
         }
 
@@ -98,11 +98,13 @@ namespace GradebookTests
                 Assert.AreEqual(grades[i].points / 1000.0 * 100.0, grades[i].getGrade());
             }
 
-            Grade ag = grades[0];
-            ag.points = 100.0;
-            ag.maxPoints = 100.0;
+            Grade g = grades[0];
+            g.points = 100.0;
+            g.maxPoints = 100.0;
+            Assert.AreEqual(100.0, g.getGrade());
 
-            Assert.AreEqual(100.0, ag.getGrade());
+            g.maxPoints = 0.0;
+            Assert.AreEqual(0.0, g.getGrade());
         }
     }
 }

@@ -10,9 +10,13 @@ namespace gradebook
         {
             Attendance,
             Homework,
+            Discussion,
             Quiz,
+            Project,
             Test,
-            Project
+            Midterm,
+            Final,
+            Bonus
         }
 
         public string name { get; set; }

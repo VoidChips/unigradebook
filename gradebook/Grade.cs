@@ -50,6 +50,11 @@ namespace gradebook
         // get the grade in percentage
         public double getGrade()
         {
+            if (maxPoints == 0.0)
+            {
+                return 0.0;
+            }
+
             return points / maxPoints * 100.0;
         }
     }
