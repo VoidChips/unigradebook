@@ -10,6 +10,7 @@ namespace gradebook
         {
             Attendance,
             Homework,
+            Lab,
             Discussion,
             Quiz,
             Project,

@@ -14,16 +14,16 @@ namespace gradebook
 
         public Grade(double maxPoints)
         {
-            points = 0.0;
+            points = 0;
             this.maxPoints = maxPoints;
             graded = false;
         }
 
-        public Grade(Grade assignment)
+        public Grade(Grade grade)
         {
-            points = assignment.points;
-            maxPoints = assignment.maxPoints;
-            graded = assignment.graded;
+            points = grade.points;
+            maxPoints = grade.maxPoints;
+            graded = grade.graded;
         }
 
         public override bool Equals(object obj)
@@ -50,12 +50,12 @@ namespace gradebook
         // get the grade in percentage
         public double getGrade()
         {
-            if (maxPoints == 0.0)
+            if (maxPoints == 0)
             {
-                return 0.0;
+                return 0;
             }
 
-            return points / maxPoints * 100.0;
+            return points / maxPoints * 100;
         }
     }
 }
