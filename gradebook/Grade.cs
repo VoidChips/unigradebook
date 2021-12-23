@@ -4,7 +4,7 @@ using System.Text;
 
 namespace gradebook
 {
-    public class Grade
+    public class Grade : IComparable<Grade>
     {
         public double points { get; set; }
 
@@ -46,6 +46,19 @@ namespace gradebook
         public static bool operator ==(Grade ag1, Grade ag2) => ag1.Equals(ag2);
 
         public static bool operator !=(Grade ag1, Grade ag2) => !ag1.Equals(ag2);
+
+        // -1: less than
+        // 0: equal
+        // 1: greater than
+        public int CompareTo(Grade grade)
+        {
+            if (grade == null)
+            {
+                return 1;
+            }
+
+            return this.getGrade().CompareTo(grade.getGrade());
+        }
 
         // get the grade in percentage
         public double getGrade()

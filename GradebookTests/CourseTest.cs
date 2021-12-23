@@ -243,6 +243,19 @@ namespace GradebookTests
                     Assert.AreEqual(false, grade.graded);
                 }
             }
+
+            // add a new student after adding assignments to the course
+            Student newStudent = new Student(12930, generateName());
+            course.addStudent(newStudent);
+            Assert.AreEqual(assignments.Count, course.students[newStudent].Count);
+            foreach(Assignment assignment in assignments)
+            {
+                Assert.IsTrue(course.students[newStudent].ContainsKey(assignment));
+                Grade grade = course.students[newStudent][assignment];
+                Assert.AreEqual(0, grade.points);
+                Assert.AreEqual(assignment.maxPoints, grade.maxPoints);
+                Assert.AreEqual(false, grade.graded);
+            }
         }
 
         // tests removeAssignment()
@@ -692,16 +705,120 @@ namespace GradebookTests
             course.gradeAssignment(student5, assignment5, 0);
 
             // test class average for assignments
-            Grade assignment1Avg = course.getAssignmentClassAvg(assignment1);
-            Grade assignment2Avg = course.getAssignmentClassAvg(assignment2);
-            Grade assignment3Avg = course.getAssignmentClassAvg(assignment3);
-            Grade assignment4Avg = course.getAssignmentClassAvg(assignment4);
-            Grade assignment5Avg = course.getAssignmentClassAvg(assignment5);
+            Grade assignment1Avg = course.getAssignmentMean(assignment1);
+            Grade assignment2Avg = course.getAssignmentMean(assignment2);
+            Grade assignment3Avg = course.getAssignmentMean(assignment3);
+            Grade assignment4Avg = course.getAssignmentMean(assignment4);
+            Grade assignment5Avg = course.getAssignmentMean(assignment5);
             Assert.AreEqual(77.66, assignment1Avg.getGrade());
             Assert.AreEqual(72.86, assignment2Avg.getGrade());
             Assert.AreEqual((10 + 9 + 8 + 7.5 + 7.8) / 5 / 10 * 100, assignment3Avg.getGrade());
             Assert.AreEqual(84.06, assignment4Avg.getGrade());
             Assert.AreEqual(1.64 / 3 * 100, assignment5Avg.getGrade());
+        }
+
+        // tests getClassMedian()
+        [Test]
+        public void Test15()
+        {
+            Course course = new Course("CS101", "Intro to Programming", "001");
+
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // tests the median with odd number of students
+            Grade assignment1Median = course.getAssignmentMedian(assignment1);
+            Grade assignment2Median = course.getAssignmentMedian(assignment2);
+            Grade assignment3Median = course.getAssignmentMedian(assignment3);
+            Grade assignment4Median = course.getAssignmentMedian(assignment4);
+            Grade assignment5Median = course.getAssignmentMedian(assignment5);
+            Assert.AreEqual(83, assignment1Median.getGrade());
+            Assert.AreEqual(82, assignment2Median.getGrade());
+            Assert.AreEqual(8, assignment3Median.points);
+            Assert.AreEqual(80, assignment3Median.getGrade());
+            Assert.AreEqual(83, assignment4Median.getGrade());
+            Assert.AreEqual(2, assignment5Median.points);
+            Assert.AreEqual(2.0 / 3.0 * 100, assignment5Median.getGrade());
+
+            // add a new student to have even number of students
+            Student newStudent = new Student(43294, generateName());
+            course.addStudent(newStudent);
+            // grade the assignments for the new student
+            course.gradeAssignment(newStudent, assignment1, 80);
+            course.gradeAssignment(newStudent, assignment2, 33);
+            course.gradeAssignment(newStudent, assignment3, 9);
+            course.gradeAssignment(newStudent, assignment4, 83.7);
+            course.gradeAssignment(newStudent, assignment5, 3);
+            // tests the median with even students
+            assignment1Median = course.getAssignmentMedian(assignment1);
+            assignment2Median = course.getAssignmentMedian(assignment2);
+            assignment3Median = course.getAssignmentMedian(assignment3);
+            assignment4Median = course.getAssignmentMedian(assignment4);
+            assignment5Median = course.getAssignmentMedian(assignment5);
+
+            Assert.AreEqual(81.5, assignment1Median.getGrade());
+            Assert.AreEqual(69, assignment2Median.getGrade());
+            Assert.AreEqual(8.5, assignment3Median.points);
+            Assert.AreEqual(85, assignment3Median.getGrade());
+            Assert.AreEqual(83.35, assignment4Median.getGrade());
+            Assert.AreEqual(2.1, assignment5Median.points);
+            Assert.AreEqual(70, assignment5Median.getGrade());
         }
     }
 }

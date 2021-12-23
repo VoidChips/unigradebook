@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using gradebook;
+﻿using gradebook;
+using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace GradebookTests
@@ -89,9 +89,29 @@ namespace GradebookTests
             }
         }
 
-        // tests the getGrade() method
+        // tests CompareTo()
         [Test]
         public void Test5()
+        {
+            Grade grade1 = new Grade(1000);
+            Assert.AreEqual(0, grades[0].CompareTo(grade1));
+            Assert.AreEqual(0, grade1.CompareTo(grades[0]));
+
+            for (int i = 1; i < count; i++)
+            {
+                Grade grade2 = new Grade(1000);
+                Assert.AreEqual(1, grades[i].CompareTo(grade2));
+                Assert.AreEqual(1, grades[i].CompareTo(grades[i - 1]));
+                if (i != count - 1)
+                {
+                    Assert.AreEqual(-1, grades[i].CompareTo(grades[i + 1]));
+                }
+            }
+        }
+
+        // tests the getGrade() method
+        [Test]
+        public void Test6()
         {
             for (int i = 0; i < count; i++)
             {

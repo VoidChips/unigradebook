@@ -164,6 +164,15 @@ namespace gradebook
         public void addStudent(Student s)
         {
             students.Add(s, new Dictionary<Assignment, Grade>());
+            // if there are existing assignments when the student is added,
+            // assign the assignments to that student
+            if (assignments.Count > 0)
+            {
+                foreach(Assignment a in assignments)
+                {
+                    students[s].Add(a, new Grade(a.maxPoints));
+                }
+            }
         }
 
         public void removeStudent(Student s)
@@ -527,7 +536,7 @@ namespace gradebook
         }
 
         // get the class average of the grade of an assignment
-        public Grade getAssignmentClassAvg(Assignment a)
+        public Grade getAssignmentMean(Assignment a)
         {
             if (students.Count == 0)
             {
@@ -535,7 +544,6 @@ namespace gradebook
             }
 
             double sum = 0;
-
             foreach(Student student in students.Keys)
             {
                 sum += getAssignmentGrade(student, a).points;
@@ -545,6 +553,39 @@ namespace gradebook
             avg.points = sum / students.Count;
 
             return avg;
+        }
+
+        // get the class median of the grade of an assignment
+        public Grade getAssignmentMedian(Assignment a)
+        {
+            if (students.Count == 0)
+            {
+                return new Grade(0);
+            }
+
+            List<Grade> grades = new List<Grade>();
+            foreach(Student student in students.Keys)
+            {
+                grades.Add(getAssignmentGrade(student, a));
+            }
+
+            if (students.Count == 1)
+            {
+                return grades[0];
+            }
+
+            // if the numbers of grades are even, return the average of two middle grades
+            // if odd, return the middle grade
+            grades.Sort();
+            if (students.Count % 2 == 0)
+            {
+                Grade median = new Grade(a.maxPoints);
+                Grade mid1 = grades[students.Count / 2 - 1];
+                Grade mid2 = grades[students.Count / 2];
+                median.points = (mid1.points + mid2.points) / 2;
+                return median;
+            }
+            return grades[students.Count / 2];
         }
     }
 }
