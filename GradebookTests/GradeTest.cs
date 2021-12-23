@@ -105,6 +105,10 @@ namespace GradebookTests
 
             g.maxPoints = 0.0;
             Assert.AreEqual(0.0, g.getGrade());
+
+            g.points = 8.5;
+            g.maxPoints = 10;
+            Assert.AreEqual(85, g.getGrade());
         }
     }
 }

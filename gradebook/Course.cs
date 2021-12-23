@@ -525,5 +525,26 @@ namespace gradebook
             studentGrade.graded = true;
             return studentGrade;
         }
+
+        // get the class average of the grade of an assignment
+        public Grade getAssignmentClassAvg(Assignment a)
+        {
+            if (students.Count == 0)
+            {
+                return new Grade(0);
+            }
+
+            double sum = 0;
+
+            foreach(Student student in students.Keys)
+            {
+                sum += getAssignmentGrade(student, a).points;
+            }
+
+            Grade avg = new Grade(a.maxPoints);
+            avg.points = sum / students.Count;
+
+            return avg;
+        }
     }
 }
