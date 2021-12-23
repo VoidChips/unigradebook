@@ -564,10 +564,10 @@ namespace GradebookTests
 
                 // testing the grade out of graded assignments
                 grade = course.getWeightedStudentGrade(student, true);
-                double homeworkGrade1 = course.students[student][assignment1].getGrade();
-                double homeworkGrade2 = course.students[student][assignment2].getGrade();
+                double homeworkGrade1 = course.getAssignmentGrade(student, assignment1).getGrade();
+                double homeworkGrade2 = course.getAssignmentGrade(student, assignment2).getGrade();
                 double homeworkGrade = (homeworkGrade1 + homeworkGrade2) / 2 * course.assignmentTypeWeights["homework"] / 100;
-                double finalGrade = course.students[student][assignment4].getGrade() * course.assignmentTypeWeights["final"] / 100;
+                double finalGrade = course.getAssignmentGrade(student, assignment4).getGrade() * course.assignmentTypeWeights["final"] / 100;
                 Assert.AreEqual(26.25, homeworkGrade);
                 Assert.AreEqual(15.3, finalGrade);
                 // (26.25 + 15.3) / (35 + 20) * 100 = 75.5454...
@@ -588,17 +588,41 @@ namespace GradebookTests
 
                 // grade the extra credit assignment
                 course.gradeAssignment(student, assignment5, 1);
+                double extraCreditPoints = course.getAssignmentGrade(student, assignment5).points;
                 grade = course.getWeightedStudentGrade(student, true);
                 finalCourseGrade =
                     (homeworkGrade + finalGrade) /
                     (course.assignmentTypeWeights["homework"] + course.assignmentTypeWeights["final"]) *
                     100 +
-                    1;
+                    extraCreditPoints;
                 Assert.AreEqual(finalCourseGrade, grade.getGrade());
 
                 grade = course.getWeightedStudentGrade(student, false);
-                finalCourseGrade = homeworkGrade + quizGrade + finalGrade + 1;
+                finalCourseGrade = homeworkGrade + quizGrade + finalGrade + extraCreditPoints;
                 Assert.AreEqual(finalCourseGrade, grade.getGrade());
+
+                // change the weights
+                Dictionary<string, double> originalWeights = new Dictionary<string, double>(course.assignmentTypeWeights);
+                course.setAssignmentTypeWeights(0, 0, 0, 0, 0, 0, 0, 100);
+                // testing the grade out of graded assignments
+                grade = course.getWeightedStudentGrade(student, true);
+                // 76.5 + 1 = 77.5
+                finalGrade = course.getAssignmentGrade(student, assignment4).getGrade() + extraCreditPoints;
+                Assert.AreEqual(finalGrade, grade.getGrade());
+                // testing the grade out of all assignments
+                grade = course.getWeightedStudentGrade(student, false);
+                Assert.AreEqual(finalGrade, grade.getGrade());
+
+                // reset the weights
+                course.setAssignmentTypeWeights(
+                    originalWeights["attendance"],
+                    originalWeights["homework"],
+                    originalWeights["lab"],
+                    originalWeights["discussion"],
+                    originalWeights["quiz"],
+                    originalWeights["project"],
+                    originalWeights["midterm"],
+                    originalWeights["final"]);
             }
         }
     }
