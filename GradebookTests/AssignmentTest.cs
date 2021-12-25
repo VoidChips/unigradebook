@@ -84,7 +84,7 @@ namespace GradebookTests
                     maxPoints = 1000.0;
                 }
                 Assert.AreEqual(type, assignments[i].type);
-                Assert.AreEqual(maxPoints, assignments[i].maxPoints);
+                Assert.AreEqual(maxPoints, assignments[i].maxPoints, 0.000001);
             }
         }
 
@@ -125,7 +125,7 @@ namespace GradebookTests
 
                 Assignment a = new Assignment(assignments[i]);
                 Assert.AreEqual(type, a.type);
-                Assert.AreEqual(maxPoints, a.maxPoints);
+                Assert.AreEqual(maxPoints, a.maxPoints, 0.000001);
             }
         }
 

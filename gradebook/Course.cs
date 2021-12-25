@@ -259,6 +259,11 @@ namespace gradebook
         {
             Grade studentGrade = new Grade(0);
 
+            if (assignments.Count == 0)
+            {
+                return studentGrade;
+            }
+
             foreach ((Assignment assignment, Grade grade) in students[s])
             {
                 if ((soFar && grade.graded) || !soFar)
@@ -301,6 +306,11 @@ namespace gradebook
             assignmentCountByType.Add("project", (0, 0));
             assignmentCountByType.Add("midterm", (0, 0));
             assignmentCountByType.Add("final", (0, 0));
+
+            if (assignments.Count == 0)
+            {
+                return new Grade(0);
+            }
 
             foreach ((Assignment assignment, Grade grade) in students[s])
             {
@@ -514,6 +524,7 @@ namespace gradebook
                     midtermGrade.maxPoints +
                     finalGrade.maxPoints;
 
+                // add bonusGrade.points percent to the grade
                 double gradeAfterBonus = studentGrade.getGrade() + bonusGrade.points;
                 double ratio = gradeAfterBonus / studentGrade.getGrade();
                 studentGrade.points *= ratio;
@@ -551,6 +562,7 @@ namespace gradebook
 
             Grade avg = new Grade(a.maxPoints);
             avg.points = sum / students.Count;
+            avg.graded = true;
 
             return avg;
         }
@@ -577,15 +589,44 @@ namespace gradebook
             // if the numbers of grades are even, return the average of two middle grades
             // if odd, return the middle grade
             grades.Sort();
+            Grade median = new Grade(0);
             if (students.Count % 2 == 0)
             {
-                Grade median = new Grade(a.maxPoints);
+                median = new Grade(a.maxPoints);
                 Grade mid1 = grades[students.Count / 2 - 1];
                 Grade mid2 = grades[students.Count / 2];
                 median.points = (mid1.points + mid2.points) / 2;
+                median.graded = true;
                 return median;
             }
+
+            median = grades[students.Count / 2];
+            median.graded = true;
             return grades[students.Count / 2];
+        }
+
+        // get the unweighted mean grade of the course
+        // if soFar is true, exclude the ungraded assignments
+        public Grade getUnweightedClassMean(bool soFar)
+        {
+            if (students.Count == 0)
+            {
+                return new Grade(0);
+            }
+
+            double sum = 0;
+            double maxPoints = 0;
+            
+            foreach(Student student in students.Keys)
+            {
+                Grade studentGrade = getUnweightedStudentGrade(student, soFar);
+                sum += studentGrade.points;
+                maxPoints = studentGrade.maxPoints;
+            }
+
+            Grade mean = new Grade(maxPoints);
+            mean.points = sum / students.Count;
+            return mean;
         }
     }
 }

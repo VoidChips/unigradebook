@@ -66,14 +66,14 @@ namespace GradebookTests
 
             // tests for correct assignment weights by type
             Assert.AreEqual(8, course.assignmentTypeWeights.Count);
-            Assert.AreEqual(5, course.assignmentTypeWeights["attendance"]);
-            Assert.AreEqual(35, course.assignmentTypeWeights["homework"]);
-            Assert.AreEqual(0, course.assignmentTypeWeights["lab"]);
-            Assert.AreEqual(0, course.assignmentTypeWeights["discussion"]);
-            Assert.AreEqual(10, course.assignmentTypeWeights["quiz"]);
-            Assert.AreEqual(0, course.assignmentTypeWeights["project"]);
-            Assert.AreEqual(30, course.assignmentTypeWeights["midterm"]);
-            Assert.AreEqual(20, course.assignmentTypeWeights["final"]);
+            Assert.AreEqual(5, course.assignmentTypeWeights["attendance"], 0.000001);
+            Assert.AreEqual(35, course.assignmentTypeWeights["homework"], 0.000001);
+            Assert.AreEqual(0, course.assignmentTypeWeights["lab"], 0.000001);
+            Assert.AreEqual(0, course.assignmentTypeWeights["discussion"], 0.000001);
+            Assert.AreEqual(10, course.assignmentTypeWeights["quiz"], 0.000001);
+            Assert.AreEqual(0, course.assignmentTypeWeights["project"], 0.000001);
+            Assert.AreEqual(30, course.assignmentTypeWeights["midterm"], 0.000001);
+            Assert.AreEqual(20, course.assignmentTypeWeights["final"], 0.000001);
         }
 
         // tests copy constructor
@@ -238,8 +238,8 @@ namespace GradebookTests
                     Assert.IsTrue(course.students[student].ContainsKey(assignment));
                     Assert.AreEqual(oldSize, course.students[student].Count);
                     Grade grade = course.students[student][assignment];
-                    Assert.AreEqual(0, grade.points);
-                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints);
+                    Assert.AreEqual(0, grade.points, 0.000001);
+                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints, 0.000001);
                     Assert.AreEqual(false, grade.graded);
                 }
             }
@@ -252,8 +252,8 @@ namespace GradebookTests
             {
                 Assert.IsTrue(course.students[newStudent].ContainsKey(assignment));
                 Grade grade = course.students[newStudent][assignment];
-                Assert.AreEqual(0, grade.points);
-                Assert.AreEqual(assignment.maxPoints, grade.maxPoints);
+                Assert.AreEqual(0, grade.points, 0.000001);
+                Assert.AreEqual(assignment.maxPoints, grade.maxPoints, 0.000001);
                 Assert.AreEqual(false, grade.graded);
             }
         }
@@ -281,8 +281,8 @@ namespace GradebookTests
                     Assert.IsTrue(course.students[student].ContainsKey(assignment));
                     Assert.AreEqual(oldSize, course.students[student].Count);
                     Grade grade = course.students[student][assignment];
-                    Assert.AreEqual(0, grade.points);
-                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints);
+                    Assert.AreEqual(0, grade.points, 0.000001);
+                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints, 0.000001);
                     Assert.AreEqual(false, grade.graded);
                 }
 
@@ -315,16 +315,16 @@ namespace GradebookTests
             {
                 foreach ((Assignment assignment, Grade grade) in course.students[student])
                 {
-                    Assert.AreEqual(0, grade.points);
-                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints);
+                    Assert.AreEqual(0, grade.points, 0.000001);
+                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints, 0.000001);
                     Assert.AreEqual(false, grade.graded);
-                    Assert.AreEqual(0, grade.getGrade());
+                    Assert.AreEqual(0, grade.getGrade(), 0.000001);
                     Assert.AreEqual(course.students[student][assignment], grade);
 
                     grade.points = 10;
                     grade.graded = true;
-                    Assert.AreEqual(10 / assignment.maxPoints * 100, course.getAssignmentGrade(student, assignment).getGrade());
-                    Assert.AreEqual(grade.points / grade.maxPoints * 100, course.getAssignmentGrade(student, assignment).getGrade());
+                    Assert.AreEqual(10 / assignment.maxPoints * 100, course.getAssignmentGrade(student, assignment).getGrade(), 0.000001);
+                    Assert.AreEqual(grade.points / grade.maxPoints * 100, course.getAssignmentGrade(student, assignment).getGrade(), 0.000001);
                     Assert.AreEqual(course.students[student][assignment], grade);
                 }
             }
@@ -348,15 +348,15 @@ namespace GradebookTests
             {
                 foreach ((Assignment assignment, Grade grade) in course.students[student])
                 {
-                    Assert.AreEqual(0, grade.points);
-                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints);
+                    Assert.AreEqual(0, grade.points, 0.000001);
+                    Assert.AreEqual(assignment.maxPoints, grade.maxPoints, 0.000001);
                     Assert.AreEqual(false, grade.graded);
-                    Assert.AreEqual(0, grade.getGrade());
+                    Assert.AreEqual(0, grade.getGrade(), 0.000001);
                     Assert.AreEqual(course.students[student][assignment], grade);
 
                     course.gradeAssignment(student, assignment, 10);
-                    Assert.AreEqual(10 / assignment.maxPoints * 100, course.students[student][assignment].getGrade());
-                    Assert.AreEqual(grade.points / grade.maxPoints * 100, course.students[student][assignment].getGrade());
+                    Assert.AreEqual(10 / assignment.maxPoints * 100, course.students[student][assignment].getGrade(), 0.000001);
+                    Assert.AreEqual(grade.points / grade.maxPoints * 100, course.students[student][assignment].getGrade(), 0.000001);
                     Assert.AreEqual(course.students[student][assignment], grade);
                     Assert.AreEqual(true, grade.graded);
                 }
@@ -370,40 +370,40 @@ namespace GradebookTests
             Course course = new Course("CS101", "Intro to Programming", "002");
             // tests for correct assignment weights by type from initialization
             Assert.AreEqual(8, course.assignmentTypeWeights.Count);
-            Assert.AreEqual(5, course.assignmentTypeWeights["attendance"]);
-            Assert.AreEqual(35, course.assignmentTypeWeights["homework"]);
-            Assert.AreEqual(0, course.assignmentTypeWeights["lab"]);
-            Assert.AreEqual(0, course.assignmentTypeWeights["discussion"]);
-            Assert.AreEqual(10, course.assignmentTypeWeights["quiz"]);
-            Assert.AreEqual(0, course.assignmentTypeWeights["project"]);
-            Assert.AreEqual(30, course.assignmentTypeWeights["midterm"]);
-            Assert.AreEqual(20, course.assignmentTypeWeights["final"]);
+            Assert.AreEqual(5, course.assignmentTypeWeights["attendance"], 0.000001);
+            Assert.AreEqual(35, course.assignmentTypeWeights["homework"], 0.000001);
+            Assert.AreEqual(0, course.assignmentTypeWeights["lab"], 0.000001);
+            Assert.AreEqual(0, course.assignmentTypeWeights["discussion"], 0.000001);
+            Assert.AreEqual(10, course.assignmentTypeWeights["quiz"], 0.000001);
+            Assert.AreEqual(0, course.assignmentTypeWeights["project"], 0.000001);
+            Assert.AreEqual(30, course.assignmentTypeWeights["midterm"], 0.000001);
+            Assert.AreEqual(20, course.assignmentTypeWeights["final"], 0.000001);
 
             Assert.AreEqual(true, course.setAssignmentTypeWeights(0, 0, 0, 0, 5, 50, 20, 25));
             // tests for correct assignment weights by type from calling setAssignmentWeights()
             Assert.AreEqual(8, course.assignmentTypeWeights.Count);
-            Assert.AreEqual(0.0, course.assignmentTypeWeights["attendance"]);
-            Assert.AreEqual(0.0, course.assignmentTypeWeights["homework"]);
-            Assert.AreEqual(0.0, course.assignmentTypeWeights["lab"]);
-            Assert.AreEqual(0.0, course.assignmentTypeWeights["discussion"]);
-            Assert.AreEqual(5.0, course.assignmentTypeWeights["quiz"]);
-            Assert.AreEqual(50.0, course.assignmentTypeWeights["project"]);
-            Assert.AreEqual(20.0, course.assignmentTypeWeights["midterm"]);
-            Assert.AreEqual(25.0, course.assignmentTypeWeights["final"]);
+            Assert.AreEqual(0.0, course.assignmentTypeWeights["attendance"], 0.000001);
+            Assert.AreEqual(0.0, course.assignmentTypeWeights["homework"], 0.000001);
+            Assert.AreEqual(0.0, course.assignmentTypeWeights["lab"], 0.000001);
+            Assert.AreEqual(0.0, course.assignmentTypeWeights["discussion"], 0.000001);
+            Assert.AreEqual(5.0, course.assignmentTypeWeights["quiz"], 0.000001);
+            Assert.AreEqual(50.0, course.assignmentTypeWeights["project"], 0.000001);
+            Assert.AreEqual(20.0, course.assignmentTypeWeights["midterm"], 0.000001);
+            Assert.AreEqual(25.0, course.assignmentTypeWeights["final"], 0.000001);
 
             for (int i = 0; i < 100; i++)
             {
                 Course newCourse = new Course("Course " + i.ToString(), "Course " + i.ToString() + " title", i.ToString());
                 // tests for correct assignment weights by type from initialization
                 Assert.AreEqual(8, newCourse.assignmentTypeWeights.Count);
-                Assert.AreEqual(5.0, newCourse.assignmentTypeWeights["attendance"]);
-                Assert.AreEqual(35.0, newCourse.assignmentTypeWeights["homework"]);
-                Assert.AreEqual(0.0, newCourse.assignmentTypeWeights["lab"]);
-                Assert.AreEqual(0.0, newCourse.assignmentTypeWeights["discussion"]);
-                Assert.AreEqual(10.0, newCourse.assignmentTypeWeights["quiz"]);
-                Assert.AreEqual(0.0, newCourse.assignmentTypeWeights["project"]);
-                Assert.AreEqual(30.0, newCourse.assignmentTypeWeights["midterm"]);
-                Assert.AreEqual(20.0, newCourse.assignmentTypeWeights["final"]);
+                Assert.AreEqual(5.0, newCourse.assignmentTypeWeights["attendance"], 0.000001);
+                Assert.AreEqual(35.0, newCourse.assignmentTypeWeights["homework"], 0.000001);
+                Assert.AreEqual(0.0, newCourse.assignmentTypeWeights["lab"], 0.000001);
+                Assert.AreEqual(0.0, newCourse.assignmentTypeWeights["discussion"], 0.000001);
+                Assert.AreEqual(10.0, newCourse.assignmentTypeWeights["quiz"], 0.000001);
+                Assert.AreEqual(0.0, newCourse.assignmentTypeWeights["project"], 0.000001);
+                Assert.AreEqual(30.0, newCourse.assignmentTypeWeights["midterm"], 0.000001);
+                Assert.AreEqual(20.0, newCourse.assignmentTypeWeights["final"], 0.000001);
 
                 // create a list that adds up to 100
                 List<double> sumHundredList = new List<double>();
@@ -438,14 +438,14 @@ namespace GradebookTests
                                                                       sumHundredList[7]));
                 // tests for correct assignment weights by type from calling setAssignmentWeights()
                 Assert.AreEqual(8, course.assignmentTypeWeights.Count);
-                Assert.AreEqual(sumHundredList[0], course.assignmentTypeWeights["attendance"]);
-                Assert.AreEqual(sumHundredList[1], course.assignmentTypeWeights["homework"]);
-                Assert.AreEqual(sumHundredList[2], course.assignmentTypeWeights["lab"]);
-                Assert.AreEqual(sumHundredList[3], course.assignmentTypeWeights["discussion"]);
-                Assert.AreEqual(sumHundredList[4], course.assignmentTypeWeights["quiz"]);
-                Assert.AreEqual(sumHundredList[5], course.assignmentTypeWeights["project"]);
-                Assert.AreEqual(sumHundredList[6], course.assignmentTypeWeights["midterm"]);
-                Assert.AreEqual(sumHundredList[7], course.assignmentTypeWeights["final"]);
+                Assert.AreEqual(sumHundredList[0], course.assignmentTypeWeights["attendance"], 0.000001);
+                Assert.AreEqual(sumHundredList[1], course.assignmentTypeWeights["homework"], 0.000001);
+                Assert.AreEqual(sumHundredList[2], course.assignmentTypeWeights["lab"], 0.000001);
+                Assert.AreEqual(sumHundredList[3], course.assignmentTypeWeights["discussion"], 0.000001);
+                Assert.AreEqual(sumHundredList[4], course.assignmentTypeWeights["quiz"], 0.000001);
+                Assert.AreEqual(sumHundredList[5], course.assignmentTypeWeights["project"], 0.000001);
+                Assert.AreEqual(sumHundredList[6], course.assignmentTypeWeights["midterm"], 0.000001);
+                Assert.AreEqual(sumHundredList[7], course.assignmentTypeWeights["final"], 0.000001);
             }
         }
 
@@ -458,6 +458,8 @@ namespace GradebookTests
             foreach (Student student in students)
             {
                 course.addStudent(student);
+                Assert.AreEqual(new Grade(0), course.getUnweightedStudentGrade(student, true));
+                Assert.AreEqual(new Grade(0), course.getUnweightedStudentGrade(student, false));
             }
             foreach (Assignment assignment in assignments)
             {
@@ -470,12 +472,12 @@ namespace GradebookTests
                 // tests the grade before any assignments are graded
                 // testing for the grade out of zero assignments
                 Grade ungradedStudentGrade = course.getUnweightedStudentGrade(student, true);
-                Assert.AreEqual(0, ungradedStudentGrade.getGrade());
+                Assert.AreEqual(0, ungradedStudentGrade.getGrade(), 0.000001);
                 Assert.AreEqual(true, ungradedStudentGrade.graded);
 
                 // testing for the grade out of all ungraded assignments
                 ungradedStudentGrade = course.getUnweightedStudentGrade(student, false);
-                Assert.AreEqual(0, ungradedStudentGrade.getGrade());
+                Assert.AreEqual(0, ungradedStudentGrade.getGrade(), 0.000001);
                 Assert.AreEqual(true, ungradedStudentGrade.graded);
 
                 double currPtsSum = 0;
@@ -484,15 +486,15 @@ namespace GradebookTests
                 {
                     double points = grade.points;
                     double maxPoints = grade.maxPoints;
-                    Assert.AreEqual(0, points);
-                    Assert.AreEqual(assignment.maxPoints, maxPoints);
+                    Assert.AreEqual(0, points, 0.000001);
+                    Assert.AreEqual(assignment.maxPoints, maxPoints, 0.000001);
                     Assert.AreEqual(false, grade.graded);
-                    Assert.AreEqual(0, grade.getGrade());
+                    Assert.AreEqual(0, grade.getGrade(), 0.000001);
                     Assert.AreEqual(course.students[student][assignment], grade);
 
                     course.gradeAssignment(student, assignment, 10);
-                    Assert.AreEqual(10 / assignment.maxPoints * 100, grade.getGrade());
-                    Assert.AreEqual(grade.points / grade.maxPoints * 100, grade.getGrade());
+                    Assert.AreEqual(10 / assignment.maxPoints * 100, grade.getGrade(), 0.000001);
+                    Assert.AreEqual(grade.points / grade.maxPoints * 100, grade.getGrade(), 0.000001);
                     Assert.AreEqual(course.students[student][assignment], grade);
                     Assert.AreEqual(true, grade.graded);
 
@@ -500,12 +502,12 @@ namespace GradebookTests
                     Grade studentGrade = course.getUnweightedStudentGrade(student, true);
                     currPtsSum += grade.points;
                     currMaxPtsSum += grade.maxPoints;
-                    Assert.AreEqual(currPtsSum / currMaxPtsSum * 100, studentGrade.getGrade());
+                    Assert.AreEqual(currPtsSum / currMaxPtsSum * 100, studentGrade.getGrade(), 0.000001);
                     Assert.AreEqual(true, studentGrade.graded);
 
                     // testing the grade out of all assignments
                     studentGrade = course.getUnweightedStudentGrade(student, false);
-                    Assert.AreEqual(currPtsSum / maxCoursePts * 100, studentGrade.getGrade());
+                    Assert.AreEqual(currPtsSum / maxCoursePts * 100, studentGrade.getGrade(), 0.000001);
                     Assert.AreEqual(true, studentGrade.graded);
                 }
             }
@@ -519,19 +521,19 @@ namespace GradebookTests
             course.addAssignment(bonusAssignment);
 
             // grade before grading anything
-            Assert.AreEqual(0, course.getUnweightedStudentGrade(student1, false).getGrade());
-            Assert.AreEqual(0, course.getUnweightedStudentGrade(student1, true).getGrade());
+            Assert.AreEqual(0, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(0, course.getUnweightedStudentGrade(student1, true).getGrade(), 0.000001);
 
             course.gradeAssignment(student1, homework, 80.5);
             // grade after grading homework
-            Assert.AreEqual(80.5, course.getUnweightedStudentGrade(student1, false).getGrade());
-            Assert.AreEqual(80.5, course.getUnweightedStudentGrade(student1, true).getGrade());
+            Assert.AreEqual(80.5, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(80.5, course.getUnweightedStudentGrade(student1, true).getGrade(), 0.000001);
 
             // grade bonus assignment
             course.gradeAssignment(student1, bonusAssignment, 2);
             // grade after grading bonus assignment
-            Assert.AreEqual(82.5, course.getUnweightedStudentGrade(student1, false).getGrade());
-            Assert.AreEqual(82.5, course.getUnweightedStudentGrade(student1, false).getGrade());
+            Assert.AreEqual(82.5, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(82.5, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
         }
 
         // tests getWeightedStudentGrade()
@@ -542,6 +544,8 @@ namespace GradebookTests
             foreach (Student student in students)
             {
                 course.addStudent(student);
+                Assert.AreEqual(new Grade(0), course.getWeightedStudentGrade(student, true));
+                Assert.AreEqual(new Grade(0), course.getWeightedStudentGrade(student, false));
             }
 
             // add assignments
@@ -562,12 +566,12 @@ namespace GradebookTests
                 // tests the grade before any assignments are graded
                 // testing for the grade out of zero assignments
                 Grade grade = course.getWeightedStudentGrade(student, true);
-                Assert.AreEqual(0, grade.getGrade());
+                Assert.AreEqual(0, grade.getGrade(), 0.000001);
                 Assert.AreEqual(true, grade.graded);
 
                 // testing for the grade out of all ungraded assignments
                 grade = course.getWeightedStudentGrade(student, false);
-                Assert.AreEqual(0.0, grade.getGrade());
+                Assert.AreEqual(0.0, grade.getGrade(), 0.000001);
                 Assert.AreEqual(true, grade.graded);
 
                 // grade assignments
@@ -581,14 +585,14 @@ namespace GradebookTests
                 double homeworkGrade2 = course.getAssignmentGrade(student, assignment2).getGrade();
                 double homeworkGrade = (homeworkGrade1 + homeworkGrade2) / 2 * course.assignmentTypeWeights["homework"] / 100;
                 double finalGrade = course.getAssignmentGrade(student, assignment4).getGrade() * course.assignmentTypeWeights["final"] / 100;
-                Assert.AreEqual(26.25, homeworkGrade);
-                Assert.AreEqual(15.3, finalGrade);
+                Assert.AreEqual(26.25, homeworkGrade, 0.000001);
+                Assert.AreEqual(15.3, finalGrade, 0.000001);
                 // (26.25 + 15.3) / (35 + 20) * 100 = 75.5454...
                 double finalCourseGrade = 
                     (homeworkGrade + finalGrade) /
                     (course.assignmentTypeWeights["homework"] + course.assignmentTypeWeights["final"]) *
                     100;
-                Assert.AreEqual(finalCourseGrade, grade.getGrade());
+                Assert.AreEqual(finalCourseGrade, grade.getGrade(), 0.000001);
                 Assert.AreEqual(true, grade.graded);
 
                 // testing the grade out of all assignments
@@ -596,7 +600,7 @@ namespace GradebookTests
                 double quizGrade = course.students[student][assignment3].getGrade() * course.assignmentTypeWeights["quiz"] / 100;
                 // 26.25 + 0 + 15.3 = 41.55
                 finalCourseGrade = homeworkGrade + quizGrade + finalGrade;
-                Assert.AreEqual(finalCourseGrade, grade.getGrade());
+                Assert.AreEqual(finalCourseGrade, grade.getGrade(), 0.000001);
                 Assert.AreEqual(true, grade.graded);
 
                 // grade the extra credit assignment
@@ -608,11 +612,11 @@ namespace GradebookTests
                     (course.assignmentTypeWeights["homework"] + course.assignmentTypeWeights["final"]) *
                     100 +
                     extraCreditPoints;
-                Assert.AreEqual(finalCourseGrade, grade.getGrade());
+                Assert.AreEqual(finalCourseGrade, grade.getGrade(), 0.000001);
 
                 grade = course.getWeightedStudentGrade(student, false);
                 finalCourseGrade = homeworkGrade + quizGrade + finalGrade + extraCreditPoints;
-                Assert.AreEqual(finalCourseGrade, grade.getGrade());
+                Assert.AreEqual(finalCourseGrade, grade.getGrade(), 0.000001);
 
                 // change the weights
                 Dictionary<string, double> originalWeights = new Dictionary<string, double>(course.assignmentTypeWeights);
@@ -621,10 +625,10 @@ namespace GradebookTests
                 grade = course.getWeightedStudentGrade(student, true);
                 // 76.5 + 1 = 77.5
                 finalGrade = course.getAssignmentGrade(student, assignment4).getGrade() + extraCreditPoints;
-                Assert.AreEqual(finalGrade, grade.getGrade());
+                Assert.AreEqual(finalGrade, grade.getGrade(), 0.000001);
                 // testing the grade out of all assignments
                 grade = course.getWeightedStudentGrade(student, false);
-                Assert.AreEqual(finalGrade, grade.getGrade());
+                Assert.AreEqual(finalGrade, grade.getGrade(), 0.000001);
 
                 // reset the weights
                 course.setAssignmentTypeWeights(
@@ -639,7 +643,7 @@ namespace GradebookTests
             }
         }
 
-        // tests getAssignmentClassAvg()
+        // tests getAssignmentMean()
         [Test]
         public void Test14()
         {
@@ -668,6 +672,17 @@ namespace GradebookTests
             course.addAssignment(assignment3);
             course.addAssignment(assignment4);
             course.addAssignment(assignment5);
+
+            Assert.AreEqual(0, course.getAssignmentMean(assignment1).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment1).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment2).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment2).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment3).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment3).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment4).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment4).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment5).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment5).graded);
 
             // grade assignment 1
             course.gradeAssignment(student1, assignment1, 50.5);
@@ -710,11 +725,11 @@ namespace GradebookTests
             Grade assignment3Avg = course.getAssignmentMean(assignment3);
             Grade assignment4Avg = course.getAssignmentMean(assignment4);
             Grade assignment5Avg = course.getAssignmentMean(assignment5);
-            Assert.AreEqual(77.66, assignment1Avg.getGrade());
-            Assert.AreEqual(72.86, assignment2Avg.getGrade());
-            Assert.AreEqual((10 + 9 + 8 + 7.5 + 7.8) / 5 / 10 * 100, assignment3Avg.getGrade());
-            Assert.AreEqual(84.06, assignment4Avg.getGrade());
-            Assert.AreEqual(1.64 / 3 * 100, assignment5Avg.getGrade());
+            Assert.AreEqual(77.66, assignment1Avg.getGrade(), 0.000001);
+            Assert.AreEqual(72.86, assignment2Avg.getGrade(), 0.000001);
+            Assert.AreEqual(84.6, assignment3Avg.getGrade(), 0.000001);
+            Assert.AreEqual(84.06, assignment4Avg.getGrade(), 0.000001);
+            Assert.AreEqual(1.64 / 3 * 100, assignment5Avg.getGrade(), 0.000001);
         }
 
         // tests getClassMedian()
@@ -746,6 +761,17 @@ namespace GradebookTests
             course.addAssignment(assignment3);
             course.addAssignment(assignment4);
             course.addAssignment(assignment5);
+
+            Assert.AreEqual(0, course.getAssignmentMedian(assignment1).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMedian(assignment1).graded);
+            Assert.AreEqual(0, course.getAssignmentMedian(assignment2).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMedian(assignment2).graded);
+            Assert.AreEqual(0, course.getAssignmentMedian(assignment3).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMedian(assignment3).graded);
+            Assert.AreEqual(0, course.getAssignmentMedian(assignment4).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMedian(assignment4).graded);
+            Assert.AreEqual(0, course.getAssignmentMedian(assignment5).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMedian(assignment5).graded);
 
             // grade assignment 1
             course.gradeAssignment(student1, assignment1, 50.5);
@@ -788,13 +814,13 @@ namespace GradebookTests
             Grade assignment3Median = course.getAssignmentMedian(assignment3);
             Grade assignment4Median = course.getAssignmentMedian(assignment4);
             Grade assignment5Median = course.getAssignmentMedian(assignment5);
-            Assert.AreEqual(83, assignment1Median.getGrade());
-            Assert.AreEqual(82, assignment2Median.getGrade());
-            Assert.AreEqual(8, assignment3Median.points);
-            Assert.AreEqual(80, assignment3Median.getGrade());
-            Assert.AreEqual(83, assignment4Median.getGrade());
-            Assert.AreEqual(2, assignment5Median.points);
-            Assert.AreEqual(2.0 / 3.0 * 100, assignment5Median.getGrade());
+            Assert.AreEqual(83, assignment1Median.getGrade(), 0.000001);
+            Assert.AreEqual(82, assignment2Median.getGrade(), 0.000001);
+            Assert.AreEqual(8, assignment3Median.points, 0.000001);
+            Assert.AreEqual(80, assignment3Median.getGrade(), 0.000001);
+            Assert.AreEqual(83, assignment4Median.getGrade(), 0.000001);
+            Assert.AreEqual(2, assignment5Median.points, 0.000001);
+            Assert.AreEqual(2.0 / 3.0 * 100, assignment5Median.getGrade(), 0.000001);
 
             // add a new student to have even number of students
             Student newStudent = new Student(43294, generateName());
@@ -811,14 +837,102 @@ namespace GradebookTests
             assignment3Median = course.getAssignmentMedian(assignment3);
             assignment4Median = course.getAssignmentMedian(assignment4);
             assignment5Median = course.getAssignmentMedian(assignment5);
+            Assert.AreEqual(81.5, assignment1Median.getGrade(), 0.000001);
+            Assert.AreEqual(69, assignment2Median.getGrade(), 0.000001);
+            Assert.AreEqual(8.5, assignment3Median.points, 0.000001);
+            Assert.AreEqual(85, assignment3Median.getGrade(), 0.000001);
+            Assert.AreEqual(83.35, assignment4Median.getGrade(), 0.000001);
+            Assert.AreEqual(2.1, assignment5Median.points, 0.000001);
+            Assert.AreEqual(70, assignment5Median.getGrade(), 0.000001);
+        }
 
-            Assert.AreEqual(81.5, assignment1Median.getGrade());
-            Assert.AreEqual(69, assignment2Median.getGrade());
-            Assert.AreEqual(8.5, assignment3Median.points);
-            Assert.AreEqual(85, assignment3Median.getGrade());
-            Assert.AreEqual(83.35, assignment4Median.getGrade());
-            Assert.AreEqual(2.1, assignment5Median.points);
-            Assert.AreEqual(70, assignment5Median.getGrade());
+        // tests getUnweightedClassMean()
+        [Test]
+        public void Test16()
+        {
+            Course course = new Course("CS101", "Intro to Programming", "001");
+
+            Assert.AreEqual(new Grade(0), course.getUnweightedClassMean(true));
+            Assert.AreEqual(new Grade(0), course.getUnweightedClassMean(false));
+
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            Assignment assignment6 = new Assignment("quiz 2", Assignment.Type.Quiz, 10);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+            course.addAssignment(assignment6);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // assignment 6 not graded
+
+            // test the unweighted student grades
+            Assert.AreEqual(245.5 / 310 * 100, course.getUnweightedStudentGrade(student1, true).getGrade(), 0.000001);
+            Assert.AreEqual(245.5 / 320 * 100, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(249.6 / 310 * 100, course.getUnweightedStudentGrade(student2, true).getGrade(), 0.000001);
+            Assert.AreEqual(249.6 / 320 * 100, course.getUnweightedStudentGrade(student2, false).getGrade(), 0.000001);
+            Assert.AreEqual(213.1 / 310 * 100, course.getUnweightedStudentGrade(student3, true).getGrade(), 0.000001);
+            Assert.AreEqual(213.1 / 320 * 100, course.getUnweightedStudentGrade(student3, false).getGrade(), 0.000001);
+            Assert.AreEqual(235.3 / 310 * 100, course.getUnweightedStudentGrade(student4, true).getGrade(), 0.000001);
+            Assert.AreEqual(235.3 / 320 * 100, course.getUnweightedStudentGrade(student4, false).getGrade(), 0.000001);
+            Assert.AreEqual(279.9 / 310 * 100, course.getUnweightedStudentGrade(student5, true).getGrade(), 0.000001);
+            Assert.AreEqual(279.9 / 320 * 100, course.getUnweightedStudentGrade(student5, false).getGrade(), 0.000001);
+
+            // test the mean
+            Assert.AreEqual(244.68 / 310 * 100, course.getUnweightedClassMean(true).getGrade(), 0.000001);
+            Assert.AreEqual(244.68 / 320 * 100, course.getUnweightedClassMean(false).getGrade(), 0.000001);
         }
     }
 }
