@@ -919,20 +919,34 @@ namespace GradebookTests
             // assignment 6 not graded
 
             // test the unweighted student grades
-            Assert.AreEqual(245.5 / 310 * 100, course.getUnweightedStudentGrade(student1, true).getGrade(), 0.000001);
-            Assert.AreEqual(245.5 / 320 * 100, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
-            Assert.AreEqual(249.6 / 310 * 100, course.getUnweightedStudentGrade(student2, true).getGrade(), 0.000001);
-            Assert.AreEqual(249.6 / 320 * 100, course.getUnweightedStudentGrade(student2, false).getGrade(), 0.000001);
-            Assert.AreEqual(213.1 / 310 * 100, course.getUnweightedStudentGrade(student3, true).getGrade(), 0.000001);
-            Assert.AreEqual(213.1 / 320 * 100, course.getUnweightedStudentGrade(student3, false).getGrade(), 0.000001);
-            Assert.AreEqual(235.3 / 310 * 100, course.getUnweightedStudentGrade(student4, true).getGrade(), 0.000001);
-            Assert.AreEqual(235.3 / 320 * 100, course.getUnweightedStudentGrade(student4, false).getGrade(), 0.000001);
+            Assert.AreEqual(243.5 / 310 * 100 + 2, course.getUnweightedStudentGrade(student1, true).getGrade(), 0.000001);
+            Assert.AreEqual(243.5 / 320 * 100 + 2, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(246.6 / 310 * 100 + 3, course.getUnweightedStudentGrade(student2, true).getGrade(), 0.000001);
+            Assert.AreEqual(246.6 / 320 * 100 + 3, course.getUnweightedStudentGrade(student2, false).getGrade(), 0.000001);
+            Assert.AreEqual(210.9 / 310 * 100 + 2.2, course.getUnweightedStudentGrade(student3, true).getGrade(), 0.000001);
+            Assert.AreEqual(210.9 / 320 * 100 + 2.2, course.getUnweightedStudentGrade(student3, false).getGrade(), 0.000001);
+            Assert.AreEqual(234.3 / 310 * 100 + 1, course.getUnweightedStudentGrade(student4, true).getGrade(), 0.000001);
+            Assert.AreEqual(234.3 / 320 * 100 + 1, course.getUnweightedStudentGrade(student4, false).getGrade(), 0.000001);
             Assert.AreEqual(279.9 / 310 * 100, course.getUnweightedStudentGrade(student5, true).getGrade(), 0.000001);
             Assert.AreEqual(279.9 / 320 * 100, course.getUnweightedStudentGrade(student5, false).getGrade(), 0.000001);
 
             // test the mean
-            Assert.AreEqual(244.68 / 310 * 100, course.getUnweightedClassMean(true).getGrade(), 0.000001);
-            Assert.AreEqual(244.68 / 320 * 100, course.getUnweightedClassMean(false).getGrade(), 0.000001);
+            Assert.AreEqual(
+                (243.5 / 310 * 100 + 2 +
+                246.6 / 310 * 100 + 3 +
+                210.9 / 310 * 100 + 2.2 +
+                234.3 / 310 * 100 + 1 +
+                279.9 / 310 * 100) /
+                5,
+                course.getUnweightedClassMean(true).getGrade(), 0.000001);
+            Assert.AreEqual(
+                (243.5 / 320 * 100 + 2 +
+                246.6 / 320 * 100 + 3 +
+                210.9 / 320 * 100 + 2.2 +
+                234.3 / 320 * 100 + 1 +
+                279.9 / 320 * 100) /
+                5,
+                course.getUnweightedClassMean(false).getGrade(), 0.000001);
         }
     }
 }

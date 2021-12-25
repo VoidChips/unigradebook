@@ -255,9 +255,14 @@ namespace gradebook
         // e.g. If the class has 10% of grade worth of assignments out and the student gets 100% in all of them,
         // soFar == true will result in a grade of 100%, while soFar == false will result
         // in a grade of 10%.
+        // note: Extra credit assignment points add to the percentage,
+        // so a score of 1 out 3 points is still +1% to the final student grade.
+        // Treat the maxPoints of extra credit as the maximum possible percentage added to the grade,
+        // and points as the actual percentage added to the grade.
         public Grade getUnweightedStudentGrade(Student s, bool soFar)
         {
             Grade studentGrade = new Grade(0);
+            Grade bonusGrade = new Grade(0);
 
             if (assignments.Count == 0)
             {
@@ -268,12 +273,27 @@ namespace gradebook
             {
                 if ((soFar && grade.graded) || !soFar)
                 {
-                    studentGrade.points += grade.points;
                     if (assignment.type != Assignment.Type.Bonus)
                     {
+                        studentGrade.points += grade.points;
                         studentGrade.maxPoints += grade.maxPoints;
+                    } else
+                    {
+                        bonusGrade.points += grade.points;
+                        bonusGrade.maxPoints += grade.maxPoints;
                     }
                 }
+            }
+
+            // add bonusGrade.points percent to the grade
+            if (studentGrade.points != 0)
+            {
+                double gradeAfterBonus = studentGrade.getGrade() + bonusGrade.points;
+                double ratio = gradeAfterBonus / studentGrade.getGrade();
+                studentGrade.points *= ratio;
+            } else
+            {
+                studentGrade.points = bonusGrade.points;
             }
 
             studentGrade.graded = true;
@@ -285,6 +305,10 @@ namespace gradebook
         // e.g. If the class has 10% of grade worth of assignments out and the student gets 100% in all of them,
         // soFar == true will result in a grade of 100%, while soFar == false will result
         // in a grade of 10%.
+        // note: Extra credit assignment points add to the percentage,
+        // so a score of 1 out 3 points is still +1% to the final student grade.
+        // Treat the maxPoints of extra credit as the maximum possible percentage added to the grade,
+        // and points as the actual percentage added to the grade.
         public Grade getWeightedStudentGrade(Student s, bool soFar)
         {
             Grade studentGrade = new Grade(100);
