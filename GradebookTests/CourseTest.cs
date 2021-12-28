@@ -64,7 +64,7 @@ namespace GradebookTests
             Assert.AreEqual("Intro to Programming", course.title);
             Assert.AreEqual("001", course.section);
 
-            // tests for correct assignment weights by type
+            // tests for correct default assignment weights by type
             Assert.AreEqual(8, course.assignmentTypeWeights.Count);
             Assert.AreEqual(5, course.assignmentTypeWeights["attendance"], 0.000001);
             Assert.AreEqual(35, course.assignmentTypeWeights["homework"], 0.000001);
@@ -74,6 +74,13 @@ namespace GradebookTests
             Assert.AreEqual(0, course.assignmentTypeWeights["project"], 0.000001);
             Assert.AreEqual(30, course.assignmentTypeWeights["midterm"], 0.000001);
             Assert.AreEqual(20, course.assignmentTypeWeights["final"], 0.000001);
+
+            // tests for correct default grade cutoffs
+            Assert.AreEqual(4, course.gradeCutoff.Count);
+            Assert.AreEqual(90, course.gradeCutoff["A"], 0.000001);
+            Assert.AreEqual(80, course.gradeCutoff["B"], 0.000001);
+            Assert.AreEqual(70, course.gradeCutoff["C"], 0.000001);
+            Assert.AreEqual(60, course.gradeCutoff["D"], 0.000001);
         }
 
         // tests copy constructor
@@ -97,22 +104,30 @@ namespace GradebookTests
             Assert.AreEqual(course1.students, course2.students);
             Assert.AreEqual(course1.assignments, course2.assignments);
 
-            Course course3 = new Course("CS102", "Intro to Programming 2", "003");
-            foreach (Student student in randomStudents)
-            {
-                course1.addStudent(student);
-            }
-            foreach (Assignment assignment in assignments)
-            {
-                course1.addAssignment(assignment);
-            }
+            // tests for correct default assignment weights by type
+            Assert.AreEqual(course1.assignmentTypeWeights, course2.assignmentTypeWeights);
 
-            Course course4 = new Course(course3);
-            Assert.AreEqual(course3.name, course4.name);
-            Assert.AreEqual(course3.title, course4.title);
-            Assert.AreEqual(course3.section, course4.section);
-            Assert.AreEqual(course3.students, course4.students);
-            Assert.AreEqual(course3.assignments, course4.assignments);
+            // tests for correct default grade cutoff
+            Assert.AreEqual(course1.gradeCutoff, course2.gradeCutoff);
+
+            course1.name = "CS102";
+            course1.title = "Intro to Programming 2";
+            course1.section = "003";
+            course1.setAssignmentTypeWeights(0, 0, 0, 0, 0, 0, 0, 100);
+            course1.setGradeCutoff(88, 78, 68, 58);
+
+            course2 = new Course(course1);
+            Assert.AreEqual(course1.name, course2.name);
+            Assert.AreEqual(course1.title, course2.title);
+            Assert.AreEqual(course1.section, course2.section);
+            Assert.AreEqual(course1.students, course2.students);
+            Assert.AreEqual(course1.assignments, course2.assignments);
+
+            // tests for correct assignment weights by type
+            Assert.AreEqual(course1.assignmentTypeWeights, course2.assignmentTypeWeights);
+
+            // tests for correct grade cutoff
+            Assert.AreEqual(course1.gradeCutoff, course2.gradeCutoff);
         }
 
         // tests equality
@@ -129,13 +144,49 @@ namespace GradebookTests
                 course1.addAssignment(assignment);
             }
 
-            Course course2 = new Course(course1);
+            course1.setAssignmentTypeWeights(0, 0, 10, 10, 20, 20, 20, 20);
+            course1.setGradeCutoff(88, 78, 68, 58);
 
+            Course course2 = new Course(course1);
             Assert.IsTrue(course1.Equals(course2));
             Assert.IsTrue(course1 == course2);
             Assert.IsFalse(course1 != course2);
 
+            // add a student
             course2.addStudent(new Student(100, "new student"));
+            Assert.IsFalse(course1.Equals(course2));
+            Assert.IsFalse(course1 == course2);
+            Assert.IsTrue(course1 != course2);
+            // reset
+            course2 = new Course(course1);
+            Assert.IsTrue(course1.Equals(course2));
+            Assert.IsTrue(course1 == course2);
+            Assert.IsFalse(course1 != course2);
+
+            // add an assignment
+            course2.addAssignment(new Assignment("new assignment", Assignment.Type.Attendance, 100));
+            Assert.IsFalse(course1.Equals(course2));
+            Assert.IsFalse(course1 == course2);
+            Assert.IsTrue(course1 != course2);
+            // reset
+            course2 = new Course(course1);
+            Assert.IsTrue(course1.Equals(course2));
+            Assert.IsTrue(course1 == course2);
+            Assert.IsFalse(course1 != course2);
+
+            // change assignment type weights
+            course2.setAssignmentTypeWeights(100, 0, 0, 0, 0, 0, 0, 0);
+            Assert.IsFalse(course1.Equals(course2));
+            Assert.IsFalse(course1 == course2);
+            Assert.IsTrue(course1 != course2);
+            // reset
+            course2 = new Course(course1);
+            Assert.IsTrue(course1.Equals(course2));
+            Assert.IsTrue(course1 == course2);
+            Assert.IsFalse(course1 != course2);
+
+            // change grade cutoff
+            course2.setGradeCutoff(90, 80, 70, 60);
             Assert.IsFalse(course1.Equals(course2));
             Assert.IsFalse(course1 == course2);
             Assert.IsTrue(course1 != course2);
@@ -155,12 +206,39 @@ namespace GradebookTests
                 course1.addAssignment(assignment);
             }
 
-            Course course2 = new Course(course1);
+            course1.setAssignmentTypeWeights(0, 0, 10, 10, 20, 20, 20, 20);
+            course1.setGradeCutoff(88, 78, 68, 58);
 
+            Course course2 = new Course(course1);
             Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
 
+            // add a student
             course2.addStudent(new Student(100, "new student"));
             Assert.AreNotEqual(course1.GetHashCode(), course2.GetHashCode());
+            // reset
+            course2 = new Course(course1);
+            Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
+
+            // add an assignment
+            course2.addAssignment(new Assignment("new assignment", Assignment.Type.Attendance, 100));
+            Assert.AreNotEqual(course1.GetHashCode(), course2.GetHashCode());
+            // reset
+            course2 = new Course(course1);
+            Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
+
+            // change assignment type weights
+            course2.setAssignmentTypeWeights(100, 0, 0, 0, 0, 0, 0, 0);
+            Assert.AreNotEqual(course1.GetHashCode(), course2.GetHashCode());
+            // reset
+            course2 = new Course(course1);
+            Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
+
+            // change grade cutoff
+            course2.setGradeCutoff(90, 80, 70, 60);
+            Assert.AreNotEqual(course1.GetHashCode(), course2.GetHashCode());
+            // reset
+            course2 = new Course(course1);
+            Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
         }
 
         // tests addStudent()
@@ -947,6 +1025,37 @@ namespace GradebookTests
                 279.9 / 320 * 100) /
                 5,
                 course.getUnweightedClassMean(false).getGrade(), 0.000001);
+        }
+
+        // tests setGradeCutoff()
+        [Test]
+        public void Test17()
+        {
+            Course course = new Course("CS101", "Intro to Programming", "001");
+            Dictionary<string, double> cutoff = new Dictionary<string, double>();
+            cutoff.Add("A", 90);
+            cutoff.Add("B", 80);
+            cutoff.Add("C", 70);
+            cutoff.Add("D", 60);
+
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+
+            // change cutoff
+            Assert.IsTrue(course.setGradeCutoff(88, 78, 68, 58));
+            Assert.AreNotEqual(cutoff, course.gradeCutoff);
+            cutoff["A"] = 88;
+            cutoff["B"] = 78;
+            cutoff["C"] = 68;
+            cutoff["D"] = 58;
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+
+            // attempt at invalid cutoff change
+            Assert.IsFalse(course.setGradeCutoff(88, 78, 68, 78));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            Assert.IsFalse(course.setGradeCutoff(88, 78, 68, 0));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            Assert.IsFalse(course.setGradeCutoff(100, 78, 68, 78));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
         }
     }
 }

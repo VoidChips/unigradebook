@@ -15,6 +15,8 @@ namespace gradebook
         // describes how much each assignment type is worth in percentages out of the total grade
         public Dictionary<string, double> assignmentTypeWeights { get; }
 
+        public Dictionary<string, double> gradeCutoff { get; }
+
         public Dictionary<Student, Dictionary<Assignment, Grade>> students { get; }
 
         public List<Assignment> assignments { get; }
@@ -25,8 +27,8 @@ namespace gradebook
             this.title = title;
             this.section = section;
 
-            assignmentTypeWeights = new Dictionary<string, double>();
             // default percentages
+            assignmentTypeWeights = new Dictionary<string, double>();
             assignmentTypeWeights.Add("attendance", 5);
             assignmentTypeWeights.Add("homework", 35);
             assignmentTypeWeights.Add("lab", 0);
@@ -35,6 +37,13 @@ namespace gradebook
             assignmentTypeWeights.Add("project", 0);
             assignmentTypeWeights.Add("midterm", 30);
             assignmentTypeWeights.Add("final", 20);
+
+            // default cutoff
+            gradeCutoff = new Dictionary<string, double>();
+            gradeCutoff.Add("A", 90);
+            gradeCutoff.Add("B", 80);
+            gradeCutoff.Add("C", 70);
+            gradeCutoff.Add("D", 60);
 
             students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
             assignments = new List<Assignment>();
@@ -48,16 +57,23 @@ namespace gradebook
             title = c.title;
             section = c.section;
 
+            // set percentages
             assignmentTypeWeights = new Dictionary<string, double>();
-            // default percentages
-            assignmentTypeWeights.Add("attendance", 5);
-            assignmentTypeWeights.Add("homework", 35);
-            assignmentTypeWeights.Add("lab", 0);
-            assignmentTypeWeights.Add("discussion", 0);
-            assignmentTypeWeights.Add("quiz", 10);
-            assignmentTypeWeights.Add("project", 0);
-            assignmentTypeWeights.Add("midterm", 30);
-            assignmentTypeWeights.Add("final", 20);
+            assignmentTypeWeights.Add("attendance", c.assignmentTypeWeights["attendance"]);
+            assignmentTypeWeights.Add("homework", c.assignmentTypeWeights["homework"]);
+            assignmentTypeWeights.Add("lab", c.assignmentTypeWeights["lab"]);
+            assignmentTypeWeights.Add("discussion", c.assignmentTypeWeights["discussion"]);
+            assignmentTypeWeights.Add("quiz", c.assignmentTypeWeights["quiz"]);
+            assignmentTypeWeights.Add("project", c.assignmentTypeWeights["project"]);
+            assignmentTypeWeights.Add("midterm", c.assignmentTypeWeights["midterm"]);
+            assignmentTypeWeights.Add("final", c.assignmentTypeWeights["final"]);
+
+            // set cutoff
+            gradeCutoff = new Dictionary<string, double>();
+            gradeCutoff.Add("A", c.gradeCutoff["A"]);
+            gradeCutoff.Add("B", c.gradeCutoff["B"]);
+            gradeCutoff.Add("C", c.gradeCutoff["C"]);
+            gradeCutoff.Add("D", c.gradeCutoff["D"]);
 
             students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
             foreach((Student student, Dictionary<Assignment, Grade> ag_dict) in c.students)
@@ -93,6 +109,8 @@ namespace gradebook
             Course c = (Course)obj;
             if (students.Count != c.students.Count || 
                 assignments.Count != c.assignments.Count ||
+                assignmentTypeWeights.Count != c.assignmentTypeWeights.Count ||
+                gradeCutoff.Count != c.gradeCutoff.Count ||
                 name != c.name ||
                 title != c.title ||
                 section != c.section)
@@ -100,8 +118,28 @@ namespace gradebook
                 return false;
             }
 
+            // checks for equality for this.assignmentTypeWeights and c.assignmentTypeWeights
+            foreach((String type, double weight) in assignmentTypeWeights)
+            {
+                if (!c.assignmentTypeWeights.ContainsKey(type) ||
+                    c.assignmentTypeWeights[type] != weight)
+                {
+                    return false;
+                }
+            }
+
+            // checks for equality for this.gradeCutoff and c.gradeCutoff
+            foreach((String letterGrade, double cutoff) in gradeCutoff)
+            {
+                if (!c.gradeCutoff.ContainsKey(letterGrade) ||
+                    c.gradeCutoff[letterGrade] != cutoff)
+                {
+                    return false;
+                }
+            }
+
             // checks for equality for this.students and c.students
-            foreach((Student s, Dictionary<Assignment, Grade> ag_dict1) in students)
+            foreach ((Student s, Dictionary<Assignment, Grade> ag_dict1) in students)
             {
                 if (!c.students.ContainsKey(s))
                 {
@@ -137,8 +175,20 @@ namespace gradebook
 
         public override int GetHashCode()
         {
+            int assignmentTypeWeightsHashCode = 0;
+            int gradeCutoffHashCode = 0;
             int studentsHashCode = 0;
             int assignmentsHashCode = 0;
+
+            foreach((String type, double weight) in assignmentTypeWeights)
+            {
+                assignmentTypeWeightsHashCode = type.GetHashCode() ^ weight.GetHashCode();
+            }
+
+            foreach((String letterGrade, double cutoff) in gradeCutoff)
+            {
+                gradeCutoffHashCode = letterGrade.GetHashCode() ^ cutoff.GetHashCode();
+            }
 
             foreach((Student student, Dictionary<Assignment, Grade> ag_dict) in students)
             {
@@ -154,7 +204,14 @@ namespace gradebook
                 assignmentsHashCode ^= assignment.GetHashCode();
             }
 
-            return name.GetHashCode() ^ title.GetHashCode() ^ section.GetHashCode() ^ studentsHashCode ^ assignmentsHashCode;
+            return 
+                name.GetHashCode() ^
+                title.GetHashCode() ^ 
+                section.GetHashCode() ^
+                assignmentTypeWeightsHashCode ^
+                gradeCutoffHashCode ^
+                studentsHashCode ^ 
+                assignmentsHashCode;
         }
 
         public static bool operator ==(Course c1, Course c2) => c1.Equals(c2);
@@ -651,6 +708,24 @@ namespace gradebook
             Grade mean = new Grade(maxPoints);
             mean.points = sum / students.Count;
             return mean;
+        }
+
+        // set the grade cutoff that is used for finding the letter grade
+        // e.g. 90.0 for A means that the student's grade must be at least 90.0 to get an A.
+        // The cutoff for a letter grade must be a greater than the lower letter grades,
+        // greater than 0, and less than 100
+        // e.g. A - 90, B - 92 will not work and return false
+        public bool setGradeCutoff(double cutoffA, double cutoffB, double cutoffC, double cutoffD)
+        {
+            if (cutoffA > cutoffB && cutoffB > cutoffC && cutoffC > cutoffD && cutoffD > 0 && cutoffA < 100)
+            {
+                gradeCutoff["A"] = cutoffA;
+                gradeCutoff["B"] = cutoffB;
+                gradeCutoff["C"] = cutoffC;
+                gradeCutoff["D"] = cutoffD;
+                return true;
+            }
+            return false;
         }
     }
 }
