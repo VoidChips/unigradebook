@@ -710,6 +710,109 @@ namespace gradebook
             return mean;
         }
 
+        // get the weighted mean grade of the course
+        // if soFar is true, exclude the ungraded assignments
+        public Grade getWeightedClassMean(bool soFar)
+        {
+            if (students.Count == 0)
+            {
+                return new Grade(0);
+            }
+
+            double sum = 0;
+            double maxPoints = 0;
+
+            foreach (Student student in students.Keys)
+            {
+                Grade studentGrade = getWeightedStudentGrade(student, soFar);
+                sum += studentGrade.points;
+                maxPoints = studentGrade.maxPoints;
+            }
+
+            Grade mean = new Grade(maxPoints);
+            mean.points = sum / students.Count;
+            mean.graded = true;
+            return mean;
+        }
+
+        // get the median unweighted grade of the class
+        // if soFar is true, exclude the ungraded assignments
+        public Grade getUnweightedClassMedian(bool soFar)
+        {
+            if (students.Count == 0)
+            {
+                return new Grade(0);
+            }
+
+            List<Grade> grades = new List<Grade>();
+            foreach (Student student in students.Keys)
+            {
+                grades.Add(getUnweightedStudentGrade(student, soFar));
+            }
+
+            if (students.Count == 1)
+            {
+                return grades[0];
+            }
+
+            // if the numbers of grades are even, return the average of two middle grades
+            // if odd, return the middle grade
+            grades.Sort();
+            Grade median = new Grade(0);
+            if (students.Count % 2 == 0)
+            {
+                median = new Grade(grades[0].maxPoints);
+                Grade mid1 = grades[students.Count / 2 - 1];
+                Grade mid2 = grades[students.Count / 2];
+                median.points = (mid1.points + mid2.points) / 2;
+                median.graded = true;
+                return median;
+            }
+
+            median = grades[students.Count / 2];
+            median.graded = true;
+            return grades[students.Count / 2];
+        }
+
+        // get the median weighted grade of the class
+        // if soFar is true, exclude the ungraded assignments
+        public Grade getWeightedClassMedian(bool soFar)
+        {
+            if (students.Count == 0)
+            {
+                return new Grade(0);
+            }
+
+            List<Grade> grades = new List<Grade>();
+            foreach (Student student in students.Keys)
+            {
+                grades.Add(getWeightedStudentGrade(student, soFar));
+            }
+
+            if (students.Count == 1)
+            {
+                return grades[0];
+            }
+
+            // if the numbers of grades are even, return the average of two middle grades
+            // if odd, return the middle grade
+            grades.Sort();
+            Grade median = new Grade(0);
+            if (students.Count % 2 == 0)
+            {
+                median = new Grade(grades[0].maxPoints);
+                Grade mid1 = grades[students.Count / 2 - 1];
+                Grade mid2 = grades[students.Count / 2];
+                median.points = (mid1.points + mid2.points) / 2;
+                median.graded = true;
+                return median;
+            }
+
+            median = grades[students.Count / 2];
+            median.graded = true;
+            return grades[students.Count / 2];
+        }
+
         // set the grade cutoff that is used for finding the letter grade
         // e.g. 90.0 for A means that the student's grade must be at least 90.0 to get an A.
         // The cutoff for a letter grade must be a greater than the lower letter grades,

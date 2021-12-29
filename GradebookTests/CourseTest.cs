@@ -1027,9 +1027,30 @@ namespace GradebookTests
                 course.getUnweightedClassMean(false).getGrade(), 0.000001);
         }
 
-        // tests setGradeCutoff()
+        // tests weightedClassMean()
         [Test]
         public void Test17()
+        {
+
+        }
+
+        // tests getUnweightedClassMedian()
+        [Test]
+        public void Test18()
+        {
+
+        }
+
+        // tests getWeightedClassMedian()
+        [Test]
+        public void Test19()
+        {
+
+        }
+
+        // tests setGradeCutoff()
+        [Test]
+        public void Test20()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Dictionary<string, double> cutoff = new Dictionary<string, double>();
