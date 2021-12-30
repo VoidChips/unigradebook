@@ -309,6 +309,7 @@ namespace gradebook
 
         // get the unweighted grade of student
         // if soFar is true, get the grade of graded assignments only
+        // if all assignments are graded, soFar doesn't affect the results
         // e.g. If the class has 10% of grade worth of assignments out and the student gets 100% in all of them,
         // soFar == true will result in a grade of 100%, while soFar == false will result
         // in a grade of 10%.
@@ -359,6 +360,7 @@ namespace gradebook
 
         // get the weighted grade of student
         // if soFar is true, get the grade of graded assignments only
+        // if all assignments are graded, soFar doesn't affect the results
         // e.g. If the class has 10% of grade worth of assignments out and the student gets 100% in all of them,
         // soFar == true will result in a grade of 100%, while soFar == false will result
         // in a grade of 10%.
@@ -399,11 +401,13 @@ namespace gradebook
                 {
                     case Assignment.Type.Attendance:
                         {
-                            attendanceGrade.points += grade.points;
-                            attendanceGrade.maxPoints += grade.maxPoints;
                             int gradedCount = assignmentCountByType["attendance"].Item1;
                             int assignmentCount = assignmentCountByType["attendance"].Item2 + 1;
-
+                            if ((soFar && grade.graded) || !soFar)
+                            {
+                                attendanceGrade.points += grade.points;
+                                attendanceGrade.maxPoints += grade.maxPoints;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -413,10 +417,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Homework:
                         {
-                            homeworkGrade.points += grade.points;
-                            homeworkGrade.maxPoints += grade.maxPoints;
                             int gradedCount = assignmentCountByType["homework"].Item1;
                             int assignmentCount = assignmentCountByType["homework"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                homeworkGrade.points += grade.points;
+                                homeworkGrade.maxPoints += grade.maxPoints;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -426,10 +433,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Lab:
                         {
-                            labGrade.points += grade.points;
-                            labGrade.maxPoints += grade.points;
                             int gradedCount = assignmentCountByType["lab"].Item1;
                             int assignmentCount = assignmentCountByType["lab"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                labGrade.points += grade.points;
+                                labGrade.maxPoints += grade.points;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -439,10 +449,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Discussion:
                         {
-                            discussionGrade.points += grade.points;
-                            discussionGrade.maxPoints += grade.points;
                             int gradedCount = assignmentCountByType["discussion"].Item1;
                             int assignmentCount = assignmentCountByType["discussion"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                discussionGrade.points += grade.points;
+                                discussionGrade.maxPoints += grade.points;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -452,10 +465,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Quiz:
                         {
-                            quizGrade.points += grade.points;
-                            quizGrade.maxPoints += grade.maxPoints;
                             int gradedCount = assignmentCountByType["quiz"].Item1;
                             int assignmentCount = assignmentCountByType["quiz"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                quizGrade.points += grade.points;
+                                quizGrade.maxPoints += grade.maxPoints;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -465,10 +481,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Project:
                         {
-                            projectGrade.points += grade.points;
-                            projectGrade.maxPoints += grade.points;
                             int gradedCount = assignmentCountByType["project"].Item1;
                             int assignmentCount = assignmentCountByType["project"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                projectGrade.points += grade.points;
+                                projectGrade.maxPoints += grade.points;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -478,10 +497,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Midterm:
                         {
-                            midtermGrade.points += grade.points;
-                            midtermGrade.maxPoints += grade.maxPoints;
                             int gradedCount = assignmentCountByType["midterm"].Item1;
                             int assignmentCount = assignmentCountByType["midterm"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                midtermGrade.points += grade.points;
+                                midtermGrade.maxPoints += grade.maxPoints;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
@@ -491,10 +513,13 @@ namespace gradebook
                         }
                     case Assignment.Type.Final:
                         {
-                            finalGrade.points += grade.points;
-                            finalGrade.maxPoints += grade.maxPoints;
                             int gradedCount = assignmentCountByType["final"].Item1;
                             int assignmentCount = assignmentCountByType["final"].Item2 + 1;
+                            if ((soFar && grade.graded || !soFar))
+                            {
+                                finalGrade.points += grade.points;
+                                finalGrade.maxPoints += grade.maxPoints;
+                            }
                             if (grade.graded)
                             {
                                 gradedCount++;
