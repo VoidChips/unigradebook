@@ -963,11 +963,32 @@ namespace gradebook
 
         // get the letter grade of the student based on the weighted grade
         // if soFar is true, exclude the ungraded assignments
+        // if there are no assignments graded, return "N/A"
         public string getLetterGrade(Student s, bool soFar)
         {
             double grade = getWeightedStudentGrade(s, soFar).getGrade();
             List<string> letterGrades = new List<string>()
             { "A", "B", "C", "D"};
+
+            if (assignments.Count == 0)
+            {
+                return "N/A";
+            }
+
+            bool noAssignmentGraded = true;
+            foreach(Grade assignmentGrade in students[s].Values)
+            {
+                if (assignmentGrade.graded)
+                {
+                    noAssignmentGraded = false;
+                    break;
+                }
+            }
+
+            if (noAssignmentGraded)
+            {
+                return "N/A";
+            }
 
             if (isPlusMinusLetterGrade)
             {

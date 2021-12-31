@@ -1845,6 +1845,18 @@ namespace GradebookTests
             course.addStudent(student4);
             course.addStudent(student5);
 
+            // test letter grades before any assignments are added
+            Assert.AreEqual("N/A", course.getLetterGrade(student1, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student1, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student2, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student2, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student3, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student3, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student4, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student4, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student5, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student5, false));
+
             // add assignments
             Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
             Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
@@ -1859,17 +1871,17 @@ namespace GradebookTests
             course.addAssignment(assignment5);
             course.addAssignment(assignment6);
 
-            // test letter grades before any grading
-            Assert.AreEqual("F", course.getLetterGrade(student1, true));
-            Assert.AreEqual("F", course.getLetterGrade(student1, false));
-            Assert.AreEqual("F", course.getLetterGrade(student2, true));
-            Assert.AreEqual("F", course.getLetterGrade(student2, false));
-            Assert.AreEqual("F", course.getLetterGrade(student3, true));
-            Assert.AreEqual("F", course.getLetterGrade(student3, false));
-            Assert.AreEqual("F", course.getLetterGrade(student4, true));
-            Assert.AreEqual("F", course.getLetterGrade(student4, false));
-            Assert.AreEqual("F", course.getLetterGrade(student5, true));
-            Assert.AreEqual("F", course.getLetterGrade(student5, false));
+            // test letter grades after assignments are added but before any grading
+            Assert.AreEqual("N/A", course.getLetterGrade(student1, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student1, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student2, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student2, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student3, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student3, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student4, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student4, false));
+            Assert.AreEqual("N/A", course.getLetterGrade(student5, true));
+            Assert.AreEqual("N/A", course.getLetterGrade(student5, false));
 
             // grade assignment 1
             course.gradeAssignment(student1, assignment1, 50.5);
