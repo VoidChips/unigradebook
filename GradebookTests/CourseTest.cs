@@ -1656,6 +1656,18 @@ namespace GradebookTests
             Assert.AreEqual(cutoff, course.gradeCutoff);
             Assert.IsFalse(course.setGradeCutoff(100, 78, 68, 78));
             Assert.AreEqual(cutoff, course.gradeCutoff);
+
+            for (int i = 1; i < 55; i++)
+            {
+                // change cutoff
+                Assert.IsTrue(course.setGradeCutoff(90 - i, 80 - i, 70 - i, 60 - i));
+                Assert.AreNotEqual(cutoff, course.gradeCutoff);
+                cutoff["A"] = 90 - i;
+                cutoff["B"] = 80 - i;
+                cutoff["C"] = 70 - i;
+                cutoff["D"] = 60 - i;
+                Assert.AreEqual(cutoff, course.gradeCutoff);
+            }
         }
 
         // tests the overloaded setGradeCutoff() with more arguments
@@ -1676,7 +1688,6 @@ namespace GradebookTests
             cutoff.Add("D-", -1);
             cutoff.Add("D", 60);
             cutoff.Add("D+", -1);
-
             Assert.AreEqual(cutoff, course.gradeCutoff);
 
             // change cutoff
@@ -1703,13 +1714,96 @@ namespace GradebookTests
             Assert.AreEqual(cutoff, course.gradeCutoff);
             Assert.IsFalse(course.setGradeCutoff(100, 93, 90, 87, 83, 80, 77, 73, 70, 67, 63, 60));
             Assert.AreEqual(cutoff, course.gradeCutoff);
+
+            for (int i = 1; i < 55; i++)
+            {
+                // change cutoff
+                Assert.IsTrue(course.setGradeCutoff(
+                    97 - i,
+                    93 - i,
+                    90 - i,
+                    87 - i,
+                    83 - i,
+                    80 - i,
+                    77 - i,
+                    73 - i,
+                    70 - i,
+                    67 - i,
+                    63 - i,
+                    60 - i));
+                Assert.AreNotEqual(cutoff, course.gradeCutoff);
+                cutoff["A+"] = 97 - i;
+                cutoff["A"] = 93 - i;
+                cutoff["A-"] = 90 - i;
+                cutoff["B+"] = 87 - i;
+                cutoff["B"] = 83 - i;
+                cutoff["B-"] = 80 - i;
+                cutoff["C+"] = 77 - i;
+                cutoff["C"] = 73 - i;
+                cutoff["C-"] = 70 - i;
+                cutoff["D+"] = 67 - i;
+                cutoff["D"] = 63 - i;
+                cutoff["D-"] = 60 - i;
+                Assert.AreEqual(cutoff, course.gradeCutoff);
+            }
         }
 
         // tests setLetterGradePlusMinus()
         [Test]
         public void Test22()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
+            Dictionary<string, double> cutoff = new Dictionary<string, double>();
+            cutoff.Add("A-", -1);
+            cutoff.Add("A", 90);
+            cutoff.Add("A+", -1);
+            cutoff.Add("B-", -1);
+            cutoff.Add("B", 80);
+            cutoff.Add("B+", -1);
+            cutoff.Add("C-", -1);
+            cutoff.Add("C", 70);
+            cutoff.Add("C+", -1);
+            cutoff.Add("D-", -1);
+            cutoff.Add("D", 60);
+            cutoff.Add("D+", -1);
+            Assert.AreEqual(cutoff, course.gradeCutoff);
 
+            // set the flag
+            course.setLetterGradePlusMinus(false);
+            Assert.AreEqual(false, course.isPlusMinusLetterGrade);
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            course.setLetterGradePlusMinus(true);
+            Assert.AreEqual(true, course.isPlusMinusLetterGrade);
+            Assert.AreNotEqual(cutoff, course.gradeCutoff);
+            cutoff["A+"] = 97;
+            cutoff["A"] = 93;
+            cutoff["A-"] = 90;
+            cutoff["B+"] = 87;
+            cutoff["B"] = 83;
+            cutoff["B-"] = 80;
+            cutoff["C+"] = 77;
+            cutoff["C"] = 73;
+            cutoff["C-"] = 70;
+            cutoff["D+"] = 67;
+            cutoff["D"] = 63;
+            cutoff["D-"] = 60;
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            course.setLetterGradePlusMinus(false);
+            Assert.AreEqual(false, course.isPlusMinusLetterGrade);
+            Assert.AreNotEqual(cutoff, course.gradeCutoff);
+            cutoff["A+"] = -1;
+            cutoff["A"] = 90;
+            cutoff["A-"] = -1;
+            cutoff["B+"] = -1;
+            cutoff["B"] = 80;
+            cutoff["B-"] = -1;
+            cutoff["C+"] = -1;
+            cutoff["C"] = 70;
+            cutoff["C-"] = -1;
+            cutoff["D+"] = -1;
+            cutoff["D"] = 60;
+            cutoff["D-"] = -1;
+            Assert.AreEqual(cutoff, course.gradeCutoff);
         }
     }
 }
