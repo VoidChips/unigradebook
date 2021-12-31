@@ -877,18 +877,18 @@ namespace gradebook
 
         // set the grade cutoff if using plus and minus system
         public bool setGradeCutoff(
-            double cutoffAm, 
-            double cutoffA, 
             double cutoffAp, 
-            double cutoffBm, 
-            double cutoffB, 
+            double cutoffA, 
+            double cutoffAm, 
             double cutoffBp, 
-            double cutoffCm, 
-            double cutoffC, 
+            double cutoffB, 
+            double cutoffBm, 
             double cutoffCp, 
-            double cutoffDm,
+            double cutoffC, 
+            double cutoffCm, 
+            double cutoffDp,
             double cutoffD,
-            double cutoffDp)
+            double cutoffDm)
         {
             if (cutoffAp > cutoffA && 
                 cutoffA > cutoffAm && 
@@ -904,18 +904,18 @@ namespace gradebook
                 cutoffDm > 0 && 
                 cutoffAp < 100)
             {
-                gradeCutoff["A-"] = cutoffAm;
-                gradeCutoff["A"] = cutoffA;
                 gradeCutoff["A+"] = cutoffAp;
-                gradeCutoff["B-"] = cutoffBm;
-                gradeCutoff["B"] = cutoffB;
+                gradeCutoff["A"] = cutoffA;
+                gradeCutoff["A-"] = cutoffAm;
                 gradeCutoff["B+"] = cutoffBp;
-                gradeCutoff["C-"] = cutoffCm;
-                gradeCutoff["C"] = cutoffC;
+                gradeCutoff["B"] = cutoffB;
+                gradeCutoff["B-"] = cutoffBm;
                 gradeCutoff["C+"] = cutoffCp;
-                gradeCutoff["D-"] = cutoffDm;
-                gradeCutoff["D"] = cutoffD;
+                gradeCutoff["C"] = cutoffC;
+                gradeCutoff["C-"] = cutoffCm;
                 gradeCutoff["D+"] = cutoffDp;
+                gradeCutoff["D"] = cutoffD;
+                gradeCutoff["D-"] = cutoffDm;
                 return true;
             }
             return false;
@@ -928,33 +928,33 @@ namespace gradebook
             if (isPlusMinus)
             {
                 isPlusMinusLetterGrade = true;
-                gradeCutoff.Add("A-", 90);
-                gradeCutoff.Add("A", 93);
-                gradeCutoff.Add("A+", 97);
-                gradeCutoff.Add("B-", 80);
-                gradeCutoff.Add("B", 83);
-                gradeCutoff.Add("B+", 87);
-                gradeCutoff.Add("C-", 70);
-                gradeCutoff.Add("C", 73);
-                gradeCutoff.Add("C+", 77);
-                gradeCutoff.Add("D-", 60);
-                gradeCutoff.Add("D", 63);
-                gradeCutoff.Add("D+", 67);
+                gradeCutoff["A+"] = 97;
+                gradeCutoff["A"] = 93;
+                gradeCutoff["A-"] = 90;
+                gradeCutoff["B+"] = 87;
+                gradeCutoff["B"] = 83;
+                gradeCutoff["B-"] = 80;
+                gradeCutoff["C+"] = 77;
+                gradeCutoff["C"] = 73;
+                gradeCutoff["C-"] = 70;
+                gradeCutoff["D+"] = 67;
+                gradeCutoff["D"] = 63;
+                gradeCutoff["D-"] = 60;
             } else
             {
                 isPlusMinusLetterGrade = false;
-                gradeCutoff.Add("A-", -1);
-                gradeCutoff.Add("A", 90);
-                gradeCutoff.Add("A+", -1);
-                gradeCutoff.Add("B-", -1);
-                gradeCutoff.Add("B", 80);
-                gradeCutoff.Add("B+", -1);
-                gradeCutoff.Add("C-", -1);
-                gradeCutoff.Add("C", 70);
-                gradeCutoff.Add("C+", -1);
-                gradeCutoff.Add("D-", -1);
-                gradeCutoff.Add("D", 60);
-                gradeCutoff.Add("D+", -1);
+                gradeCutoff["A+"] = -1;
+                gradeCutoff["A"] = 90;
+                gradeCutoff["A-"] = -1;
+                gradeCutoff["B+"] = -1;
+                gradeCutoff["B"] = 80;
+                gradeCutoff["B-"] = -1;
+                gradeCutoff["C+"] = -1;
+                gradeCutoff["C"] = 70;
+                gradeCutoff["C-"] = -1;
+                gradeCutoff["D+"] = -1;
+                gradeCutoff["D"] = 60;
+                gradeCutoff["D-"] = -1;
             }
         }
 

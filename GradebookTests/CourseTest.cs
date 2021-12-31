@@ -1662,7 +1662,47 @@ namespace GradebookTests
         [Test]
         public void Test21()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
+            Dictionary<string, double> cutoff = new Dictionary<string, double>();
+            cutoff.Add("A-", -1);
+            cutoff.Add("A", 90);
+            cutoff.Add("A+", -1);
+            cutoff.Add("B-", -1);
+            cutoff.Add("B", 80);
+            cutoff.Add("B+", -1);
+            cutoff.Add("C-", -1);
+            cutoff.Add("C", 70);
+            cutoff.Add("C+", -1);
+            cutoff.Add("D-", -1);
+            cutoff.Add("D", 60);
+            cutoff.Add("D+", -1);
 
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+
+            // change cutoff
+            Assert.IsTrue(course.setGradeCutoff(97, 93, 90, 87, 83, 80, 77, 73, 70, 67, 63, 60));
+            Assert.AreNotEqual(cutoff, course.gradeCutoff);
+            cutoff["A+"] = 97;
+            cutoff["A"] = 93;
+            cutoff["A-"] = 90;
+            cutoff["B+"] = 87;
+            cutoff["B"] = 83;
+            cutoff["B-"] = 80;
+            cutoff["C+"] = 77;
+            cutoff["C"] = 73;
+            cutoff["C-"] = 70;
+            cutoff["D+"] = 67;
+            cutoff["D"] = 63;
+            cutoff["D-"] = 60;
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+
+            // attempt at invalid cutoff change
+            Assert.IsFalse(course.setGradeCutoff(97, 93, 90, 87, 83, 80, 77, 73, 70, 80, 63, 60));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            Assert.IsFalse(course.setGradeCutoff(97, 93, 90, 87, 83, 80, 77, 73, 70, 67, 63, 0));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            Assert.IsFalse(course.setGradeCutoff(100, 93, 90, 87, 83, 80, 77, 73, 70, 67, 63, 60));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
         }
 
         // tests setLetterGradePlusMinus()
