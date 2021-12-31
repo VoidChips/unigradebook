@@ -12,20 +12,24 @@ namespace gradebook
 
         public string section { get; set; }  // e.g. 001
 
+        public bool isPlusMinusLetterGrade { get; private set; }  // flag for whether the letter grade uses pluses and minuses
+
         // describes how much each assignment type is worth in percentages out of the total grade
         public Dictionary<string, double> assignmentTypeWeights { get; }
 
-        public Dictionary<string, double> gradeCutoff { get; }
+        public Dictionary<string, double> gradeCutoff { get; }  // cutoff for letter grades
 
+        // mapping of students and their grades on assignments
         public Dictionary<Student, Dictionary<Assignment, Grade>> students { get; }
 
-        public List<Assignment> assignments { get; }
+        public List<Assignment> assignments { get; }  // all assignments currently used in the course
 
         public Course(string name, string title, string section)
         {
             this.name = name;
             this.title = title;
             this.section = section;
+            this.isPlusMinusLetterGrade = false;
 
             // default percentages
             assignmentTypeWeights = new Dictionary<string, double>();
@@ -40,10 +44,18 @@ namespace gradebook
 
             // default cutoff
             gradeCutoff = new Dictionary<string, double>();
+            gradeCutoff.Add("A-", -1);
             gradeCutoff.Add("A", 90);
+            gradeCutoff.Add("A+", -1);
+            gradeCutoff.Add("B-", -1);
             gradeCutoff.Add("B", 80);
+            gradeCutoff.Add("B+", -1);
+            gradeCutoff.Add("C-", -1);
             gradeCutoff.Add("C", 70);
+            gradeCutoff.Add("C+", -1);
+            gradeCutoff.Add("D-", -1);
             gradeCutoff.Add("D", 60);
+            gradeCutoff.Add("D+", -1);
 
             students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
             assignments = new List<Assignment>();
@@ -56,6 +68,7 @@ namespace gradebook
             name = c.name;
             title = c.title;
             section = c.section;
+            isPlusMinusLetterGrade = c.isPlusMinusLetterGrade;
 
             // set percentages
             assignmentTypeWeights = new Dictionary<string, double>();
@@ -70,10 +83,18 @@ namespace gradebook
 
             // set cutoff
             gradeCutoff = new Dictionary<string, double>();
+            gradeCutoff.Add("A-", c.gradeCutoff["A-"]);
             gradeCutoff.Add("A", c.gradeCutoff["A"]);
+            gradeCutoff.Add("A+", c.gradeCutoff["A+"]);
+            gradeCutoff.Add("B-", c.gradeCutoff["B-"]);
             gradeCutoff.Add("B", c.gradeCutoff["B"]);
+            gradeCutoff.Add("B+", c.gradeCutoff["B+"]);
+            gradeCutoff.Add("C-", c.gradeCutoff["C-"]);
             gradeCutoff.Add("C", c.gradeCutoff["C"]);
+            gradeCutoff.Add("C+", c.gradeCutoff["C+"]);
+            gradeCutoff.Add("D-", c.gradeCutoff["D-"]);
             gradeCutoff.Add("D", c.gradeCutoff["D"]);
+            gradeCutoff.Add("D+", c.gradeCutoff["D+"]);
 
             students = new Dictionary<Student, Dictionary<Assignment, Grade>>();
             foreach((Student student, Dictionary<Assignment, Grade> ag_dict) in c.students)
@@ -113,7 +134,8 @@ namespace gradebook
                 gradeCutoff.Count != c.gradeCutoff.Count ||
                 name != c.name ||
                 title != c.title ||
-                section != c.section)
+                section != c.section ||
+                isPlusMinusLetterGrade != c.isPlusMinusLetterGrade)
             {
                 return false;
             }
@@ -182,12 +204,12 @@ namespace gradebook
 
             foreach((String type, double weight) in assignmentTypeWeights)
             {
-                assignmentTypeWeightsHashCode = type.GetHashCode() ^ weight.GetHashCode();
+                assignmentTypeWeightsHashCode ^= type.GetHashCode() ^ weight.GetHashCode();
             }
 
             foreach((String letterGrade, double cutoff) in gradeCutoff)
             {
-                gradeCutoffHashCode = letterGrade.GetHashCode() ^ cutoff.GetHashCode();
+                gradeCutoffHashCode ^= letterGrade.GetHashCode() ^ cutoff.GetHashCode();
             }
 
             foreach((Student student, Dictionary<Assignment, Grade> ag_dict) in students)
@@ -208,6 +230,7 @@ namespace gradebook
                 name.GetHashCode() ^
                 title.GetHashCode() ^ 
                 section.GetHashCode() ^
+                isPlusMinusLetterGrade.GetHashCode() ^
                 assignmentTypeWeightsHashCode ^
                 gradeCutoffHashCode ^
                 studentsHashCode ^ 
@@ -851,5 +874,95 @@ namespace gradebook
             }
             return false;
         }
+
+        // set the grade cutoff if using plus and minus system
+        public bool setGradeCutoff(
+            double cutoffAm, 
+            double cutoffA, 
+            double cutoffAp, 
+            double cutoffBm, 
+            double cutoffB, 
+            double cutoffBp, 
+            double cutoffCm, 
+            double cutoffC, 
+            double cutoffCp, 
+            double cutoffDm,
+            double cutoffD,
+            double cutoffDp)
+        {
+            if (cutoffAp > cutoffA && 
+                cutoffA > cutoffAm && 
+                cutoffAm > cutoffBp && 
+                cutoffBp > cutoffB && 
+                cutoffB > cutoffBm && 
+                cutoffBm > cutoffCp && 
+                cutoffCp > cutoffC && 
+                cutoffC > cutoffCm && 
+                cutoffCm > cutoffDp && 
+                cutoffDp > cutoffD && 
+                cutoffD > cutoffDm && 
+                cutoffDm > 0 && 
+                cutoffAp < 100)
+            {
+                gradeCutoff["A-"] = cutoffAm;
+                gradeCutoff["A"] = cutoffA;
+                gradeCutoff["A+"] = cutoffAp;
+                gradeCutoff["B-"] = cutoffBm;
+                gradeCutoff["B"] = cutoffB;
+                gradeCutoff["B+"] = cutoffBp;
+                gradeCutoff["C-"] = cutoffCm;
+                gradeCutoff["C"] = cutoffC;
+                gradeCutoff["C+"] = cutoffCp;
+                gradeCutoff["D-"] = cutoffDm;
+                gradeCutoff["D"] = cutoffD;
+                gradeCutoff["D+"] = cutoffDp;
+                return true;
+            }
+            return false;
+        }
+
+        // set whether the course uses plus minus for the letter grade
+        public void setLetterGradePlusMinus(bool isPlusMinus)
+        {
+            // set to default values
+            if (isPlusMinus)
+            {
+                isPlusMinusLetterGrade = true;
+                gradeCutoff.Add("A-", 90);
+                gradeCutoff.Add("A", 93);
+                gradeCutoff.Add("A+", 97);
+                gradeCutoff.Add("B-", 80);
+                gradeCutoff.Add("B", 83);
+                gradeCutoff.Add("B+", 87);
+                gradeCutoff.Add("C-", 70);
+                gradeCutoff.Add("C", 73);
+                gradeCutoff.Add("C+", 77);
+                gradeCutoff.Add("D-", 60);
+                gradeCutoff.Add("D", 63);
+                gradeCutoff.Add("D+", 67);
+            } else
+            {
+                isPlusMinusLetterGrade = false;
+                gradeCutoff.Add("A-", -1);
+                gradeCutoff.Add("A", 90);
+                gradeCutoff.Add("A+", -1);
+                gradeCutoff.Add("B-", -1);
+                gradeCutoff.Add("B", 80);
+                gradeCutoff.Add("B+", -1);
+                gradeCutoff.Add("C-", -1);
+                gradeCutoff.Add("C", 70);
+                gradeCutoff.Add("C+", -1);
+                gradeCutoff.Add("D-", -1);
+                gradeCutoff.Add("D", 60);
+                gradeCutoff.Add("D+", -1);
+            }
+        }
+
+        // get the letter grade of the student based on the weighted grade
+        // if soFar is true, exclude the ungraded assignments
+        //public string getLetterGrade(Student s, bool soFar)
+        //{
+        //    double grade = getWeightedStudentGrade(s, soFar).getGrade();
+        //}
     }
 }

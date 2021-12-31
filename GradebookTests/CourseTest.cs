@@ -63,6 +63,7 @@ namespace GradebookTests
             Assert.AreEqual("CS101", course.name);
             Assert.AreEqual("Intro to Programming", course.title);
             Assert.AreEqual("001", course.section);
+            Assert.AreEqual(false, course.isPlusMinusLetterGrade);
 
             // tests for correct default assignment weights by type
             Assert.AreEqual(8, course.assignmentTypeWeights.Count);
@@ -76,7 +77,7 @@ namespace GradebookTests
             Assert.AreEqual(20, course.assignmentTypeWeights["final"], 0.000001);
 
             // tests for correct default grade cutoffs
-            Assert.AreEqual(4, course.gradeCutoff.Count);
+            Assert.AreEqual(12, course.gradeCutoff.Count);
             Assert.AreEqual(90, course.gradeCutoff["A"], 0.000001);
             Assert.AreEqual(80, course.gradeCutoff["B"], 0.000001);
             Assert.AreEqual(70, course.gradeCutoff["C"], 0.000001);
@@ -101,6 +102,7 @@ namespace GradebookTests
             Assert.AreEqual(course1.name, course2.name);
             Assert.AreEqual(course1.title, course2.title);
             Assert.AreEqual(course1.section, course2.section);
+            Assert.AreEqual(course1.isPlusMinusLetterGrade, course2.isPlusMinusLetterGrade);
             Assert.AreEqual(course1.students, course2.students);
             Assert.AreEqual(course1.assignments, course2.assignments);
 
@@ -120,6 +122,7 @@ namespace GradebookTests
             Assert.AreEqual(course1.name, course2.name);
             Assert.AreEqual(course1.title, course2.title);
             Assert.AreEqual(course1.section, course2.section);
+            Assert.AreEqual(course1.isPlusMinusLetterGrade, course2.isPlusMinusLetterGrade);
             Assert.AreEqual(course1.students, course2.students);
             Assert.AreEqual(course1.assignments, course2.assignments);
 
@@ -207,7 +210,7 @@ namespace GradebookTests
             }
 
             course1.setAssignmentTypeWeights(0, 0, 10, 10, 20, 20, 20, 20);
-            course1.setGradeCutoff(88, 78, 68, 58);
+            Assert.IsTrue(course1.setGradeCutoff(88, 78, 68, 58));
 
             Course course2 = new Course(course1);
             Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
@@ -234,7 +237,7 @@ namespace GradebookTests
             Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
 
             // change grade cutoff
-            course2.setGradeCutoff(90, 80, 70, 60);
+            Assert.IsTrue(course2.setGradeCutoff(90, 80, 70, 60));
             Assert.AreNotEqual(course1.GetHashCode(), course2.GetHashCode());
             // reset
             course2 = new Course(course1);
@@ -1622,10 +1625,18 @@ namespace GradebookTests
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Dictionary<string, double> cutoff = new Dictionary<string, double>();
+            cutoff.Add("A-", -1);
             cutoff.Add("A", 90);
+            cutoff.Add("A+", -1);
+            cutoff.Add("B-", -1);
             cutoff.Add("B", 80);
+            cutoff.Add("B+", -1);
+            cutoff.Add("C-", -1);
             cutoff.Add("C", 70);
+            cutoff.Add("C+", -1);
+            cutoff.Add("D-", -1);
             cutoff.Add("D", 60);
+            cutoff.Add("D+", -1);
 
             Assert.AreEqual(cutoff, course.gradeCutoff);
 
@@ -1645,6 +1656,20 @@ namespace GradebookTests
             Assert.AreEqual(cutoff, course.gradeCutoff);
             Assert.IsFalse(course.setGradeCutoff(100, 78, 68, 78));
             Assert.AreEqual(cutoff, course.gradeCutoff);
+        }
+
+        // tests the overloaded setGradeCutoff() with more arguments
+        [Test]
+        public void Test21()
+        {
+
+        }
+
+        // tests setLetterGradePlusMinus()
+        [Test]
+        public void Test22()
+        {
+
         }
     }
 }
