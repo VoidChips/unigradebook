@@ -783,9 +783,9 @@ namespace gradebook
             // if the numbers of grades are even, return the average of two middle grades
             // if odd, return the middle grade
             grades.Sort();
-            Grade median = new Grade(0);
             if (students.Count % 2 == 0)
             {
+                Grade median = new Grade(0);
                 median = new Grade(grades[0].maxPoints);
                 Grade mid1 = grades[students.Count / 2 - 1];
                 Grade mid2 = grades[students.Count / 2];
@@ -794,8 +794,6 @@ namespace gradebook
                 return median;
             }
 
-            median = grades[students.Count / 2];
-            median.graded = true;
             return grades[students.Count / 2];
         }
 
@@ -822,9 +820,9 @@ namespace gradebook
             // if the numbers of grades are even, return the average of two middle grades
             // if odd, return the middle grade
             grades.Sort();
-            Grade median = new Grade(0);
             if (students.Count % 2 == 0)
             {
+                Grade median = new Grade(0);
                 median = new Grade(grades[0].maxPoints);
                 Grade mid1 = grades[students.Count / 2 - 1];
                 Grade mid2 = grades[students.Count / 2];
@@ -833,8 +831,6 @@ namespace gradebook
                 return median;
             }
 
-            median = grades[students.Count / 2];
-            median.graded = true;
             return grades[students.Count / 2];
         }
 
