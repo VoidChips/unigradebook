@@ -1676,6 +1676,8 @@ namespace GradebookTests
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Dictionary<string, double> cutoff = new Dictionary<string, double>();
+
+            // test the default cutoff
             cutoff.Add("A-", -1);
             cutoff.Add("A", 90);
             cutoff.Add("A+", -1);
@@ -1691,7 +1693,7 @@ namespace GradebookTests
             Assert.AreEqual(cutoff, course.gradeCutoff);
 
             // change cutoff
-            Assert.IsTrue(course.setGradeCutoff(97, 93, 90, 87, 83, 80, 77, 73, 70, 67, 63, 60));
+            course.useLetterGradePlusMinus(true);
             Assert.AreNotEqual(cutoff, course.gradeCutoff);
             cutoff["A+"] = 97;
             cutoff["A"] = 93;
@@ -1706,6 +1708,22 @@ namespace GradebookTests
             cutoff["D"] = 63;
             cutoff["D-"] = 60;
             Assert.AreEqual(cutoff, course.gradeCutoff);
+            Assert.IsTrue(course.setGradeCutoff(97, 93, 90, 87, 83, 80, 77, 73, 70, 67, 63, 60));
+            Assert.AreEqual(cutoff, course.gradeCutoff);
+            Assert.IsTrue(course.setGradeCutoff(96, 92, 89, 86, 82, 79, 76, 72, 69, 66, 62, 59));
+            cutoff["A+"] = 96;
+            cutoff["A"] = 92;
+            cutoff["A-"] = 89;
+            cutoff["B+"] = 86;
+            cutoff["B"] = 82;
+            cutoff["B-"] = 79;
+            cutoff["C+"] = 76;
+            cutoff["C"] = 72;
+            cutoff["C-"] = 69;
+            cutoff["D+"] = 66;
+            cutoff["D"] = 62;
+            cutoff["D-"] = 59;
+            Assert.AreEqual(cutoff, course.gradeCutoff);
 
             // attempt at invalid cutoff change
             Assert.IsFalse(course.setGradeCutoff(97, 93, 90, 87, 83, 80, 77, 73, 70, 80, 63, 60));
@@ -1719,36 +1737,36 @@ namespace GradebookTests
             {
                 // change cutoff
                 Assert.IsTrue(course.setGradeCutoff(
-                    97 - i,
-                    93 - i,
-                    90 - i,
-                    87 - i,
-                    83 - i,
-                    80 - i,
-                    77 - i,
-                    73 - i,
-                    70 - i,
-                    67 - i,
-                    63 - i,
-                    60 - i));
+                    96 - i,
+                    92 - i,
+                    89 - i,
+                    86 - i,
+                    82 - i,
+                    79 - i,
+                    76 - i,
+                    72 - i,
+                    69 - i,
+                    66 - i,
+                    62 - i,
+                    59 - i));
                 Assert.AreNotEqual(cutoff, course.gradeCutoff);
-                cutoff["A+"] = 97 - i;
-                cutoff["A"] = 93 - i;
-                cutoff["A-"] = 90 - i;
-                cutoff["B+"] = 87 - i;
-                cutoff["B"] = 83 - i;
-                cutoff["B-"] = 80 - i;
-                cutoff["C+"] = 77 - i;
-                cutoff["C"] = 73 - i;
-                cutoff["C-"] = 70 - i;
-                cutoff["D+"] = 67 - i;
-                cutoff["D"] = 63 - i;
-                cutoff["D-"] = 60 - i;
+                cutoff["A+"] = 96 - i;
+                cutoff["A"] = 92 - i;
+                cutoff["A-"] = 89 - i;
+                cutoff["B+"] = 86 - i;
+                cutoff["B"] = 82 - i;
+                cutoff["B-"] = 79 - i;
+                cutoff["C+"] = 76 - i;
+                cutoff["C"] = 72 - i;
+                cutoff["C-"] = 69 - i;
+                cutoff["D+"] = 66 - i;
+                cutoff["D"] = 62 - i;
+                cutoff["D-"] = 59 - i;
                 Assert.AreEqual(cutoff, course.gradeCutoff);
             }
         }
 
-        // tests setLetterGradePlusMinus()
+        // tests useLetterGradePlusMinus()
         [Test]
         public void Test22()
         {
@@ -1769,10 +1787,10 @@ namespace GradebookTests
             Assert.AreEqual(cutoff, course.gradeCutoff);
 
             // set the flag
-            course.setLetterGradePlusMinus(false);
+            course.useLetterGradePlusMinus(false);
             Assert.AreEqual(false, course.isPlusMinusLetterGrade);
             Assert.AreEqual(cutoff, course.gradeCutoff);
-            course.setLetterGradePlusMinus(true);
+            course.useLetterGradePlusMinus(true);
             Assert.AreEqual(true, course.isPlusMinusLetterGrade);
             Assert.AreNotEqual(cutoff, course.gradeCutoff);
             cutoff["A+"] = 97;
@@ -1788,7 +1806,7 @@ namespace GradebookTests
             cutoff["D"] = 63;
             cutoff["D-"] = 60;
             Assert.AreEqual(cutoff, course.gradeCutoff);
-            course.setLetterGradePlusMinus(false);
+            course.useLetterGradePlusMinus(false);
             Assert.AreEqual(false, course.isPlusMinusLetterGrade);
             Assert.AreNotEqual(cutoff, course.gradeCutoff);
             cutoff["A+"] = -1;
@@ -1804,6 +1822,223 @@ namespace GradebookTests
             cutoff["D"] = 60;
             cutoff["D-"] = -1;
             Assert.AreEqual(cutoff, course.gradeCutoff);
+        }
+
+        // tests getLetterGrade()
+        [Test]
+        public void Test23()
+        {
+            Course course = new Course("CS101", "Intro to Programming", "001");
+
+            // set weights
+            Assert.IsTrue(course.setAssignmentTypeWeights(0, 35, 0, 0, 15, 0, 0, 50));
+
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            Assignment assignment6 = new Assignment("quiz 2", Assignment.Type.Quiz, 10);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+            course.addAssignment(assignment6);
+
+            // test letter grades before any grading
+            Assert.AreEqual("F", course.getLetterGrade(student1, true));
+            Assert.AreEqual("F", course.getLetterGrade(student1, false));
+            Assert.AreEqual("F", course.getLetterGrade(student2, true));
+            Assert.AreEqual("F", course.getLetterGrade(student2, false));
+            Assert.AreEqual("F", course.getLetterGrade(student3, true));
+            Assert.AreEqual("F", course.getLetterGrade(student3, false));
+            Assert.AreEqual("F", course.getLetterGrade(student4, true));
+            Assert.AreEqual("F", course.getLetterGrade(student4, false));
+            Assert.AreEqual("F", course.getLetterGrade(student5, true));
+            Assert.AreEqual("F", course.getLetterGrade(student5, false));
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // assignment 6 not graded yet
+
+            // test the weighted student grades
+            Assert.AreEqual(26.3375 + 15 + 41.5 + 2,
+                course.getWeightedStudentGrade(student1, true).getGrade(), 0.000001);
+            Assert.AreEqual(26.3375 + 7.5 + 41.5 + 2,
+                course.getWeightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(26.6 + 13.5 + 42.8 + 3,
+                course.getWeightedStudentGrade(student2, true).getGrade(), 0.000001);
+            Assert.AreEqual(26.6 + 6.75 + 42.8 + 3,
+                course.getWeightedStudentGrade(student2, false).getGrade(), 0.000001);
+            Assert.AreEqual(21.525 + 12 + 39.95 + 2.2,
+                course.getWeightedStudentGrade(student3, true).getGrade(), 0.000001);
+            Assert.AreEqual(21.525 + 6 + 39.95 + 2.2,
+                course.getWeightedStudentGrade(student3, false).getGrade(), 0.000001);
+            Assert.AreEqual(25.515 + 11.25 + 40.5 + 1,
+                course.getWeightedStudentGrade(student4, true).getGrade(), 0.000001);
+            Assert.AreEqual(25.515 + 5.625 + 40.5 + 1,
+                course.getWeightedStudentGrade(student4, false).getGrade(), 0.000001);
+            Assert.AreEqual(31.7275 + 11.7 + 45.4 + 0,
+                course.getWeightedStudentGrade(student5, true).getGrade(), 0.000001);
+            Assert.AreEqual(31.7275 + 5.85 + 45.4 + 0,
+                course.getWeightedStudentGrade(student5, false).getGrade(), 0.000001);
+
+            // test the letter grades after grading assignments 1-5
+            Assert.AreEqual("B", course.getLetterGrade(student1, true));
+            Assert.AreEqual("C", course.getLetterGrade(student1, false));
+            Assert.AreEqual("B", course.getLetterGrade(student2, true));
+            Assert.AreEqual("C", course.getLetterGrade(student2, false));
+            Assert.AreEqual("C", course.getLetterGrade(student3, true));
+            Assert.AreEqual("D", course.getLetterGrade(student3, false));
+            Assert.AreEqual("C", course.getLetterGrade(student4, true));
+            Assert.AreEqual("C", course.getLetterGrade(student4, false));
+            Assert.AreEqual("B", course.getLetterGrade(student5, true));
+            Assert.AreEqual("B", course.getLetterGrade(student5, false));
+
+            // switch to letter grades with plus and minus (cutoff changed by default) and test again
+            course.useLetterGradePlusMinus(true);
+            Assert.AreEqual("B", course.getLetterGrade(student1, true));
+            Assert.AreEqual("C+", course.getLetterGrade(student1, false));
+            Assert.AreEqual("B", course.getLetterGrade(student2, true));
+            Assert.AreEqual("C+", course.getLetterGrade(student2, false));
+            Assert.AreEqual("C", course.getLetterGrade(student3, true));
+            Assert.AreEqual("D+", course.getLetterGrade(student3, false));
+            Assert.AreEqual("C+", course.getLetterGrade(student4, true));
+            Assert.AreEqual("C-", course.getLetterGrade(student4, false));
+            Assert.AreEqual("B+", course.getLetterGrade(student5, true));
+            Assert.AreEqual("B-", course.getLetterGrade(student5, false));
+            // reset to normal letter grades
+            course.useLetterGradePlusMinus(false);
+
+            // grade assignment 6
+            course.gradeAssignment(student1, assignment6, 7);
+            course.gradeAssignment(student2, assignment6, 5);
+            course.gradeAssignment(student3, assignment6, 3.8);
+            course.gradeAssignment(student4, assignment6, 6.5);
+            course.gradeAssignment(student5, assignment6, 8);
+
+            // test the weighted student grades
+            Assert.AreEqual(26.3375 + 12.75 + 41.5 + 2,
+                course.getWeightedStudentGrade(student1, true).getGrade(), 0.000001);
+            Assert.AreEqual(26.3375 + 12.75 + 41.5 + 2,
+                course.getWeightedStudentGrade(student1, false).getGrade(), 0.000001);
+            Assert.AreEqual(26.6 + 10.5 + 42.8 + 3,
+                course.getWeightedStudentGrade(student2, true).getGrade(), 0.000001);
+            Assert.AreEqual(26.6 + 10.5 + 42.8 + 3,
+                course.getWeightedStudentGrade(student2, false).getGrade(), 0.000001);
+            Assert.AreEqual(21.525 + 8.85 + 39.95 + 2.2,
+                course.getWeightedStudentGrade(student3, true).getGrade(), 0.000001);
+            Assert.AreEqual(21.525 + 8.85 + 39.95 + 2.2,
+                course.getWeightedStudentGrade(student3, false).getGrade(), 0.000001);
+            Assert.AreEqual(25.515 + 10.5 + 40.5 + 1,
+                course.getWeightedStudentGrade(student4, true).getGrade(), 0.000001);
+            Assert.AreEqual(25.515 + 10.5 + 40.5 + 1,
+                course.getWeightedStudentGrade(student4, false).getGrade(), 0.000001);
+            Assert.AreEqual(31.7275 + 11.85 + 45.4 + 0,
+                course.getWeightedStudentGrade(student5, true).getGrade(), 0.000001);
+            Assert.AreEqual(31.7275 + 11.85 + 45.4 + 0,
+                course.getWeightedStudentGrade(student5, false).getGrade(), 0.000001);
+
+            // test the letter grades after grading assignment 6
+            Assert.AreEqual("B", course.getLetterGrade(student1, true));
+            Assert.AreEqual("B", course.getLetterGrade(student1, false));
+            Assert.AreEqual("B", course.getLetterGrade(student2, true));
+            Assert.AreEqual("B", course.getLetterGrade(student2, false));
+            Assert.AreEqual("C", course.getLetterGrade(student3, true));
+            Assert.AreEqual("C", course.getLetterGrade(student3, false));
+            Assert.AreEqual("C", course.getLetterGrade(student4, true));
+            Assert.AreEqual("C", course.getLetterGrade(student4, false));
+            Assert.AreEqual("B", course.getLetterGrade(student5, true));
+            Assert.AreEqual("B", course.getLetterGrade(student5, false));
+
+            // switch to letter grades with plus and minus (cutoff changed by default) and test again
+            course.useLetterGradePlusMinus(true);
+            Assert.AreEqual("B-", course.getLetterGrade(student1, true));
+            Assert.AreEqual("B-", course.getLetterGrade(student1, false));
+            Assert.AreEqual("B-", course.getLetterGrade(student2, true));
+            Assert.AreEqual("B-", course.getLetterGrade(student2, false));
+            Assert.AreEqual("C-", course.getLetterGrade(student3, true));
+            Assert.AreEqual("C-", course.getLetterGrade(student3, false));
+            Assert.AreEqual("C+", course.getLetterGrade(student4, true));
+            Assert.AreEqual("C+", course.getLetterGrade(student4, false));
+            Assert.AreEqual("B+", course.getLetterGrade(student5, true));
+            Assert.AreEqual("B+", course.getLetterGrade(student5, false));
+            // reset to normal letter grades
+            course.useLetterGradePlusMinus(false);
+
+            // change grade cutoff and test again
+            Assert.IsTrue(course.setGradeCutoff(86, 76, 66, 56));
+            Assert.AreEqual("B", course.getLetterGrade(student1, true));
+            Assert.AreEqual("B", course.getLetterGrade(student1, false));
+            Assert.AreEqual("B", course.getLetterGrade(student2, true));
+            Assert.AreEqual("B", course.getLetterGrade(student2, false));
+            Assert.AreEqual("C", course.getLetterGrade(student3, true));
+            Assert.AreEqual("C", course.getLetterGrade(student3, false));
+            Assert.AreEqual("B", course.getLetterGrade(student4, true));
+            Assert.AreEqual("B", course.getLetterGrade(student4, false));
+            Assert.AreEqual("A", course.getLetterGrade(student5, true));
+            Assert.AreEqual("A", course.getLetterGrade(student5, false));
+
+            // switch to letter grades with plus and minus, change cutoff, and test again
+            course.useLetterGradePlusMinus(true);
+            Assert.IsTrue(course.setGradeCutoff(95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40));
+            Assert.AreEqual("B+", course.getLetterGrade(student1, true));
+            Assert.AreEqual("B+", course.getLetterGrade(student1, false));
+            Assert.AreEqual("B+", course.getLetterGrade(student2, true));
+            Assert.AreEqual("B+", course.getLetterGrade(student2, false));
+            Assert.AreEqual("B-", course.getLetterGrade(student3, true));
+            Assert.AreEqual("B-", course.getLetterGrade(student3, false));
+            Assert.AreEqual("B", course.getLetterGrade(student4, true));
+            Assert.AreEqual("B", course.getLetterGrade(student4, false));
+            Assert.AreEqual("A-", course.getLetterGrade(student5, true));
+            Assert.AreEqual("A-", course.getLetterGrade(student5, false));
         }
     }
 }

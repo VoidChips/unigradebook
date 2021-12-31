@@ -864,7 +864,9 @@ namespace gradebook
         // e.g. A - 90, B - 92 will not work and return false
         public bool setGradeCutoff(double cutoffA, double cutoffB, double cutoffC, double cutoffD)
         {
-            if (cutoffA > cutoffB && cutoffB > cutoffC && cutoffC > cutoffD && cutoffD > 0 && cutoffA < 100)
+            if (!isPlusMinusLetterGrade && 
+                cutoffA > cutoffB && cutoffB > cutoffC && cutoffC > cutoffD 
+                && cutoffD > 0 && cutoffA < 100)
             {
                 gradeCutoff["A"] = cutoffA;
                 gradeCutoff["B"] = cutoffB;
@@ -890,7 +892,8 @@ namespace gradebook
             double cutoffD,
             double cutoffDm)
         {
-            if (cutoffAp > cutoffA && 
+            if (isPlusMinusLetterGrade &&
+                cutoffAp > cutoffA && 
                 cutoffA > cutoffAm && 
                 cutoffAm > cutoffBp && 
                 cutoffBp > cutoffB && 
@@ -922,7 +925,7 @@ namespace gradebook
         }
 
         // set whether the course uses plus minus for the letter grade
-        public void setLetterGradePlusMinus(bool isPlusMinus)
+        public void useLetterGradePlusMinus(bool isPlusMinus)
         {
             // set to default values
             if (isPlusMinus)
@@ -960,9 +963,26 @@ namespace gradebook
 
         // get the letter grade of the student based on the weighted grade
         // if soFar is true, exclude the ungraded assignments
-        //public string getLetterGrade(Student s, bool soFar)
-        //{
-        //    double grade = getWeightedStudentGrade(s, soFar).getGrade();
-        //}
+        public string getLetterGrade(Student s, bool soFar)
+        {
+            double grade = getWeightedStudentGrade(s, soFar).getGrade();
+            List<string> letterGrades = new List<string>()
+            { "A", "B", "C", "D"};
+
+            if (isPlusMinusLetterGrade)
+            {
+                letterGrades = new List<string>()
+                { "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-" };
+            }
+            
+            foreach(string letterGrade in letterGrades)
+            {
+                if (grade >= gradeCutoff[letterGrade])
+                {
+                    return letterGrade;
+                }
+            }
+            return "F";
+        }
     }
 }
