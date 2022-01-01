@@ -37,7 +37,7 @@ namespace unigradebook
             // 
             this.courses_lbl.AutoSize = true;
             this.courses_lbl.Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.courses_lbl.Location = new System.Drawing.Point(359, 30);
+            this.courses_lbl.Location = new System.Drawing.Point(344, 30);
             this.courses_lbl.Name = "courses_lbl";
             this.courses_lbl.Size = new System.Drawing.Size(116, 32);
             this.courses_lbl.TabIndex = 0;

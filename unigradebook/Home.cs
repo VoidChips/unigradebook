@@ -22,6 +22,8 @@ namespace unigradebook
 
         private void addCourseBtn_Click(object sender, EventArgs e)
         {
+            Form addCourseForm = new AddCourseForm();
+            addCourseForm.Show();
             //Program.courses.Add(new Course(100, "CS101"));
             //Debug.WriteLine(Program.courses[0].name);
         }

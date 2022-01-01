@@ -968,7 +968,7 @@ namespace gradebook
         {
             double grade = getWeightedStudentGrade(s, soFar).getGrade();
             List<string> letterGrades = new List<string>()
-            { "A", "B", "C", "D"};
+            { "A", "B", "C", "D" };
 
             if (assignments.Count == 0)
             {
