@@ -274,6 +274,7 @@ namespace unigradebook
             this.finalTextbox.Size = new System.Drawing.Size(57, 27);
             this.finalTextbox.TabIndex = 34;
             this.finalTextbox.Text = "30";
+            this.finalTextbox.TextChanged += new System.EventHandler(this.finalTextbox_TextChanged);
             // 
             // midtermTextbox
             // 
@@ -282,6 +283,7 @@ namespace unigradebook
             this.midtermTextbox.Size = new System.Drawing.Size(57, 27);
             this.midtermTextbox.TabIndex = 33;
             this.midtermTextbox.Text = "20";
+            this.midtermTextbox.TextChanged += new System.EventHandler(this.midtermTextbox_TextChanged);
             // 
             // midtermLbl
             // 
@@ -308,6 +310,7 @@ namespace unigradebook
             this.projectTextbox.Size = new System.Drawing.Size(57, 27);
             this.projectTextbox.TabIndex = 30;
             this.projectTextbox.Text = "0";
+            this.projectTextbox.TextChanged += new System.EventHandler(this.projectTextbox_TextChanged);
             // 
             // quizTextbox
             // 
@@ -316,6 +319,7 @@ namespace unigradebook
             this.quizTextbox.Size = new System.Drawing.Size(57, 27);
             this.quizTextbox.TabIndex = 29;
             this.quizTextbox.Text = "10";
+            this.quizTextbox.TextChanged += new System.EventHandler(this.quizTextbox_TextChanged);
             // 
             // discussionTextbox
             // 
@@ -324,6 +328,7 @@ namespace unigradebook
             this.discussionTextbox.Size = new System.Drawing.Size(57, 27);
             this.discussionTextbox.TabIndex = 28;
             this.discussionTextbox.Text = "0";
+            this.discussionTextbox.TextChanged += new System.EventHandler(this.discussionTextbox_TextChanged);
             // 
             // labTextbox
             // 
@@ -332,6 +337,7 @@ namespace unigradebook
             this.labTextbox.Size = new System.Drawing.Size(57, 27);
             this.labTextbox.TabIndex = 27;
             this.labTextbox.Text = "0";
+            this.labTextbox.TextChanged += new System.EventHandler(this.labTextbox_TextChanged);
             // 
             // homeworkTextbox
             // 
@@ -340,6 +346,7 @@ namespace unigradebook
             this.homeworkTextbox.Size = new System.Drawing.Size(57, 27);
             this.homeworkTextbox.TabIndex = 26;
             this.homeworkTextbox.Text = "35";
+            this.homeworkTextbox.TextChanged += new System.EventHandler(this.homeworkTextbox_TextChanged);
             // 
             // quizLbl
             // 
@@ -393,6 +400,7 @@ namespace unigradebook
             this.attendanceTextbox.Size = new System.Drawing.Size(57, 27);
             this.attendanceTextbox.TabIndex = 20;
             this.attendanceTextbox.Text = "5";
+            this.attendanceTextbox.TextChanged += new System.EventHandler(this.attendanceTextbox_TextChanged);
             // 
             // attendanceLbl
             // 

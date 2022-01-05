@@ -11,12 +11,40 @@ namespace unigradebook
 {
     public partial class AddCourseForm : Form
     {
+        private double weightSum;
+
         public AddCourseForm()
         {
             InitializeComponent();
             letterGradeType1Btn.Checked = true;
             gradeCutoff2.Enabled = false;
             errorLbl.Visible = false;
+            weightSum = 100;
+        }
+
+        // update the displayed sum of all the assignment weights
+        private void updateWeightSum()
+        {
+            double x = 0;
+            double attendanceWeight = double.TryParse(attendanceTextbox.Text, out x) ? x : 0;
+            double homeworkWeight = double.TryParse(homeworkTextbox.Text, out x) ? x : 0;
+            double labWeight = double.TryParse(labTextbox.Text, out x) ? x : 0;
+            double discussionWeight = double.TryParse(discussionTextbox.Text, out x) ? x : 0;
+            double quizWeight = double.TryParse(quizTextbox.Text, out x) ? x : 0;
+            double projectWeight = double.TryParse(projectTextbox.Text, out x) ? x : 0;
+            double midtermWeight = double.TryParse(midtermTextbox.Text, out x) ? x : 0;
+            double finalWeight = double.TryParse(finalTextbox.Text, out x) ? x : 0;
+
+            weightSum =
+                attendanceWeight +
+                homeworkWeight +
+                labWeight +
+                discussionWeight +
+                quizWeight +
+                projectWeight +
+                midtermWeight +
+                finalWeight;
+            sumLbl.Text = weightSum.ToString();
         }
 
         private void letterGradeType1Btn_CheckedChanged(object sender, EventArgs e)
@@ -29,6 +57,46 @@ namespace unigradebook
         {
             gradeCutoff1.Enabled = false;
             gradeCutoff2.Enabled = true;
+        }
+
+        private void attendanceTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void homeworkTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void labTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void discussionTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void quizTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void projectTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void midtermTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
+        }
+
+        private void finalTextbox_TextChanged(object sender, EventArgs e)
+        {
+            updateWeightSum();
         }
 
         private void doneBtn_Click(object sender, EventArgs e)
@@ -66,10 +134,11 @@ namespace unigradebook
             {
                 errorLbl.Text = "Fill all textboxes in the form.";
                 errorLbl.Visible = true;
-            } else
+            }
+            else
             {
                 Course course = new Course(nameTextbox.Text, titleTextbox.Text, sectionTextbox.Text);
-                
+
                 if (gradeCutoff1.Enabled)
                 {
                     double cutoffA = Convert.ToDouble(aTextbox1.Text);
@@ -77,7 +146,8 @@ namespace unigradebook
                     double cutoffC = Convert.ToDouble(cTextbox1.Text);
                     double cutoffD = Convert.ToDouble(dTextbox1.Text);
                     course.setGradeCutoff(cutoffA, cutoffB, cutoffC, cutoffD);
-                } else
+                }
+                else
                 {
                     double cutoffAp = Convert.ToDouble(aPlusTextbox.Text);
                     double cutoffA = Convert.ToDouble(aTextbox2.Text);
@@ -106,14 +176,15 @@ namespace unigradebook
                         cutoffDm);
                 }
 
-                double attendanceWeight = Convert.ToDouble(attendanceTextbox.Text);
-                double homeworkWeight = Convert.ToDouble(homeworkTextbox.Text);
-                double labWeight = Convert.ToDouble(labTextbox.Text);
-                double discussionWeight = Convert.ToDouble(discussionTextbox.Text);
-                double quizWeight = Convert.ToDouble(quizTextbox.Text);
-                double projectWeight = Convert.ToDouble(projectTextbox.Text);
-                double midtermWeight = Convert.ToDouble(midtermTextbox.Text);
-                double finalWeight = Convert.ToDouble(finalTextbox.Text);
+                double x = 0;
+                double attendanceWeight = double.TryParse(attendanceTextbox.Text, out x) ? x : 0;
+                double homeworkWeight = double.TryParse(homeworkTextbox.Text, out x) ? x : 0;
+                double labWeight = double.TryParse(labTextbox.Text, out x) ? x : 0;
+                double discussionWeight = double.TryParse(discussionTextbox.Text, out x) ? x : 0;
+                double quizWeight = double.TryParse(quizTextbox.Text, out x) ? x : 0;
+                double projectWeight = double.TryParse(projectTextbox.Text, out x) ? x : 0;
+                double midtermWeight = double.TryParse(midtermTextbox.Text, out x) ? x : 0;
+                double finalWeight = double.TryParse(finalTextbox.Text, out x) ? x : 0;
                 course.setAssignmentTypeWeights(
                     attendanceWeight,
                     homeworkWeight,
