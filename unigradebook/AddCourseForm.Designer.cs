@@ -40,10 +40,10 @@ namespace unigradebook
             this.gradeCutoffLbl = new System.Windows.Forms.Label();
             this.letterGradeTypeLbl = new System.Windows.Forms.Label();
             this.rightBox = new System.Windows.Forms.GroupBox();
+            this.errorTextbox = new System.Windows.Forms.RichTextBox();
             this.equalSignLbl = new System.Windows.Forms.Label();
             this.plusSignLbl = new System.Windows.Forms.Label();
             this.sumLbl = new System.Windows.Forms.Label();
-            this.errorLbl = new System.Windows.Forms.Label();
             this.finalTextbox = new System.Windows.Forms.TextBox();
             this.midtermTextbox = new System.Windows.Forms.TextBox();
             this.midtermLbl = new System.Windows.Forms.Label();
@@ -162,7 +162,7 @@ namespace unigradebook
             this.leftBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftBox.Location = new System.Drawing.Point(0, 0);
             this.leftBox.Name = "leftBox";
-            this.leftBox.Size = new System.Drawing.Size(161, 868);
+            this.leftBox.Size = new System.Drawing.Size(161, 864);
             this.leftBox.TabIndex = 6;
             this.leftBox.TabStop = false;
             // 
@@ -195,10 +195,11 @@ namespace unigradebook
             // 
             // rightBox
             // 
+            this.rightBox.AutoSize = true;
+            this.rightBox.Controls.Add(this.errorTextbox);
             this.rightBox.Controls.Add(this.equalSignLbl);
             this.rightBox.Controls.Add(this.plusSignLbl);
             this.rightBox.Controls.Add(this.sumLbl);
-            this.rightBox.Controls.Add(this.errorLbl);
             this.rightBox.Controls.Add(this.finalTextbox);
             this.rightBox.Controls.Add(this.midtermTextbox);
             this.rightBox.Controls.Add(this.midtermLbl);
@@ -226,9 +227,21 @@ namespace unigradebook
             this.rightBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightBox.Location = new System.Drawing.Point(161, 0);
             this.rightBox.Name = "rightBox";
-            this.rightBox.Size = new System.Drawing.Size(504, 868);
+            this.rightBox.Size = new System.Drawing.Size(504, 864);
             this.rightBox.TabIndex = 7;
             this.rightBox.TabStop = false;
+            // 
+            // errorTextbox
+            // 
+            this.errorTextbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.errorTextbox.ForeColor = System.Drawing.Color.Red;
+            this.errorTextbox.Location = new System.Drawing.Point(18, 787);
+            this.errorTextbox.Name = "errorTextbox";
+            this.errorTextbox.ReadOnly = true;
+            this.errorTextbox.Size = new System.Drawing.Size(346, 67);
+            this.errorTextbox.TabIndex = 40;
+            this.errorTextbox.Text = "error";
+            this.errorTextbox.Visible = false;
             // 
             // equalSignLbl
             // 
@@ -256,16 +269,6 @@ namespace unigradebook
             this.sumLbl.Size = new System.Drawing.Size(33, 20);
             this.sumLbl.TabIndex = 37;
             this.sumLbl.Text = "100";
-            // 
-            // errorLbl
-            // 
-            this.errorLbl.AutoSize = true;
-            this.errorLbl.ForeColor = System.Drawing.Color.Red;
-            this.errorLbl.Location = new System.Drawing.Point(18, 827);
-            this.errorLbl.Name = "errorLbl";
-            this.errorLbl.Size = new System.Drawing.Size(41, 20);
-            this.errorLbl.TabIndex = 35;
-            this.errorLbl.Text = "error";
             // 
             // finalTextbox
             // 
@@ -757,7 +760,7 @@ namespace unigradebook
             // 
             // doneBtn
             // 
-            this.doneBtn.Location = new System.Drawing.Point(387, 827);
+            this.doneBtn.Location = new System.Drawing.Point(386, 823);
             this.doneBtn.Name = "doneBtn";
             this.doneBtn.Size = new System.Drawing.Size(94, 29);
             this.doneBtn.TabIndex = 6;
@@ -769,7 +772,7 @@ namespace unigradebook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(665, 868);
+            this.ClientSize = new System.Drawing.Size(665, 864);
             this.Controls.Add(this.rightBox);
             this.Controls.Add(this.leftBox);
             this.Name = "AddCourseForm";
@@ -783,6 +786,7 @@ namespace unigradebook
             this.gradeCutoff1.ResumeLayout(false);
             this.gradeCutoff1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -852,9 +856,9 @@ namespace unigradebook
         private System.Windows.Forms.Label midtermLbl;
         private System.Windows.Forms.Label finalLbl;
         private System.Windows.Forms.TextBox aTextbox1;
-        private System.Windows.Forms.Label errorLbl;
         private System.Windows.Forms.Label sumLbl;
         private System.Windows.Forms.Label equalSignLbl;
         private System.Windows.Forms.Label plusSignLbl;
+        private System.Windows.Forms.RichTextBox errorTextbox;
     }
 }

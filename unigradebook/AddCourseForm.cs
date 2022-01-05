@@ -18,7 +18,6 @@ namespace unigradebook
             InitializeComponent();
             letterGradeType1Btn.Checked = true;
             gradeCutoff2.Enabled = false;
-            errorLbl.Visible = false;
             weightSum = 100;
         }
 
@@ -99,9 +98,10 @@ namespace unigradebook
             updateWeightSum();
         }
 
+        // add the course if all values are valid
         private void doneBtn_Click(object sender, EventArgs e)
         {
-            // add the course if all values are valid
+            // check if all fields are filled
             if (nameTextbox.Text.Length == 0 ||
                 titleTextbox.Text.Length == 0 ||
                 sectionTextbox.Text.Length == 0 ||
@@ -132,51 +132,81 @@ namespace unigradebook
                 midtermTextbox.Text.Length == 0 ||
                 finalTextbox.Text.Length == 0)
             {
-                errorLbl.Text = "Fill all textboxes in the form.";
-                errorLbl.Visible = true;
+                errorTextbox.Text = "Fill all fields in the form.";
+                errorTextbox.Visible = true;
+                return;
+            }
+
+            Course course = new Course(nameTextbox.Text, titleTextbox.Text, sectionTextbox.Text);
+            double x = 0;
+
+            double cutoffA1 = double.TryParse(aTextbox1.Text, out x) ? x : 0;
+            double cutoffB1 = double.TryParse(bTextbox1.Text, out x) ? x : 0;
+            double cutoffC1 = double.TryParse(cTextbox1.Text, out x) ? x : 0;
+            double cutoffD1 = double.TryParse(dTextbox1.Text, out x) ? x : 0;
+
+            double cutoffAp = double.TryParse(aPlusTextbox.Text, out x) ? x : 0;
+            double cutoffA2 = double.TryParse(aTextbox2.Text, out x) ? x : 0;
+            double cutoffAm = double.TryParse(aMinusTextbox.Text, out x) ? x : 0;
+            double cutoffBp = double.TryParse(bPlusTextbox.Text, out x) ? x : 0;
+            double cutoffB2 = double.TryParse(bTextbox2.Text, out x) ? x : 0;
+            double cutoffBm = double.TryParse(bMinusTextbox.Text, out x) ? x : 0;
+            double cutoffCp = double.TryParse(cPlusTextbox.Text, out x) ? x : 0;
+            double cutoffC2 = double.TryParse(cTextbox2.Text, out x) ? x : 0;
+            double cutoffCm = double.TryParse(cMinusTextbox.Text, out x) ? x : 0;
+            double cutoffDp = double.TryParse(dPlusTextbox.Text, out x) ? x : 0;
+            double cutoffD2 = double.TryParse(dTextbox2.Text, out x) ? x : 0;
+            double cutoffDm = double.TryParse(dMinusTextbox.Text, out x) ? x : 0;
+
+            if (gradeCutoff1.Enabled && !course.setGradeCutoff(cutoffA1, cutoffB1, cutoffC1, cutoffD1))
+            {
+                errorTextbox.Text = "Each preceding letter grades must have a cutoff higher than the next letter grade.\n";
+                errorTextbox.Text += "Constraints: A < 100, D > 0";
+                errorTextbox.Visible = true;
+            } else if (
+                gradeCutoff2.Enabled &&
+                !course.setGradeCutoff(
+                    cutoffAp,
+                    cutoffA2,
+                    cutoffAm,
+                    cutoffBp,
+                    cutoffB2,
+                    cutoffBm,
+                    cutoffCp,
+                    cutoffC2,
+                    cutoffCm,
+                    cutoffDp,
+                    cutoffD2,
+                    cutoffDm))
+            {
+                errorTextbox.Text = "Each preceding letter grades must have a cutoff higher than the next letter grade.\n";
+                errorTextbox.Text += "Constraints: A+ < 100, D- > 0";
+                errorTextbox.Visible = true;
             }
             else
             {
-                Course course = new Course(nameTextbox.Text, titleTextbox.Text, sectionTextbox.Text);
-
                 if (gradeCutoff1.Enabled)
                 {
-                    double cutoffA = Convert.ToDouble(aTextbox1.Text);
-                    double cutoffB = Convert.ToDouble(bTextbox1.Text);
-                    double cutoffC = Convert.ToDouble(cTextbox1.Text);
-                    double cutoffD = Convert.ToDouble(dTextbox1.Text);
-                    course.setGradeCutoff(cutoffA, cutoffB, cutoffC, cutoffD);
+                    course.setGradeCutoff(cutoffA1, cutoffB1, cutoffC1, cutoffD1);
                 }
                 else
                 {
-                    double cutoffAp = Convert.ToDouble(aPlusTextbox.Text);
-                    double cutoffA = Convert.ToDouble(aTextbox2.Text);
-                    double cutoffAm = Convert.ToDouble(aMinusTextbox.Text);
-                    double cutoffBp = Convert.ToDouble(bPlusTextbox.Text);
-                    double cutoffB = Convert.ToDouble(bTextbox2.Text);
-                    double cutoffBm = Convert.ToDouble(bMinusTextbox.Text);
-                    double cutoffCp = Convert.ToDouble(cPlusTextbox.Text);
-                    double cutoffC = Convert.ToDouble(cTextbox2.Text);
-                    double cutoffCm = Convert.ToDouble(cMinusTextbox.Text);
-                    double cutoffDp = Convert.ToDouble(dPlusTextbox.Text);
-                    double cutoffD = Convert.ToDouble(dTextbox2.Text);
-                    double cutoffDm = Convert.ToDouble(dMinusTextbox.Text);
+                    course.useLetterGradePlusMinus(true);
                     course.setGradeCutoff(
                         cutoffAp,
-                        cutoffA,
+                        cutoffA2,
                         cutoffAm,
                         cutoffBp,
-                        cutoffB,
+                        cutoffB2,
                         cutoffBm,
                         cutoffCp,
-                        cutoffC,
+                        cutoffC2,
                         cutoffCm,
                         cutoffDp,
-                        cutoffD,
+                        cutoffD2,
                         cutoffDm);
                 }
 
-                double x = 0;
                 double attendanceWeight = double.TryParse(attendanceTextbox.Text, out x) ? x : 0;
                 double homeworkWeight = double.TryParse(homeworkTextbox.Text, out x) ? x : 0;
                 double labWeight = double.TryParse(labTextbox.Text, out x) ? x : 0;
