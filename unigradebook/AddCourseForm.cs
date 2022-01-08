@@ -182,8 +182,11 @@ namespace unigradebook
                 errorTextbox.Text = "Each preceding letter grades must have a cutoff higher than the next letter grade.\n";
                 errorTextbox.Text += "Constraints: A+ < 100, D- > 0";
                 errorTextbox.Visible = true;
-            }
-            else
+            } else if (weightSum != 100)
+            {
+                errorTextbox.Text = "The sum of assignment weights must be 100.\n";
+                errorTextbox.Visible = true;
+            } else
             {
                 if (gradeCutoff1.Enabled)
                 {
