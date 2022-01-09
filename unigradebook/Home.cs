@@ -17,15 +17,16 @@ namespace unigradebook
         public Home()
         {
             InitializeComponent();
+            courseList.FullRowSelect = true;
+            courseList.Columns.Add("Name", -2, HorizontalAlignment.Left);
+            courseList.Columns.Add("Title", -2, HorizontalAlignment.Left);
+            courseList.Columns.Add("Section", -2, HorizontalAlignment.Left);
         }
-
 
         private void addCourseBtn_Click(object sender, EventArgs e)
         {
             Form addCourseForm = new AddCourseForm();
-            addCourseForm.Show();
-            //Program.courses.Add(new Course(100, "CS101"));
-            //Debug.WriteLine(Program.courses[0].name);
+            addCourseForm.Show(this);
         }
     }
 }

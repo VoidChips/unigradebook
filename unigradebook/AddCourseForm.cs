@@ -229,6 +229,11 @@ namespace unigradebook
                     finalWeight);
 
                 Program.courses.Add(course);
+                ListView courseList = (ListView)Owner.Controls.Find("courseList", true)[0];
+                ListViewItem item = new ListViewItem(course.name, 0);
+                item.SubItems.Add(course.title);
+                item.SubItems.Add(course.section);
+                courseList.Items.Add(item);
                 Close();
             }
         }
