@@ -42,7 +42,7 @@ namespace unigradebook
             // 
             this.courses_lbl.AutoSize = true;
             this.courses_lbl.Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.courses_lbl.Location = new System.Drawing.Point(346, 18);
+            this.courses_lbl.Location = new System.Drawing.Point(346, 9);
             this.courses_lbl.Name = "courses_lbl";
             this.courses_lbl.Size = new System.Drawing.Size(116, 32);
             this.courses_lbl.TabIndex = 0;
@@ -50,7 +50,7 @@ namespace unigradebook
             // 
             // addCourseBtn
             // 
-            this.addCourseBtn.Location = new System.Drawing.Point(489, 21);
+            this.addCourseBtn.Location = new System.Drawing.Point(488, 12);
             this.addCourseBtn.Name = "addCourseBtn";
             this.addCourseBtn.Size = new System.Drawing.Size(106, 29);
             this.addCourseBtn.TabIndex = 1;
@@ -61,10 +61,10 @@ namespace unigradebook
             // courseList
             // 
             this.courseList.HideSelection = false;
-            this.courseList.Location = new System.Drawing.Point(257, 19);
+            this.courseList.Location = new System.Drawing.Point(257, 6);
             this.courseList.MultiSelect = false;
             this.courseList.Name = "courseList";
-            this.courseList.Size = new System.Drawing.Size(301, 350);
+            this.courseList.Size = new System.Drawing.Size(301, 363);
             this.courseList.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.courseList.TabIndex = 2;
             this.courseList.UseCompatibleStateImageBehavior = false;
@@ -77,7 +77,7 @@ namespace unigradebook
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(800, 69);
+            this.topPanel.Size = new System.Drawing.Size(800, 51);
             this.topPanel.TabIndex = 3;
             // 
             // bottomPanel
@@ -85,9 +85,9 @@ namespace unigradebook
             this.bottomPanel.AutoSize = true;
             this.bottomPanel.Controls.Add(this.courseList);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 69);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 51);
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(800, 381);
+            this.bottomPanel.Size = new System.Drawing.Size(800, 399);
             this.bottomPanel.TabIndex = 4;
             // 
             // Home

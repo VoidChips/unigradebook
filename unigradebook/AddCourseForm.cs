@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Data.SQLite;
 using gradebook;
 
 namespace unigradebook
@@ -229,11 +230,27 @@ namespace unigradebook
                     finalWeight);
 
                 Program.courses.Add(course);
+
+                // add course to the course list
                 ListView courseList = (ListView)Owner.Controls.Find("courseList", true)[0];
                 ListViewItem item = new ListViewItem(course.name, 0);
                 item.SubItems.Add(course.title);
                 item.SubItems.Add(course.section);
                 courseList.Items.Add(item);
+
+                // add course to the database
+                string cs = "Data Source=./gradebook.db";
+                using var con = new SQLiteConnection(cs);
+                con.Open();
+
+                using var cmd = new SQLiteCommand(con);
+                cmd.CommandText = "INSERT INTO courses(name, title, section) VALUES(@name, @title, @section);";
+                cmd.Parameters.AddWithValue("@name", course.name);
+                cmd.Parameters.AddWithValue("@title", course.title);
+                cmd.Parameters.AddWithValue("@section", course.section);
+                cmd.ExecuteNonQuery();
+                con.Close();
+
                 Close();
             }
         }
