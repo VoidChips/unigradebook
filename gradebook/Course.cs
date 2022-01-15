@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MathNet.Numerics.Statistics;
 
 namespace gradebook
 {
@@ -732,6 +733,32 @@ namespace gradebook
             median = grades[students.Count / 2];
             median.graded = true;
             return grades[students.Count / 2];
+        }
+
+        // get the class variance of the grade of an assignment
+        public double getAssignmentVariance(Assignment a)
+        {
+            List<double> grades = new List<double>();
+            foreach (Student student in students.Keys)
+            {
+                double grade = getAssignmentGrade(student, a).getGrade();
+                grades.Add(grade);
+            }
+
+            return new DescriptiveStatistics(grades).Variance;
+        }
+
+        // get the class standard deviation of the grade of an assignment
+        public double getAssignmentStdDev(Assignment a)
+        {
+            List<double> grades = new List<double>();
+            foreach (Student student in students.Keys)
+            {
+                double grade = getAssignmentGrade(student, a).getGrade();
+                grades.Add(grade);
+            }
+
+            return new DescriptiveStatistics(grades).StandardDeviation;
         }
 
         // get the unweighted mean grade of the course

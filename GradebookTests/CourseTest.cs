@@ -932,7 +932,7 @@ namespace GradebookTests
             Assert.AreEqual(1.64 / 3 * 100, assignment5Avg.getGrade(), 0.000001);
         }
 
-        // tests getClassMedian()
+        // tests getAssignmentMedian()
         [Test]
         public void Test15()
         {
@@ -2051,6 +2051,20 @@ namespace GradebookTests
             Assert.AreEqual("B", course.getLetterGrade(student4, false));
             Assert.AreEqual("A-", course.getLetterGrade(student5, true));
             Assert.AreEqual("A-", course.getLetterGrade(student5, false));
+        }
+
+        // tests getAssignmentVariance()
+        [Test]
+        public void Test24()
+        {
+
+        }
+
+        // tests getAssignmentStdDev()
+        [Test]
+        public void Test25()
+        {
+
         }
     }
 }
