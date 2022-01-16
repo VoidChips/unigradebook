@@ -683,17 +683,28 @@ namespace gradebook
         }
 
         // get the class average of the grade of an assignment
+        // returns null for N/A
         public Grade getAssignmentMean(Assignment a)
         {
-            if (students.Count == 0)
+            if (students.Count == 0 || assignments.Count == 0)
             {
-                return new Grade(0);
+                return null;
             }
 
             double sum = 0;
+            bool atLeastOneAssignmentGraded = false;
             foreach(Student student in students.Keys)
             {
                 sum += getAssignmentGrade(student, a).points;
+                if (getAssignmentGrade(student, a).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
             }
 
             Grade avg = new Grade(a.maxPoints);
@@ -704,17 +715,28 @@ namespace gradebook
         }
 
         // get the class median of the grade of an assignment
+        // returns null for N/A
         public Grade getAssignmentMedian(Assignment a)
         {
-            if (students.Count == 0)
+            if (students.Count == 0 || assignments.Count == 0)
             {
-                return new Grade(0);
+                return null;
             }
 
             List<Grade> grades = new List<Grade>();
-            foreach(Student student in students.Keys)
+            bool atLeastOneAssignmentGraded = false;
+            foreach (Student student in students.Keys)
             {
                 grades.Add(getAssignmentGrade(student, a));
+                if (getAssignmentGrade(student, a).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
             }
 
             if (students.Count == 1)
@@ -742,29 +764,128 @@ namespace gradebook
         }
 
         // get the class variance of the grade of an assignment
+        // returns -1 for N/A
         public double getAssignmentVariance(Assignment a)
         {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return -1;
+            }
+
             List<double> grades = new List<double>();
+            bool atLeastOneAssignmentGraded = false;
             foreach (Student student in students.Keys)
             {
                 double grade = getAssignmentGrade(student, a).getGrade();
                 grades.Add(grade);
+                if (getAssignmentGrade(student, a).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
             }
 
-            return new RunningStatistics(grades).PopulationVariance;
+            if (!atLeastOneAssignmentGraded)
+            {
+                return -1;
+            }
+
+            return Statistics.PopulationVariance(grades);
         }
 
         // get the class standard deviation of the grade of an assignment
+        // returns -1 for N/A
         public double getAssignmentStdDev(Assignment a)
         {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return -1;
+            }
+
             List<double> grades = new List<double>();
+            bool atLeastOneAssignmentGraded = false;
             foreach (Student student in students.Keys)
             {
                 double grade = getAssignmentGrade(student, a).getGrade();
                 grades.Add(grade);
+                if (getAssignmentGrade(student, a).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
             }
 
-            return new RunningStatistics(grades).PopulationStandardDeviation;
+            if (!atLeastOneAssignmentGraded)
+            {
+                return -1;
+            }
+
+            return Statistics.PopulationStandardDeviation(grades);
+        }
+
+        // get the class maximum of the grade of an assignment
+        // returns null for N/A
+        public Grade getAssignmentMaximum(Assignment a)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return null;
+            }
+
+            Grade maximum = new Grade(0);
+            bool atLeastOneAssignmentGraded = false;
+            foreach (Student student in students.Keys) {
+                Grade grade = getAssignmentGrade(student, a);
+
+                if (maximum.getGrade() < grade.getGrade())
+                {
+                    maximum = grade;
+                }
+
+                if (getAssignmentGrade(student, a).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
+            }
+
+            return maximum;
+        }
+
+        // get the class minimum of the grade of an assignment
+        // returns null for N/A
+        public Grade getAssignmentMinimum(Assignment a)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return null;
+            }
+
+            Grade minimum = new Grade(0);
+            bool atLeastOneAssignmentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                Grade grade = getAssignmentGrade(student, a);
+
+                if (minimum.getGrade() > grade.getGrade())
+                {
+                    minimum = grade;
+                }
+
+                if (getAssignmentGrade(student, a).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
+            }
+
+            return minimum;
         }
 
         // get the unweighted mean grade of the course
