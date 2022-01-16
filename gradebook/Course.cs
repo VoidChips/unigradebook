@@ -294,6 +294,12 @@ namespace gradebook
         // get the grade for an assignment for a specific student
         public Grade getAssignmentGrade(Student s, Assignment a)
         {
+            // check if the student or assignment exists
+            if (!students.ContainsKey(s) || !students[s].ContainsKey(a))
+            {
+                return null;
+            }
+
             return students[s][a];
         }
 
@@ -745,7 +751,7 @@ namespace gradebook
                 grades.Add(grade);
             }
 
-            return new DescriptiveStatistics(grades).Variance;
+            return new RunningStatistics(grades).PopulationVariance;
         }
 
         // get the class standard deviation of the grade of an assignment
@@ -758,7 +764,7 @@ namespace gradebook
                 grades.Add(grade);
             }
 
-            return new DescriptiveStatistics(grades).StandardDeviation;
+            return new RunningStatistics(grades).PopulationStandardDeviation;
         }
 
         // get the unweighted mean grade of the course

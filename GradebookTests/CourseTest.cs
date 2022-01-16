@@ -929,7 +929,7 @@ namespace GradebookTests
             Assert.AreEqual(72.86, assignment2Avg.getGrade(), 0.000001);
             Assert.AreEqual(84.6, assignment3Avg.getGrade(), 0.000001);
             Assert.AreEqual(84.06, assignment4Avg.getGrade(), 0.000001);
-            Assert.AreEqual(1.64 / 3 * 100, assignment5Avg.getGrade(), 0.000001);
+            Assert.AreEqual(54.666666, assignment5Avg.getGrade(), 0.000001);
         }
 
         // tests getAssignmentMedian()
@@ -1020,7 +1020,7 @@ namespace GradebookTests
             Assert.AreEqual(80, assignment3Median.getGrade(), 0.000001);
             Assert.AreEqual(83, assignment4Median.getGrade(), 0.000001);
             Assert.AreEqual(2, assignment5Median.points, 0.000001);
-            Assert.AreEqual(2.0 / 3.0 * 100, assignment5Median.getGrade(), 0.000001);
+            Assert.AreEqual(66.666666, assignment5Median.getGrade(), 0.000001);
 
             // add a new student to have even number of students
             Student newStudent = new Student(43294, generateName());
@@ -2057,14 +2057,230 @@ namespace GradebookTests
         [Test]
         public void Test24()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
 
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+
+            // test class average for assignments before grading
+            Assert.AreEqual(0, course.getAssignmentMean(assignment1).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment1).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment2).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment2).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment3).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment3).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment4).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment4).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment5).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment5).graded);
+
+            // test the assignment variance before grading
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment1), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment2), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment3), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment4), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment5), 0.000001);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // test class average for assignments
+            Grade assignment1Avg = course.getAssignmentMean(assignment1);
+            Grade assignment2Avg = course.getAssignmentMean(assignment2);
+            Grade assignment3Avg = course.getAssignmentMean(assignment3);
+            Grade assignment4Avg = course.getAssignmentMean(assignment4);
+            Grade assignment5Avg = course.getAssignmentMean(assignment5);
+            Assert.AreEqual(77.66, assignment1Avg.getGrade(), 0.000001);
+            Assert.AreEqual(72.86, assignment2Avg.getGrade(), 0.000001);
+            Assert.AreEqual(84.6, assignment3Avg.getGrade(), 0.000001);
+            Assert.AreEqual(84.06, assignment4Avg.getGrade(), 0.000001);
+            Assert.AreEqual(54.666666, assignment5Avg.getGrade(), 0.000001);
+
+            // test the assignment variance
+            double assignment1Variance = course.getAssignmentVariance(assignment1);
+            double assignment2Variance = course.getAssignmentVariance(assignment2);
+            double assignment3Variance = course.getAssignmentVariance(assignment3);
+            double assignment4Variance = course.getAssignmentVariance(assignment4);
+            double assignment5Variance = course.getAssignmentVariance(assignment5);
+            Assert.AreEqual(254.5824, assignment1Variance, 0.000001);
+            Assert.AreEqual(472.9584, assignment2Variance, 0.000001);
+            Assert.AreEqual(84.64, assignment3Variance, 0.000001);
+            Assert.AreEqual(15.1184, assignment4Variance, 0.000001);
+            Assert.AreEqual(1198.222222, assignment5Variance, 0.000001);
         }
 
         // tests getAssignmentStdDev()
         [Test]
         public void Test25()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
 
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+
+            // test class average for assignments before grading
+            Assert.AreEqual(0, course.getAssignmentMean(assignment1).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment1).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment2).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment2).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment3).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment3).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment4).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment4).graded);
+            Assert.AreEqual(0, course.getAssignmentMean(assignment5).points, 0.000001);
+            Assert.AreEqual(true, course.getAssignmentMean(assignment5).graded);
+
+            // test the assignment standard deviation before grading
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment1), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment2), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment3), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment4), 0.000001);
+            Assert.AreEqual(0, course.getAssignmentVariance(assignment5), 0.000001);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // test class average for assignments
+            Grade assignment1Avg = course.getAssignmentMean(assignment1);
+            Grade assignment2Avg = course.getAssignmentMean(assignment2);
+            Grade assignment3Avg = course.getAssignmentMean(assignment3);
+            Grade assignment4Avg = course.getAssignmentMean(assignment4);
+            Grade assignment5Avg = course.getAssignmentMean(assignment5);
+            Assert.AreEqual(77.66, assignment1Avg.getGrade(), 0.000001);
+            Assert.AreEqual(72.86, assignment2Avg.getGrade(), 0.000001);
+            Assert.AreEqual(84.6, assignment3Avg.getGrade(), 0.000001);
+            Assert.AreEqual(84.06, assignment4Avg.getGrade(), 0.000001);
+            Assert.AreEqual(54.666666, assignment5Avg.getGrade(), 0.000001);
+
+            // test the assignment variance
+            double assignment1Variance = course.getAssignmentVariance(assignment1);
+            double assignment2Variance = course.getAssignmentVariance(assignment2);
+            double assignment3Variance = course.getAssignmentVariance(assignment3);
+            double assignment4Variance = course.getAssignmentVariance(assignment4);
+            double assignment5Variance = course.getAssignmentVariance(assignment5);
+            Assert.AreEqual(254.5824, assignment1Variance, 0.000001);
+            Assert.AreEqual(472.9584, assignment2Variance, 0.000001);
+            Assert.AreEqual(84.64, assignment3Variance, 0.000001);
+            Assert.AreEqual(15.1184, assignment4Variance, 0.000001);
+            Assert.AreEqual(1198.222222, assignment5Variance, 0.000001);
+
+            // test the assignment standard deviation
+            double assignment1StdDev = course.getAssignmentStdDev(assignment1);
+            double assignment2StdDev = course.getAssignmentStdDev(assignment2);
+            double assignment3StdDev = course.getAssignmentStdDev(assignment3);
+            double assignment4StdDev = course.getAssignmentStdDev(assignment4);
+            double assignment5StdDev = course.getAssignmentStdDev(assignment5);
+            Assert.AreEqual(Math.Sqrt(assignment1Variance), assignment1StdDev, 0.000001);
+            Assert.AreEqual(Math.Sqrt(assignment2Variance), assignment2StdDev, 0.000001);
+            Assert.AreEqual(Math.Sqrt(assignment3Variance), assignment3StdDev, 0.000001);
+            Assert.AreEqual(Math.Sqrt(assignment4Variance), assignment4StdDev, 0.000001);
+            Assert.AreEqual(Math.Sqrt(assignment5Variance), assignment5StdDev, 0.000001);
         }
     }
 }
