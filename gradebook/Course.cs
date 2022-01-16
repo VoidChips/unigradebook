@@ -863,8 +863,10 @@ namespace gradebook
                 return null;
             }
 
-            Grade minimum = new Grade(0);
+            Grade minimum = new Grade(100);
             bool atLeastOneAssignmentGraded = false;
+            // start with the max value in case everyone got over 100% on the assignment
+            minimum.points = Int32.MaxValue;
             foreach (Student student in students.Keys)
             {
                 Grade grade = getAssignmentGrade(student, a);
