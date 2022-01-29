@@ -237,6 +237,7 @@ namespace unigradebook
                 item.SubItems.Add(course.title);
                 item.SubItems.Add(course.section);
                 courseList.Items.Add(item);
+                courseList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
                 // add course to the database
                 string cs = "Data Source=./gradebook.db";

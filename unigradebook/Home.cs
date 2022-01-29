@@ -45,6 +45,8 @@ namespace unigradebook
                 courseList.Items.Add(item);
             }
             con.Close();
+
+            courseList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void addCourseBtn_Click(object sender, EventArgs e)

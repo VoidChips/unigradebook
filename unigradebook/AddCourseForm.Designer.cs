@@ -195,7 +195,6 @@ namespace unigradebook
             // 
             // rightBox
             // 
-            this.rightBox.AutoSize = true;
             this.rightBox.Controls.Add(this.errorTextbox);
             this.rightBox.Controls.Add(this.equalSignLbl);
             this.rightBox.Controls.Add(this.plusSignLbl);
@@ -775,6 +774,8 @@ namespace unigradebook
             this.ClientSize = new System.Drawing.Size(665, 864);
             this.Controls.Add(this.rightBox);
             this.Controls.Add(this.leftBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "AddCourseForm";
             this.Text = "AddCourseForm";
             this.leftBox.ResumeLayout(false);
@@ -786,7 +787,6 @@ namespace unigradebook
             this.gradeCutoff1.ResumeLayout(false);
             this.gradeCutoff1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
