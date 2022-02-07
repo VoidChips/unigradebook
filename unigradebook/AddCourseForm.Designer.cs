@@ -97,6 +97,9 @@ namespace unigradebook
             this.letterGradeType2Btn = new System.Windows.Forms.RadioButton();
             this.letterGradeType1Btn = new System.Windows.Forms.RadioButton();
             this.doneBtn = new System.Windows.Forms.Button();
+            this.nameHintLabel = new System.Windows.Forms.Label();
+            this.titleHintLabel = new System.Windows.Forms.Label();
+            this.sectionHintLabel = new System.Windows.Forms.Label();
             this.leftBox.SuspendLayout();
             this.rightBox.SuspendLayout();
             this.gradeCutoff2.SuspendLayout();
@@ -195,6 +198,9 @@ namespace unigradebook
             // 
             // rightBox
             // 
+            this.rightBox.Controls.Add(this.sectionHintLabel);
+            this.rightBox.Controls.Add(this.titleHintLabel);
+            this.rightBox.Controls.Add(this.nameHintLabel);
             this.rightBox.Controls.Add(this.errorTextbox);
             this.rightBox.Controls.Add(this.equalSignLbl);
             this.rightBox.Controls.Add(this.plusSignLbl);
@@ -767,6 +773,36 @@ namespace unigradebook
             this.doneBtn.UseVisualStyleBackColor = true;
             this.doneBtn.Click += new System.EventHandler(this.doneBtn_Click);
             // 
+            // nameHintLabel
+            // 
+            this.nameHintLabel.AutoSize = true;
+            this.nameHintLabel.ForeColor = System.Drawing.Color.Gray;
+            this.nameHintLabel.Location = new System.Drawing.Point(271, 23);
+            this.nameHintLabel.Name = "nameHintLabel";
+            this.nameHintLabel.Size = new System.Drawing.Size(77, 20);
+            this.nameHintLabel.TabIndex = 41;
+            this.nameHintLabel.Text = "e.g. CS101";
+            // 
+            // titleHintLabel
+            // 
+            this.titleHintLabel.AutoSize = true;
+            this.titleHintLabel.ForeColor = System.Drawing.Color.Gray;
+            this.titleHintLabel.Location = new System.Drawing.Point(271, 59);
+            this.titleHintLabel.Name = "titleHintLabel";
+            this.titleHintLabel.Size = new System.Drawing.Size(180, 20);
+            this.titleHintLabel.TabIndex = 42;
+            this.titleHintLabel.Text = "e.g. Intro to Programming";
+            // 
+            // sectionHintLabel
+            // 
+            this.sectionHintLabel.AutoSize = true;
+            this.sectionHintLabel.ForeColor = System.Drawing.Color.Gray;
+            this.sectionHintLabel.Location = new System.Drawing.Point(271, 94);
+            this.sectionHintLabel.Name = "sectionHintLabel";
+            this.sectionHintLabel.Size = new System.Drawing.Size(60, 20);
+            this.sectionHintLabel.TabIndex = 43;
+            this.sectionHintLabel.Text = "e.g. 003";
+            // 
             // AddCourseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -860,5 +896,8 @@ namespace unigradebook
         private System.Windows.Forms.Label equalSignLbl;
         private System.Windows.Forms.Label plusSignLbl;
         private System.Windows.Forms.RichTextBox errorTextbox;
+        private System.Windows.Forms.Label sectionHintLabel;
+        private System.Windows.Forms.Label titleHintLabel;
+        private System.Windows.Forms.Label nameHintLabel;
     }
 }
