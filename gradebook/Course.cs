@@ -1013,6 +1013,270 @@ namespace gradebook
             return grades[students.Count / 2];
         }
 
+        // get the class variance of unweighted student grades
+        // if soFar is true, exclude the ungraded assignments
+        // returns -1 for N/A
+        public double getUnweightedClassVariance(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return -1;
+            }
+
+            List<double> grades = new List<double>();
+            bool atLeastOneStudentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                double grade = getUnweightedStudentGrade(student, soFar).getGrade();
+                grades.Add(grade);
+                if (getUnweightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneStudentGraded = true;
+                }
+            }
+
+            if (!atLeastOneStudentGraded)
+            {
+                return -1;
+            }
+
+            return Statistics.PopulationVariance(grades);
+        }
+
+        // get the class variance of weighted student grades
+        // if soFar is true, exclude the ungraded assignments
+        // returns -1 for N/A
+        public double getWeightedClassVariance(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return -1;
+            }
+
+            List<double> grades = new List<double>();
+            bool atLeastOneStudentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                double grade = getWeightedStudentGrade(student, soFar).getGrade();
+                grades.Add(grade);
+                if (getWeightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneStudentGraded = true;
+                }
+            }
+
+            if (!atLeastOneStudentGraded)
+            {
+                return -1;
+            }
+
+            return Statistics.PopulationVariance(grades);
+        }
+
+        // get the class standard deviation of unweighted student grades
+        // if soFar is true, exclude the ungraded assignments
+        // returns -1 for N/A
+        public double getUnweightedClassStdDev(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return -1;
+            }
+
+            List<double> grades = new List<double>();
+            bool atLeastOneStudentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                double grade = getUnweightedStudentGrade(student, soFar).getGrade();
+                grades.Add(grade);
+                if (getUnweightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneStudentGraded = true;
+                }
+            }
+
+            if (!atLeastOneStudentGraded)
+            {
+                return -1;
+            }
+
+            return Statistics.PopulationStandardDeviation(grades);
+        }
+
+        // get the class standard deviation of weighted student grades
+        // if soFar is true, exclude the ungraded assignments
+        // returns -1 for N/A
+        public double getWeightedClassStdDev(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return -1;
+            }
+
+            List<double> grades = new List<double>();
+            bool atLeastOneStudentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                double grade = getWeightedStudentGrade(student, soFar).getGrade();
+                grades.Add(grade);
+                if (getWeightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneStudentGraded = true;
+                }
+            }
+
+            if (!atLeastOneStudentGraded)
+            {
+                return -1;
+            }
+
+            return Statistics.PopulationStandardDeviation(grades);
+        }
+
+        // get the highest unweighted student grade of the class
+        // if soFar is true, exclude the ungraded assignments
+        // returns null for N/A
+        public Grade getUnweightedClassMaximum(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return null;
+            }
+
+            Grade maximum = new Grade(0);
+            bool atLeastOneAssignmentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                Grade grade = getUnweightedStudentGrade(student, soFar);
+
+                if (maximum.getGrade() < grade.getGrade())
+                {
+                    maximum = grade;
+                }
+
+                if (getUnweightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
+            }
+
+            return maximum;
+        }
+
+        // get the highest weighted student grade of the class
+        // if soFar is true, exclude the ungraded assignments
+        // returns null for N/A
+        public Grade getWeightedClassMaximum(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return null;
+            }
+
+            Grade maximum = new Grade(0);
+            bool atLeastOneAssignmentGraded = false;
+            foreach (Student student in students.Keys)
+            {
+                Grade grade = getWeightedStudentGrade(student, soFar);
+
+                if (maximum.getGrade() < grade.getGrade())
+                {
+                    maximum = grade;
+                }
+
+                if (getWeightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
+            }
+
+            return maximum;
+        }
+
+        // get the lowest unweighted student grade of the class
+        // if soFar is true, exclude the ungraded assignments
+        // returns null for N/A
+        public Grade getUnweightedClassMinimum(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return null;
+            }
+
+            Grade minimum = new Grade(100);
+            bool atLeastOneAssignmentGraded = false;
+            // start with the max value in case everyone got over 100% on the assignment
+            minimum.points = Int32.MaxValue;
+            foreach (Student student in students.Keys)
+            {
+                Grade grade = getUnweightedStudentGrade(student, soFar);
+
+                if (minimum.getGrade() > grade.getGrade())
+                {
+                    minimum = grade;
+                }
+
+                if (getUnweightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
+            }
+
+            return minimum;
+        }
+
+        // get the lowest weighted student grade of the class
+        // if soFar is true, exclude the ungraded assignments
+        // returns null for N/A
+        public Grade getWeightedClassMinimum(bool soFar)
+        {
+            if (students.Count == 0 || assignments.Count == 0)
+            {
+                return null;
+            }
+
+            Grade minimum = new Grade(100);
+            bool atLeastOneAssignmentGraded = false;
+            // start with the max value in case everyone got over 100% on the assignment
+            minimum.points = Int32.MaxValue;
+            foreach (Student student in students.Keys)
+            {
+                Grade grade = getWeightedStudentGrade(student, soFar);
+
+                if (minimum.getGrade() > grade.getGrade())
+                {
+                    minimum = grade;
+                }
+
+                if (getWeightedStudentGrade(student, soFar).graded)
+                {
+                    atLeastOneAssignmentGraded = true;
+                }
+            }
+
+            if (!atLeastOneAssignmentGraded)
+            {
+                return null;
+            }
+
+            return minimum;
+        }
+
         // set the grade cutoff that is used for finding the letter grade
         // e.g. 90.0 for A means that the student's grade must be at least 90.0 to get an A.
         // The cutoff for a letter grade must be a greater than the lower letter grades,

@@ -2424,5 +2424,61 @@ namespace GradebookTests
             Assert.AreEqual(79.9, course.getAssignmentMinimum(assignment4).getGrade(), 0.000001);
             Assert.AreEqual(0, course.getAssignmentMinimum(assignment5).getGrade(), 0.000001);
         }
+
+        // tests getUnweightedClassVariance()
+        [Test]
+        public void Test28()
+        {
+
+        }
+
+        // tests getWeightedClassVariance()
+        [Test]
+        public void Test29()
+        {
+
+        }
+
+        // tests getUnweightedClassStdDev()
+        [Test]
+        public void Test30()
+        {
+
+        }
+
+        // tests getWeightedClassStdDev()
+        [Test]
+        public void Test31()
+        {
+
+        }
+
+        // tests getUnweightedClassMaximum()
+        [Test]
+        public void Test32()
+        {
+
+        }
+
+        // tests getWeightedClassMaximum()
+        [Test]
+        public void Test33()
+        {
+
+        }
+
+        // tests getUnweightedClassMinimum()
+        [Test]
+        public void Test34()
+        {
+
+        }
+
+        // tests getWeightedClassMinimum()
+        [Test]
+        public void Test35()
+        {
+
+        }
     }
 }
