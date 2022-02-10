@@ -2673,21 +2673,650 @@ namespace GradebookTests
         [Test]
         public void Test29()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
 
+            // test the variance with no assignments or students
+            Assert.AreEqual(-1, course.getWeightedClassVariance(true));
+            Assert.AreEqual(-1, course.getWeightedClassVariance(false));
+
+            // set weights
+            Assert.IsTrue(course.setAssignmentTypeWeights(0, 35, 0, 0, 15, 0, 0, 50));
+
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            Assignment assignment6 = new Assignment("quiz 2", Assignment.Type.Quiz, 10);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+            course.addAssignment(assignment6);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // assignment 6 not graded yet
+
+            // get the weighted student grades
+            double student1Grade1 = course.getWeightedStudentGrade(student1, true).getGrade();
+            double student1Grade2 = course.getWeightedStudentGrade(student1, false).getGrade();
+            double student2Grade1 = course.getWeightedStudentGrade(student2, true).getGrade();
+            double student2Grade2 = course.getWeightedStudentGrade(student2, false).getGrade();
+            double student3Grade1 = course.getWeightedStudentGrade(student3, true).getGrade();
+            double student3Grade2 = course.getWeightedStudentGrade(student3, false).getGrade();
+            double student4Grade1 = course.getWeightedStudentGrade(student4, true).getGrade();
+            double student4Grade2 = course.getWeightedStudentGrade(student4, false).getGrade();
+            double student5Grade1 = course.getWeightedStudentGrade(student5, true).getGrade();
+            double student5Grade2 = course.getWeightedStudentGrade(student5, false).getGrade();
+
+            // test the weighted student grades
+            Assert.AreEqual(26.3375 + 15 + 41.5 + 2, student1Grade1, 0.000001);
+            Assert.AreEqual(26.3375 + 7.5 + 41.5 + 2, student1Grade2, 0.000001);
+            Assert.AreEqual(26.6 + 13.5 + 42.8 + 3, student2Grade1, 0.000001);
+            Assert.AreEqual(26.6 + 6.75 + 42.8 + 3, student2Grade2, 0.000001);
+            Assert.AreEqual(21.525 + 12 + 39.95 + 2.2, student3Grade1, 0.000001);
+            Assert.AreEqual(21.525 + 6 + 39.95 + 2.2, student3Grade2, 0.000001);
+            Assert.AreEqual(25.515 + 11.25 + 40.5 + 1, student4Grade1, 0.000001);
+            Assert.AreEqual(25.515 + 5.625 + 40.5 + 1, student4Grade2, 0.000001);
+            Assert.AreEqual(31.7275 + 11.7 + 45.4 + 0, student5Grade1, 0.000001);
+            Assert.AreEqual(31.7275 + 5.85 + 45.4 + 0, student5Grade2, 0.000001);
+
+            // test the weighted class mean
+            double mu1 = course.getWeightedClassMean(true).getGrade();
+            double mu2 = course.getWeightedClassMean(false).getGrade();
+            Assert.AreEqual(
+                (26.3375 + 15 + 41.5 + 2 +
+                26.6 + 13.5 + 42.8 + 3 +
+                21.525 + 12 + 39.95 + 2.2 +
+                25.515 + 11.25 + 40.5 + 1 +
+                31.7275 + 11.7 + 45.4 + 0) /
+                5,
+                mu1, 0.000001);
+            Assert.AreEqual(
+                (26.3375 + 7.5 + 41.5 + 2 +
+                26.6 + 6.75 + 42.8 + 3 +
+                21.525 + 6 + 39.95 + 2.2 +
+                25.515 + 5.625 + 40.5 + 1 +
+                31.7275 + 5.85 + 45.4 + 0) /
+                5,
+                mu2, 0.000001);
+
+            // find the variance
+            double variance1, variance2 = 0;
+            double sum =
+                Math.Pow(student1Grade1 - mu1, 2) +
+                Math.Pow(student2Grade1 - mu1, 2) +
+                Math.Pow(student3Grade1 - mu1, 2) +
+                Math.Pow(student4Grade1 - mu1, 2) +
+                Math.Pow(student5Grade1 - mu1, 2);
+            variance1 = 1.0 / 5.0 * sum;
+            sum =
+                Math.Pow(student1Grade2 - mu2, 2) +
+                Math.Pow(student2Grade2 - mu2, 2) +
+                Math.Pow(student3Grade2 - mu2, 2) +
+                Math.Pow(student4Grade2 - mu2, 2) +
+                Math.Pow(student5Grade2 - mu2, 2);
+            variance2 = 1.0 / 5.0 * sum;
+
+            // test the variance
+            Assert.AreEqual(variance1, course.getWeightedClassVariance(true), 0.000001);
+            Assert.AreEqual(variance2, course.getWeightedClassVariance(false), 0.000001);
+
+            // grade assignment 6
+            course.gradeAssignment(student1, assignment6, 7);
+            course.gradeAssignment(student2, assignment6, 5);
+            course.gradeAssignment(student3, assignment6, 3.8);
+            course.gradeAssignment(student4, assignment6, 6.5);
+            course.gradeAssignment(student5, assignment6, 8);
+
+            // get the weighted student grades
+            student1Grade1 = course.getWeightedStudentGrade(student1, true).getGrade();
+            student1Grade2 = course.getWeightedStudentGrade(student1, false).getGrade();
+            student2Grade1 = course.getWeightedStudentGrade(student2, true).getGrade();
+            student2Grade2 = course.getWeightedStudentGrade(student2, false).getGrade();
+            student3Grade1 = course.getWeightedStudentGrade(student3, true).getGrade();
+            student3Grade2 = course.getWeightedStudentGrade(student3, false).getGrade();
+            student4Grade1 = course.getWeightedStudentGrade(student4, true).getGrade();
+            student4Grade2 = course.getWeightedStudentGrade(student4, false).getGrade();
+            student5Grade1 = course.getWeightedStudentGrade(student5, true).getGrade();
+            student5Grade2 = course.getWeightedStudentGrade(student5, false).getGrade();
+
+            // test the weighted student grades
+            Assert.AreEqual(26.3375 + 12.75 + 41.5 + 2, student1Grade1, 0.000001);
+            Assert.AreEqual(26.3375 + 12.75 + 41.5 + 2, student1Grade2, 0.000001);
+            Assert.AreEqual(26.6 + 10.5 + 42.8 + 3, student2Grade1, 0.000001);
+            Assert.AreEqual(26.6 + 10.5 + 42.8 + 3, student2Grade2, 0.000001);
+            Assert.AreEqual(21.525 + 8.85 + 39.95 + 2.2, student3Grade1, 0.000001);
+            Assert.AreEqual(21.525 + 8.85 + 39.95 + 2.2, student3Grade2, 0.000001);
+            Assert.AreEqual(25.515 + 10.5 + 40.5 + 1, student4Grade1, 0.000001);
+            Assert.AreEqual(25.515 + 10.5 + 40.5 + 1, student4Grade2, 0.000001);
+            Assert.AreEqual(31.7275 + 11.85 + 45.4 + 0, student5Grade1, 0.000001);
+            Assert.AreEqual(31.7275 + 11.85 + 45.4 + 0, student5Grade2, 0.000001);
+
+            // test the weighted class mean
+            mu1 = course.getWeightedClassMean(true).getGrade();
+            mu2 = course.getWeightedClassMean(false).getGrade();
+            Assert.AreEqual(
+                (26.3375 + 12.75 + 41.5 + 2 +
+                26.6 + 10.5 + 42.8 + 3 +
+                21.525 + 8.85 + 39.95 + 2.2 +
+                25.515 + 10.5 + 40.5 + 1 +
+                31.7275 + 11.85 + 45.4 + 0) /
+                5,
+                mu1, 0.000001);
+            Assert.AreEqual(
+                (26.3375 + 12.75 + 41.5 + 2 +
+                26.6 + 10.5 + 42.8 + 3 +
+                21.525 + 8.85 + 39.95 + 2.2 +
+                25.515 + 10.5 + 40.5 + 1 +
+                31.7275 + 11.85 + 45.4 + 0) /
+                5,
+                mu2, 0.000001);
+
+            // find the variance
+            sum =
+                Math.Pow(student1Grade1 - mu1, 2) +
+                Math.Pow(student2Grade1 - mu1, 2) +
+                Math.Pow(student3Grade1 - mu1, 2) +
+                Math.Pow(student4Grade1 - mu1, 2) +
+                Math.Pow(student5Grade1 - mu1, 2);
+            variance1 = 1.0 / 5.0 * sum;
+            sum =
+                Math.Pow(student1Grade2 - mu2, 2) +
+                Math.Pow(student2Grade2 - mu2, 2) +
+                Math.Pow(student3Grade2 - mu2, 2) +
+                Math.Pow(student4Grade2 - mu2, 2) +
+                Math.Pow(student5Grade2 - mu2, 2);
+            variance2 = 1.0 / 5.0 * sum;
+
+            // test the variance
+            Assert.AreEqual(variance1, course.getWeightedClassVariance(true), 0.000001);
+            Assert.AreEqual(variance2, course.getWeightedClassVariance(false), 0.000001);
         }
 
         // tests getUnweightedClassStdDev()
         [Test]
         public void Test30()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
 
+            // test the variance with no assignments or students
+            Assert.AreEqual(-1, course.getUnweightedClassStdDev(true), 0.000001);
+            Assert.AreEqual(-1, course.getUnweightedClassStdDev(false), 0.000001);
+
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            Assignment assignment6 = new Assignment("quiz 2", Assignment.Type.Quiz, 10);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+            course.addAssignment(assignment6);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // assignment 6 not graded yet
+
+            // test the unweighted student grades
+            double student1Grade1 = course.getUnweightedStudentGrade(student1, true).getGrade();
+            double student1Grade2 = course.getUnweightedStudentGrade(student1, false).getGrade();
+            double student2Grade1 = course.getUnweightedStudentGrade(student2, true).getGrade();
+            double student2Grade2 = course.getUnweightedStudentGrade(student2, false).getGrade();
+            double student3Grade1 = course.getUnweightedStudentGrade(student3, true).getGrade();
+            double student3Grade2 = course.getUnweightedStudentGrade(student3, false).getGrade();
+            double student4Grade1 = course.getUnweightedStudentGrade(student4, true).getGrade();
+            double student4Grade2 = course.getUnweightedStudentGrade(student4, false).getGrade();
+            double student5Grade1 = course.getUnweightedStudentGrade(student5, true).getGrade();
+            double student5Grade2 = course.getUnweightedStudentGrade(student5, false).getGrade();
+
+            Assert.AreEqual(243.5 / 310 * 100 + 2, student1Grade1, 0.000001);
+            Assert.AreEqual(243.5 / 320 * 100 + 2, student1Grade2, 0.000001);
+            Assert.AreEqual(246.6 / 310 * 100 + 3, student2Grade1, 0.000001);
+            Assert.AreEqual(246.6 / 320 * 100 + 3, student2Grade2, 0.000001);
+            Assert.AreEqual(210.9 / 310 * 100 + 2.2, student3Grade1, 0.000001);
+            Assert.AreEqual(210.9 / 320 * 100 + 2.2, student3Grade2, 0.000001);
+            Assert.AreEqual(234.3 / 310 * 100 + 1, student4Grade1, 0.000001);
+            Assert.AreEqual(234.3 / 320 * 100 + 1, student4Grade2, 0.000001);
+            Assert.AreEqual(279.9 / 310 * 100 + 0, student5Grade1, 0.000001);
+            Assert.AreEqual(279.9 / 320 * 100 + 0, student5Grade2, 0.000001);
+
+            // test the unweighted class mean
+            double mu1 = course.getUnweightedClassMean(true).getGrade();
+            double mu2 = course.getUnweightedClassMean(false).getGrade();
+            Assert.AreEqual(
+                (243.5 / 310 * 100 + 2 +
+                246.6 / 310 * 100 + 3 +
+                210.9 / 310 * 100 + 2.2 +
+                234.3 / 310 * 100 + 1 +
+                279.9 / 310 * 100) /
+                5,
+                mu1, 0.000001);
+            Assert.AreEqual(
+                (243.5 / 320 * 100 + 2 +
+                246.6 / 320 * 100 + 3 +
+                210.9 / 320 * 100 + 2.2 +
+                234.3 / 320 * 100 + 1 +
+                279.9 / 320 * 100) /
+                5,
+                mu2, 0.000001);
+
+            // find the variance and standard deviation
+            double variance1, variance2, stdDev1, stdDev2 = 0;
+            double sum =
+                Math.Pow(student1Grade1 - mu1, 2) +
+                Math.Pow(student2Grade1 - mu1, 2) +
+                Math.Pow(student3Grade1 - mu1, 2) +
+                Math.Pow(student4Grade1 - mu1, 2) +
+                Math.Pow(student5Grade1 - mu1, 2);
+            variance1 = 1.0 / 5.0 * sum;
+            stdDev1 = Math.Sqrt(variance1);
+            sum =
+                Math.Pow(student1Grade2 - mu2, 2) +
+                Math.Pow(student2Grade2 - mu2, 2) +
+                Math.Pow(student3Grade2 - mu2, 2) +
+                Math.Pow(student4Grade2 - mu2, 2) +
+                Math.Pow(student5Grade2 - mu2, 2);
+            variance2 = 1.0 / 5.0 * sum;
+            stdDev2 = Math.Sqrt(variance2);
+
+            // test the standard deviation
+            Assert.AreEqual(variance1, course.getUnweightedClassVariance(true), 0.000001);
+            Assert.AreEqual(variance2, course.getUnweightedClassVariance(false), 0.000001);
+            Assert.AreEqual(stdDev1, course.getUnweightedClassStdDev(true), 0.000001);
+            Assert.AreEqual(stdDev2, course.getUnweightedClassStdDev(false), 0.000001);
+
+            // grade assignment 6
+            course.gradeAssignment(student1, assignment6, 7);
+            course.gradeAssignment(student2, assignment6, 5);
+            course.gradeAssignment(student3, assignment6, 3.8);
+            course.gradeAssignment(student4, assignment6, 6.5);
+            course.gradeAssignment(student5, assignment6, 8);
+
+            // test the unweighted student grades
+            student1Grade1 = course.getUnweightedStudentGrade(student1, true).getGrade();
+            student1Grade2 = course.getUnweightedStudentGrade(student1, false).getGrade();
+            student2Grade1 = course.getUnweightedStudentGrade(student2, true).getGrade();
+            student2Grade2 = course.getUnweightedStudentGrade(student2, false).getGrade();
+            student3Grade1 = course.getUnweightedStudentGrade(student3, true).getGrade();
+            student3Grade2 = course.getUnweightedStudentGrade(student3, false).getGrade();
+            student4Grade1 = course.getUnweightedStudentGrade(student4, true).getGrade();
+            student4Grade2 = course.getUnweightedStudentGrade(student4, false).getGrade();
+            student5Grade1 = course.getUnweightedStudentGrade(student5, true).getGrade();
+            student5Grade2 = course.getUnweightedStudentGrade(student5, false).getGrade();
+
+            Assert.AreEqual(250.5 / 320 * 100 + 2, student1Grade1, 0.000001);
+            Assert.AreEqual(250.5 / 320 * 100 + 2, student1Grade2, 0.000001);
+            Assert.AreEqual(251.6 / 320 * 100 + 3, student2Grade1, 0.000001);
+            Assert.AreEqual(251.6 / 320 * 100 + 3, student2Grade2, 0.000001);
+            Assert.AreEqual(214.7 / 320 * 100 + 2.2, student3Grade1, 0.000001);
+            Assert.AreEqual(214.7 / 320 * 100 + 2.2, student3Grade2, 0.000001);
+            Assert.AreEqual(240.8 / 320 * 100 + 1, student4Grade1, 0.000001);
+            Assert.AreEqual(240.8 / 320 * 100 + 1, student4Grade2, 0.000001);
+            Assert.AreEqual(287.9 / 320 * 100 + 0, student5Grade1, 0.000001);
+            Assert.AreEqual(287.9 / 320 * 100 + 0, student5Grade2, 0.000001);
+
+            // test the unweighted class mean
+            mu1 = course.getUnweightedClassMean(true).getGrade();
+            mu2 = course.getUnweightedClassMean(false).getGrade();
+            Assert.AreEqual(
+                (250.5 / 320 * 100 + 2 +
+                251.6 / 320 * 100 + 3 +
+                214.7 / 320 * 100 + 2.2 +
+                240.8 / 320 * 100 + 1 +
+                287.9 / 320 * 100 + 0) /
+                5,
+                mu1, 0.000001);
+            Assert.AreEqual(
+                (250.5 / 320 * 100 + 2 +
+                251.6 / 320 * 100 + 3 +
+                214.7 / 320 * 100 + 2.2 +
+                240.8 / 320 * 100 + 1 +
+                287.9 / 320 * 100 + 0) /
+                5,
+                mu2, 0.000001);
+
+            // find the variance
+            sum =
+                Math.Pow(student1Grade1 - mu1, 2) +
+                Math.Pow(student2Grade1 - mu1, 2) +
+                Math.Pow(student3Grade1 - mu1, 2) +
+                Math.Pow(student4Grade1 - mu1, 2) +
+                Math.Pow(student5Grade1 - mu1, 2);
+            variance1 = 1.0 / 5.0 * sum;
+            stdDev1 = Math.Sqrt(variance1);
+            sum =
+                Math.Pow(student1Grade2 - mu2, 2) +
+                Math.Pow(student2Grade2 - mu2, 2) +
+                Math.Pow(student3Grade2 - mu2, 2) +
+                Math.Pow(student4Grade2 - mu2, 2) +
+                Math.Pow(student5Grade2 - mu2, 2);
+            variance2 = 1.0 / 5.0 * sum;
+            stdDev2 = Math.Sqrt(variance2);
+
+            // test the standard deviation
+            Assert.AreEqual(variance1, course.getUnweightedClassVariance(true), 0.000001);
+            Assert.AreEqual(variance2, course.getUnweightedClassVariance(false), 0.000001);
+            Assert.AreEqual(stdDev1, course.getUnweightedClassStdDev(true), 0.000001);
+            Assert.AreEqual(stdDev2, course.getUnweightedClassStdDev(false), 0.000001);
         }
 
         // tests getWeightedClassStdDev()
         [Test]
         public void Test31()
         {
+            Course course = new Course("CS101", "Intro to Programming", "001");
 
+            // test the standard deviation with no assignments or students
+            Assert.AreEqual(-1, course.getWeightedClassStdDev(true));
+            Assert.AreEqual(-1, course.getWeightedClassStdDev(false));
+
+            // set weights
+            Assert.IsTrue(course.setAssignmentTypeWeights(0, 35, 0, 0, 15, 0, 0, 50));
+
+            // add students
+            Student student1 = new Student(1, "student 1");
+            Student student2 = new Student(2, "student 2");
+            Student student3 = new Student(3, "student 3");
+            Student student4 = new Student(4, "student 4");
+            Student student5 = new Student(5, "student 5");
+            course.addStudent(student1);
+            course.addStudent(student2);
+            course.addStudent(student3);
+            course.addStudent(student4);
+            course.addStudent(student5);
+
+            // add assignments
+            Assignment assignment1 = new Assignment("homework 1", Assignment.Type.Homework, 100);
+            Assignment assignment2 = new Assignment("homework 2", Assignment.Type.Homework, 100);
+            Assignment assignment3 = new Assignment("quiz 1", Assignment.Type.Quiz, 10);
+            Assignment assignment4 = new Assignment("final", Assignment.Type.Final, 100);
+            Assignment assignment5 = new Assignment("extra credit", Assignment.Type.Bonus, 3);
+            Assignment assignment6 = new Assignment("quiz 2", Assignment.Type.Quiz, 10);
+            course.addAssignment(assignment1);
+            course.addAssignment(assignment2);
+            course.addAssignment(assignment3);
+            course.addAssignment(assignment4);
+            course.addAssignment(assignment5);
+            course.addAssignment(assignment6);
+
+            // grade assignment 1
+            course.gradeAssignment(student1, assignment1, 50.5);
+            course.gradeAssignment(student2, assignment1, 70);
+            course.gradeAssignment(student3, assignment1, 83);
+            course.gradeAssignment(student4, assignment1, 89.8);
+            course.gradeAssignment(student5, assignment1, 95);
+
+            // grade assignment 2
+            course.gradeAssignment(student1, assignment2, 100);
+            course.gradeAssignment(student2, assignment2, 82);
+            course.gradeAssignment(student3, assignment2, 40);
+            course.gradeAssignment(student4, assignment2, 56);
+            course.gradeAssignment(student5, assignment2, 86.3);
+
+            // grade assignment 3
+            course.gradeAssignment(student1, assignment3, 10);
+            course.gradeAssignment(student2, assignment3, 9);
+            course.gradeAssignment(student3, assignment3, 8);
+            course.gradeAssignment(student4, assignment3, 7.5);
+            course.gradeAssignment(student5, assignment3, 7.8);
+
+            // grade assignment 4
+            course.gradeAssignment(student1, assignment4, 83);
+            course.gradeAssignment(student2, assignment4, 85.6);
+            course.gradeAssignment(student3, assignment4, 79.9);
+            course.gradeAssignment(student4, assignment4, 81);
+            course.gradeAssignment(student5, assignment4, 90.8);
+
+            // grade assignment 5
+            course.gradeAssignment(student1, assignment5, 2);
+            course.gradeAssignment(student2, assignment5, 3);
+            course.gradeAssignment(student3, assignment5, 2.2);
+            course.gradeAssignment(student4, assignment5, 1);
+            course.gradeAssignment(student5, assignment5, 0);
+
+            // assignment 6 not graded yet
+
+            // get the weighted student grades
+            double student1Grade1 = course.getWeightedStudentGrade(student1, true).getGrade();
+            double student1Grade2 = course.getWeightedStudentGrade(student1, false).getGrade();
+            double student2Grade1 = course.getWeightedStudentGrade(student2, true).getGrade();
+            double student2Grade2 = course.getWeightedStudentGrade(student2, false).getGrade();
+            double student3Grade1 = course.getWeightedStudentGrade(student3, true).getGrade();
+            double student3Grade2 = course.getWeightedStudentGrade(student3, false).getGrade();
+            double student4Grade1 = course.getWeightedStudentGrade(student4, true).getGrade();
+            double student4Grade2 = course.getWeightedStudentGrade(student4, false).getGrade();
+            double student5Grade1 = course.getWeightedStudentGrade(student5, true).getGrade();
+            double student5Grade2 = course.getWeightedStudentGrade(student5, false).getGrade();
+
+            // test the weighted student grades
+            Assert.AreEqual(26.3375 + 15 + 41.5 + 2, student1Grade1, 0.000001);
+            Assert.AreEqual(26.3375 + 7.5 + 41.5 + 2, student1Grade2, 0.000001);
+            Assert.AreEqual(26.6 + 13.5 + 42.8 + 3, student2Grade1, 0.000001);
+            Assert.AreEqual(26.6 + 6.75 + 42.8 + 3, student2Grade2, 0.000001);
+            Assert.AreEqual(21.525 + 12 + 39.95 + 2.2, student3Grade1, 0.000001);
+            Assert.AreEqual(21.525 + 6 + 39.95 + 2.2, student3Grade2, 0.000001);
+            Assert.AreEqual(25.515 + 11.25 + 40.5 + 1, student4Grade1, 0.000001);
+            Assert.AreEqual(25.515 + 5.625 + 40.5 + 1, student4Grade2, 0.000001);
+            Assert.AreEqual(31.7275 + 11.7 + 45.4 + 0, student5Grade1, 0.000001);
+            Assert.AreEqual(31.7275 + 5.85 + 45.4 + 0, student5Grade2, 0.000001);
+
+            // test the weighted class mean
+            double mu1 = course.getWeightedClassMean(true).getGrade();
+            double mu2 = course.getWeightedClassMean(false).getGrade();
+            Assert.AreEqual(
+                (26.3375 + 15 + 41.5 + 2 +
+                26.6 + 13.5 + 42.8 + 3 +
+                21.525 + 12 + 39.95 + 2.2 +
+                25.515 + 11.25 + 40.5 + 1 +
+                31.7275 + 11.7 + 45.4 + 0) /
+                5,
+                mu1, 0.000001);
+            Assert.AreEqual(
+                (26.3375 + 7.5 + 41.5 + 2 +
+                26.6 + 6.75 + 42.8 + 3 +
+                21.525 + 6 + 39.95 + 2.2 +
+                25.515 + 5.625 + 40.5 + 1 +
+                31.7275 + 5.85 + 45.4 + 0) /
+                5,
+                mu2, 0.000001);
+
+            // find the standard deviation
+            double variance1, variance2, stdDev1, stdDev2 = 0;
+            double sum =
+                Math.Pow(student1Grade1 - mu1, 2) +
+                Math.Pow(student2Grade1 - mu1, 2) +
+                Math.Pow(student3Grade1 - mu1, 2) +
+                Math.Pow(student4Grade1 - mu1, 2) +
+                Math.Pow(student5Grade1 - mu1, 2);
+            variance1 = 1.0 / 5.0 * sum;
+            stdDev1 = Math.Sqrt(variance1);
+            sum =
+                Math.Pow(student1Grade2 - mu2, 2) +
+                Math.Pow(student2Grade2 - mu2, 2) +
+                Math.Pow(student3Grade2 - mu2, 2) +
+                Math.Pow(student4Grade2 - mu2, 2) +
+                Math.Pow(student5Grade2 - mu2, 2);
+            variance2 = 1.0 / 5.0 * sum;
+            stdDev2 = Math.Sqrt(variance2);
+
+            // test the standard deviation
+            Assert.AreEqual(variance1, course.getWeightedClassVariance(true), 0.000001);
+            Assert.AreEqual(variance2, course.getWeightedClassVariance(false), 0.000001);
+            Assert.AreEqual(stdDev1, course.getWeightedClassStdDev(true), 0.000001);
+            Assert.AreEqual(stdDev2, course.getWeightedClassStdDev(false), 0.000001);
+
+            // grade assignment 6
+            course.gradeAssignment(student1, assignment6, 7);
+            course.gradeAssignment(student2, assignment6, 5);
+            course.gradeAssignment(student3, assignment6, 3.8);
+            course.gradeAssignment(student4, assignment6, 6.5);
+            course.gradeAssignment(student5, assignment6, 8);
+
+            // get the weighted student grades
+            student1Grade1 = course.getWeightedStudentGrade(student1, true).getGrade();
+            student1Grade2 = course.getWeightedStudentGrade(student1, false).getGrade();
+            student2Grade1 = course.getWeightedStudentGrade(student2, true).getGrade();
+            student2Grade2 = course.getWeightedStudentGrade(student2, false).getGrade();
+            student3Grade1 = course.getWeightedStudentGrade(student3, true).getGrade();
+            student3Grade2 = course.getWeightedStudentGrade(student3, false).getGrade();
+            student4Grade1 = course.getWeightedStudentGrade(student4, true).getGrade();
+            student4Grade2 = course.getWeightedStudentGrade(student4, false).getGrade();
+            student5Grade1 = course.getWeightedStudentGrade(student5, true).getGrade();
+            student5Grade2 = course.getWeightedStudentGrade(student5, false).getGrade();
+
+            // test the weighted student grades
+            Assert.AreEqual(26.3375 + 12.75 + 41.5 + 2, student1Grade1, 0.000001);
+            Assert.AreEqual(26.3375 + 12.75 + 41.5 + 2, student1Grade2, 0.000001);
+            Assert.AreEqual(26.6 + 10.5 + 42.8 + 3, student2Grade1, 0.000001);
+            Assert.AreEqual(26.6 + 10.5 + 42.8 + 3, student2Grade2, 0.000001);
+            Assert.AreEqual(21.525 + 8.85 + 39.95 + 2.2, student3Grade1, 0.000001);
+            Assert.AreEqual(21.525 + 8.85 + 39.95 + 2.2, student3Grade2, 0.000001);
+            Assert.AreEqual(25.515 + 10.5 + 40.5 + 1, student4Grade1, 0.000001);
+            Assert.AreEqual(25.515 + 10.5 + 40.5 + 1, student4Grade2, 0.000001);
+            Assert.AreEqual(31.7275 + 11.85 + 45.4 + 0, student5Grade1, 0.000001);
+            Assert.AreEqual(31.7275 + 11.85 + 45.4 + 0, student5Grade2, 0.000001);
+
+            // test the weighted class mean
+            mu1 = course.getWeightedClassMean(true).getGrade();
+            mu2 = course.getWeightedClassMean(false).getGrade();
+            Assert.AreEqual(
+                (26.3375 + 12.75 + 41.5 + 2 +
+                26.6 + 10.5 + 42.8 + 3 +
+                21.525 + 8.85 + 39.95 + 2.2 +
+                25.515 + 10.5 + 40.5 + 1 +
+                31.7275 + 11.85 + 45.4 + 0) /
+                5,
+                mu1, 0.000001);
+            Assert.AreEqual(
+                (26.3375 + 12.75 + 41.5 + 2 +
+                26.6 + 10.5 + 42.8 + 3 +
+                21.525 + 8.85 + 39.95 + 2.2 +
+                25.515 + 10.5 + 40.5 + 1 +
+                31.7275 + 11.85 + 45.4 + 0) /
+                5,
+                mu2, 0.000001);
+
+            // find the variance
+            sum =
+                Math.Pow(student1Grade1 - mu1, 2) +
+                Math.Pow(student2Grade1 - mu1, 2) +
+                Math.Pow(student3Grade1 - mu1, 2) +
+                Math.Pow(student4Grade1 - mu1, 2) +
+                Math.Pow(student5Grade1 - mu1, 2);
+            variance1 = 1.0 / 5.0 * sum;
+            stdDev1 = Math.Sqrt(variance1);
+            sum =
+                Math.Pow(student1Grade2 - mu2, 2) +
+                Math.Pow(student2Grade2 - mu2, 2) +
+                Math.Pow(student3Grade2 - mu2, 2) +
+                Math.Pow(student4Grade2 - mu2, 2) +
+                Math.Pow(student5Grade2 - mu2, 2);
+            variance2 = 1.0 / 5.0 * sum;
+            stdDev2 = Math.Sqrt(variance2);
+
+            // test the standard deviation
+            Assert.AreEqual(variance1, course.getWeightedClassVariance(true), 0.000001);
+            Assert.AreEqual(variance2, course.getWeightedClassVariance(false), 0.000001);
+            Assert.AreEqual(stdDev1, course.getWeightedClassStdDev(true), 0.000001);
+            Assert.AreEqual(stdDev2, course.getWeightedClassStdDev(false), 0.000001);
         }
 
         // tests getUnweightedClassMaximum()
