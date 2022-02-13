@@ -825,7 +825,7 @@ namespace gradebook
         // returns null for N/A
         public Grade getAssignmentMaximum(Assignment a)
         {
-            if (students.Count == 0 || assignments.Count == 0)
+            if (students.Count == 0 || assignments.Count == 0 || a == null)
             {
                 return null;
             }
@@ -858,7 +858,7 @@ namespace gradebook
         // returns null for N/A
         public Grade getAssignmentMinimum(Assignment a)
         {
-            if (students.Count == 0 || assignments.Count == 0)
+            if (students.Count == 0 || assignments.Count == 0 || a == null)
             {
                 return null;
             }
