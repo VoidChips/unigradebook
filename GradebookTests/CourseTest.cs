@@ -57,7 +57,7 @@ namespace GradebookTests
 
         // tests for correct initialization
         [Test]
-        public void Test1()
+        public void ConstructorTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Assert.AreEqual("CS101", course.name);
@@ -84,9 +84,8 @@ namespace GradebookTests
             Assert.AreEqual(60, course.gradeCutoff["D"], 0.000001);
         }
 
-        // tests copy constructor
         [Test]
-        public void Test2()
+        public void CopyConstuctorTest()
         {
             Course course1 = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -133,9 +132,8 @@ namespace GradebookTests
             Assert.AreEqual(course1.gradeCutoff, course2.gradeCutoff);
         }
 
-        // tests equality
         [Test]
-        public void Test3()
+        public void EqualityTest()
         {
             Course course1 = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -195,9 +193,8 @@ namespace GradebookTests
             Assert.IsTrue(course1 != course2);
         }
 
-        // tests GetHashCode()
         [Test]
-        public void Test4()
+        public void GetHashCodeTest()
         {
             Course course1 = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -244,9 +241,8 @@ namespace GradebookTests
             Assert.AreEqual(course1.GetHashCode(), course2.GetHashCode());
         }
 
-        // tests addStudent()
         [Test]
-        public void Test5()
+        public void AddStudentTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             int oldSize = course.students.Count;
@@ -261,9 +257,8 @@ namespace GradebookTests
             }
         }
 
-        // tests removeStudent()
         [Test]
-        public void Test6()
+        public void RemoveStudentTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -291,9 +286,8 @@ namespace GradebookTests
             Assert.AreEqual(0, course.students.Count);
         }
 
-        // tests addAssignment()
         [Test]
-        public void Test7()
+        public void AddAssignmentTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -339,9 +333,8 @@ namespace GradebookTests
             }
         }
 
-        // tests removeAssignment()
         [Test]
-        public void Test8()
+        public void RemoveAssignmentTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -378,9 +371,8 @@ namespace GradebookTests
             }
         }
 
-        // tests getAssignmentGrade()
         [Test]
-        public void Test9()
+        public void GetAssignmentGradeTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -411,9 +403,8 @@ namespace GradebookTests
             }
         }
 
-        // tests gradeAssignment()
         [Test]
-        public void Test10()
+        public void GradeAssignmentTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -444,9 +435,8 @@ namespace GradebookTests
             }
         }
 
-        // tests setAssignmentWeights()
         [Test]
-        public void Test11()
+        public void SetAssignmentWeightsTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "002");
             // tests for correct assignment weights by type from initialization
@@ -530,9 +520,8 @@ namespace GradebookTests
             }
         }
 
-        // tests getUnweightedStudentGrade()
         [Test]
-        public void Test12()
+        public void GetUnweightedStudentGradeTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             double maxCoursePts = 0;
@@ -617,9 +606,8 @@ namespace GradebookTests
             Assert.AreEqual(82.5, course.getUnweightedStudentGrade(student1, false).getGrade(), 0.000001);
         }
 
-        // tests getWeightedStudentGrade()
         [Test]
-        public void Test13()
+        public void GetWeightedStudentGradeTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             foreach (Student student in students)
@@ -843,9 +831,8 @@ namespace GradebookTests
                 course.getWeightedStudentGrade(student5, false).getGrade(), 0.000001);
         }
 
-        // tests getAssignmentMean()
         [Test]
-        public void Test14()
+        public void GetAssignmentMeanTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -928,9 +915,8 @@ namespace GradebookTests
             Assert.AreEqual(54.666666, assignment5Avg.getGrade(), 0.000001);
         }
 
-        // tests getAssignmentMedian()
         [Test]
-        public void Test15()
+        public void GetAssignmentMedianTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -1038,9 +1024,8 @@ namespace GradebookTests
             Assert.AreEqual(70, assignment5Median.getGrade(), 0.000001);
         }
 
-        // tests getUnweightedClassMean()
         [Test]
-        public void Test16()
+        public void GetUnweightedClassMeanTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -1178,9 +1163,8 @@ namespace GradebookTests
                 course.getUnweightedClassMean(false).getGrade(), 0.000001);
         }
 
-        // tests weightedClassMean()
         [Test]
-        public void Test17()
+        public void GetWeightedClassMeanTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -1341,9 +1325,8 @@ namespace GradebookTests
                 course.getWeightedClassMean(false).getGrade(), 0.000001);
         }
 
-        // tests getUnweightedClassMedian()
         [Test]
-        public void Test18()
+        public void GetUnweightedClassMedianTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -1483,9 +1466,8 @@ namespace GradebookTests
             Assert.AreEqual(expectedGrade, course.getUnweightedClassMedian(false).getGrade(), 0.000001);
         }
 
-        // tests getWeightedClassMedian()
         [Test]
-        public void Test19()
+        public void GetWeightedClassMedianTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -1647,9 +1629,8 @@ namespace GradebookTests
             Assert.AreEqual(expectedGrade, course.getWeightedClassMedian(false).getGrade(), 0.000001);
         }
 
-        // tests setGradeCutoff()
         [Test]
-        public void Test20()
+        public void SetGradeCutoffTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Dictionary<string, double> cutoff = new Dictionary<string, double>();
@@ -1700,7 +1681,7 @@ namespace GradebookTests
 
         // tests the overloaded setGradeCutoff() with more arguments
         [Test]
-        public void Test21()
+        public void OverloadedSetGradeCutoffTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Dictionary<string, double> cutoff = new Dictionary<string, double>();
@@ -1794,9 +1775,8 @@ namespace GradebookTests
             }
         }
 
-        // tests useLetterGradePlusMinus()
         [Test]
-        public void Test22()
+        public void UseLetterGradePlusMinusTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
             Dictionary<string, double> cutoff = new Dictionary<string, double>();
@@ -1852,9 +1832,8 @@ namespace GradebookTests
             Assert.AreEqual(cutoff, course.gradeCutoff);
         }
 
-        // tests getLetterGrade()
         [Test]
-        public void Test23()
+        public void GetLetterGradeTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2081,9 +2060,8 @@ namespace GradebookTests
             Assert.AreEqual("A-", course.getLetterGrade(student5, false));
         }
 
-        // tests getAssignmentVariance()
         [Test]
-        public void Test24()
+        public void GetAssignmentVarianceTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2185,9 +2163,8 @@ namespace GradebookTests
             Assert.AreEqual(1198.222222, assignment5Variance, 0.000001);
         }
 
-        // tests getAssignmentStdDev()
         [Test]
-        public void Test25()
+        public void GetAssignmentStdDevTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2301,9 +2278,8 @@ namespace GradebookTests
             Assert.AreEqual(Math.Sqrt(assignment5Variance), assignment5StdDev, 0.000001);
         }
 
-        // tests getAssignmentMaximum()
         [Test]
-        public void Test26()
+        public void GetAssignmentMaximumTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2384,9 +2360,8 @@ namespace GradebookTests
             Assert.AreEqual(100, course.getAssignmentMaximum(assignment5).getGrade(), 0.000001);
         }
 
-        // tests getAssignmentMinimum()
         [Test]
-        public void Test27()
+        public void GetAssignmentMinimumTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2467,9 +2442,8 @@ namespace GradebookTests
             Assert.AreEqual(0, course.getAssignmentMinimum(assignment5).getGrade(), 0.000001);
         }
 
-        // tests getUnweightedClassVariance()
         [Test]
-        public void Test28()
+        public void GetUnweightedClassVarianceTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2675,9 +2649,8 @@ namespace GradebookTests
             Assert.AreEqual(variance2, course.getUnweightedClassVariance(false), 0.000001);
         }
 
-        // tests getWeightedClassVariance()
         [Test]
-        public void Test29()
+        public void GetWeightedClassVarianceTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -2888,9 +2861,8 @@ namespace GradebookTests
             Assert.AreEqual(variance2, course.getWeightedClassVariance(false), 0.000001);
         }
 
-        // tests getUnweightedClassStdDev()
         [Test]
-        public void Test30()
+        public void GetUnweightedClassStdDevTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -3104,9 +3076,8 @@ namespace GradebookTests
             Assert.AreEqual(stdDev2, course.getUnweightedClassStdDev(false), 0.000001);
         }
 
-        // tests getWeightedClassStdDev()
         [Test]
-        public void Test31()
+        public void GetWeightedClassStdDevTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -3325,9 +3296,8 @@ namespace GradebookTests
             Assert.AreEqual(stdDev2, course.getWeightedClassStdDev(false), 0.000001);
         }
 
-        // tests getUnweightedClassMaximum()
         [Test]
-        public void Test32()
+        public void GetUnweightedClassMaximumTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -3460,9 +3430,8 @@ namespace GradebookTests
             Assert.AreEqual(course.getUnweightedStudentGrade(student5, false), course.getUnweightedClassMaximum(false));
         }
 
-        // tests getWeightedClassMaximum()
         [Test]
-        public void Test33()
+        public void GetWeightedClassMaximumTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -3600,9 +3569,8 @@ namespace GradebookTests
             Assert.AreEqual(course.getWeightedStudentGrade(student5, false), course.getWeightedClassMaximum(false));
         }
 
-        // tests getUnweightedClassMinimum()
         [Test]
-        public void Test34()
+        public void GetUnweightedClassMinimumTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
@@ -3735,9 +3703,8 @@ namespace GradebookTests
             Assert.AreEqual(course.getUnweightedStudentGrade(student3, false), course.getUnweightedClassMinimum(false));
         }
 
-        // tests getWeightedClassMinimum()
         [Test]
-        public void Test35()
+        public void GetWeightedClassMinimumTest()
         {
             Course course = new Course("CS101", "Intro to Programming", "001");
 
