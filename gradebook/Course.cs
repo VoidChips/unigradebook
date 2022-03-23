@@ -765,6 +765,7 @@ namespace gradebook
 
         // get the class variance of the grade of an assignment
         // returns -1 for N/A
+        // returns sample variance if not all assignments are graded
         public double getAssignmentVariance(Assignment a)
         {
             if (students.Count == 0 || assignments.Count == 0)
@@ -773,20 +774,21 @@ namespace gradebook
             }
 
             List<double> grades = new List<double>();
-            bool atLeastOneAssignmentGraded = false;
             foreach (Student student in students.Keys)
             {
                 double grade = getAssignmentGrade(student, a).getGrade();
-                grades.Add(grade);
                 if (getAssignmentGrade(student, a).graded)
                 {
-                    atLeastOneAssignmentGraded = true;
+                    grades.Add(grade);
                 }
             }
 
-            if (!atLeastOneAssignmentGraded)
+            if (grades.Count == 0)
             {
                 return -1;
+            } else if (grades.Count < students.Count)
+            {
+                return Statistics.Variance(grades);
             }
 
             return Statistics.PopulationVariance(grades);
@@ -794,31 +796,16 @@ namespace gradebook
 
         // get the class standard deviation of the grade of an assignment
         // returns -1 for N/A
+        // returns sample standard deviation if not all assignments are graded
         public double getAssignmentStdDev(Assignment a)
         {
-            if (students.Count == 0 || assignments.Count == 0)
+            double variance = getAssignmentVariance(a);
+
+            if (variance == -1)
             {
                 return -1;
             }
-
-            List<double> grades = new List<double>();
-            bool atLeastOneAssignmentGraded = false;
-            foreach (Student student in students.Keys)
-            {
-                double grade = getAssignmentGrade(student, a).getGrade();
-                grades.Add(grade);
-                if (getAssignmentGrade(student, a).graded)
-                {
-                    atLeastOneAssignmentGraded = true;
-                }
-            }
-
-            if (!atLeastOneAssignmentGraded)
-            {
-                return -1;
-            }
-
-            return Statistics.PopulationStandardDeviation(grades);
+            return Math.Sqrt(variance);
         }
 
         // get the class maximum of the grade of an assignment
@@ -1016,6 +1003,7 @@ namespace gradebook
         // get the class variance of unweighted student grades
         // if soFar is true, exclude the ungraded assignments
         // returns -1 for N/A
+        // returns sample variance if not all students are graded
         public double getUnweightedClassVariance(bool soFar)
         {
             if (students.Count == 0 || assignments.Count == 0)
@@ -1024,20 +1012,21 @@ namespace gradebook
             }
 
             List<double> grades = new List<double>();
-            bool atLeastOneStudentGraded = false;
             foreach (Student student in students.Keys)
             {
-                double grade = getUnweightedStudentGrade(student, soFar).getGrade();
-                grades.Add(grade);
-                if (getUnweightedStudentGrade(student, soFar).graded)
+                Grade grade = getUnweightedStudentGrade(student, soFar);
+                if (grade.graded)
                 {
-                    atLeastOneStudentGraded = true;
+                    grades.Add(grade.getGrade());
                 }
             }
 
-            if (!atLeastOneStudentGraded)
+            if (grades.Count == 0)
             {
                 return -1;
+            } else if (grades.Count < students.Count)
+            {
+                return Statistics.Variance(grades);
             }
 
             return Statistics.PopulationVariance(grades);
@@ -1046,6 +1035,7 @@ namespace gradebook
         // get the class variance of weighted student grades
         // if soFar is true, exclude the ungraded assignments
         // returns -1 for N/A
+        // returns sample variance if not all students are graded
         public double getWeightedClassVariance(bool soFar)
         {
             if (students.Count == 0 || assignments.Count == 0)
@@ -1054,20 +1044,21 @@ namespace gradebook
             }
 
             List<double> grades = new List<double>();
-            bool atLeastOneStudentGraded = false;
             foreach (Student student in students.Keys)
             {
-                double grade = getWeightedStudentGrade(student, soFar).getGrade();
-                grades.Add(grade);
-                if (getWeightedStudentGrade(student, soFar).graded)
+                Grade grade = getWeightedStudentGrade(student, soFar);
+                if (grade.graded)
                 {
-                    atLeastOneStudentGraded = true;
+                    grades.Add(grade.getGrade());
                 }
             }
 
-            if (!atLeastOneStudentGraded)
+            if (grades.Count == 0)
             {
                 return -1;
+            } else if (grades.Count < students.Count)
+            {
+                return Statistics.Variance(grades);
             }
 
             return Statistics.PopulationVariance(grades);
@@ -1076,61 +1067,31 @@ namespace gradebook
         // get the class standard deviation of unweighted student grades
         // if soFar is true, exclude the ungraded assignments
         // returns -1 for N/A
+        // returns sample standard deviation if not all students are graded
         public double getUnweightedClassStdDev(bool soFar)
         {
-            if (students.Count == 0 || assignments.Count == 0)
+            double variance = getUnweightedClassVariance(soFar);
+
+            if (variance == -1)
             {
                 return -1;
             }
-
-            List<double> grades = new List<double>();
-            bool atLeastOneStudentGraded = false;
-            foreach (Student student in students.Keys)
-            {
-                double grade = getUnweightedStudentGrade(student, soFar).getGrade();
-                grades.Add(grade);
-                if (getUnweightedStudentGrade(student, soFar).graded)
-                {
-                    atLeastOneStudentGraded = true;
-                }
-            }
-
-            if (!atLeastOneStudentGraded)
-            {
-                return -1;
-            }
-
-            return Statistics.PopulationStandardDeviation(grades);
+            return Math.Sqrt(variance);
         }
 
         // get the class standard deviation of weighted student grades
         // if soFar is true, exclude the ungraded assignments
         // returns -1 for N/A
+        // returns sample standard deviation if not all students are graded
         public double getWeightedClassStdDev(bool soFar)
         {
-            if (students.Count == 0 || assignments.Count == 0)
+            double variance = getWeightedClassVariance(soFar);
+
+            if (variance == -1)
             {
                 return -1;
             }
-
-            List<double> grades = new List<double>();
-            bool atLeastOneStudentGraded = false;
-            foreach (Student student in students.Keys)
-            {
-                double grade = getWeightedStudentGrade(student, soFar).getGrade();
-                grades.Add(grade);
-                if (getWeightedStudentGrade(student, soFar).graded)
-                {
-                    atLeastOneStudentGraded = true;
-                }
-            }
-
-            if (!atLeastOneStudentGraded)
-            {
-                return -1;
-            }
-
-            return Statistics.PopulationStandardDeviation(grades);
+            return Math.Sqrt(variance);
         }
 
         // get the highest unweighted student grade of the class
