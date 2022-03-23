@@ -1306,6 +1306,7 @@ namespace gradebook
         }
 
         // set whether the course uses plus minus for the letter grade
+        // note that the grade cutoff will be set to default, so use setGradeCutoff() for custom values
         public void useLetterGradePlusMinus(bool isPlusMinus)
         {
             // set to default values
@@ -1342,10 +1343,55 @@ namespace gradebook
             }
         }
 
+        // get the letter grade of the student based on the unweighted grade
+        // if soFar is true, exclude the ungraded assignments
+        // if there are no assignments graded, return "N/A"
+        public string getUnweightedLetterGrade(Student s, bool soFar)
+        {
+            double grade = getUnweightedStudentGrade(s, soFar).getGrade();
+            List<string> letterGrades = new List<string>()
+            { "A", "B", "C", "D" };
+
+            if (assignments.Count == 0)
+            {
+                return "N/A";
+            }
+
+            bool noAssignmentGraded = true;
+            foreach (Grade assignmentGrade in students[s].Values)
+            {
+                if (assignmentGrade.graded)
+                {
+                    noAssignmentGraded = false;
+                    break;
+                }
+            }
+
+            if (noAssignmentGraded)
+            {
+                return "N/A";
+            }
+
+            if (isPlusMinusLetterGrade)
+            {
+                letterGrades = new List<string>()
+                { "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-" };
+            }
+
+            foreach (string letterGrade in letterGrades)
+            {
+                if (grade >= gradeCutoff[letterGrade])
+                {
+                    return letterGrade;
+                }
+            }
+            return "F";
+        }
+
         // get the letter grade of the student based on the weighted grade
         // if soFar is true, exclude the ungraded assignments
         // if there are no assignments graded, return "N/A"
-        public string getLetterGrade(Student s, bool soFar)
+        public string getWeightedLetterGrade(Student s, bool soFar)
         {
             double grade = getWeightedStudentGrade(s, soFar).getGrade();
             List<string> letterGrades = new List<string>()
